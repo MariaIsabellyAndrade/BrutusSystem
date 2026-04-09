@@ -1,0 +1,66 @@
+.cards {
+  display: flex;
+  gap: 20px;
+  padding: 20px 5%;
+   
+}
+
+.titulo {
+  text-align: center; /* 👈 centraliza */
+  color: white;
+
+  margin-top: 40px; /* 👈 desce por causa do header */
+  margin-bottom: 20px;
+
+  font-size: 40px;
+  font-weight: bold;
+}
+
+/* cada card ocupa espaço igual */
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 15px;
+
+
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  transition: 0.3s;
+}
+
+/* efeito hover 🔥 */
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #d4af37;
+}
+
+/* textos */
+.card p {
+  margin: 0;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.card h2 {
+  margin-top: 10px;
+  font-size: 28px;
+  color: white;
+}
+
+/* cores */
+.total h2 {
+  color: #3b82f6;
+}
+
+.ativos h2 {
+  color: #22c55e;
+}
+
+.inativos h2 {
+  color: #ef4444;
+}

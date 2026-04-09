@@ -1,0 +1,343 @@
+html, body, #root {
+  width: 100%;
+  min-height: 100vh; /* Garante que o fundo cubra tudo */
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* Fix para o fundo não "andar" e cobrir toda a tela */
+  background: linear-gradient(to right, #000 60%, #111 75%, #d4af37);
+  background-attachment: fixed; 
+  font-family: sans-serif;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+  max-width: 1200px; /* Limita a largura em telas ultra-wide */
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: white;
+}
+
+/* CONTAINER CENTRAL */
+.list-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center; /* Centraliza o título e o emoji */
+}
+
+.list-container h1 {
+  font-size: clamp(24px, 5vw, 40px); /* Fonte diminui conforme a tela */
+  margin-bottom: 10px;
+}
+
+.list-container p {
+    margin-bottom: 30px;
+    color: #aaa;
+}
+
+/* LISTA */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* CARD */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(17, 17, 17, 0.9); /* Leve transparência para o gradiente aparecer */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  transition: 0.3s ease;
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #d4af37;
+}
+
+/* IMG */
+.card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0; /* Impede a imagem de amassar */
+  border: 2px solid #333;
+}
+
+/* INFO */
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info h3 {
+  font-size: 20px;
+  text-transform: capitalize;
+}
+
+.info span {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* STATUS */
+.ativo { color: #00ff88; font-weight: bold; }
+.inativo { color: #ff4444; font-weight: bold; }
+
+/* BOTÕES */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.card button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap; /* Impede o texto do botão de quebrar */
+}
+
+.actions button:first-child {
+  background: #d4af37;
+  color: black;
+}
+
+.actions button:last-child {
+  background: #ff0000;
+  color: white;
+}
+
+.card button:hover {
+  filter: brightness(1.2);
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 15px;
+  }
+
+  .card {
+    flex-direction: column; /* Empilha os elementos */
+    text-align: center;
+    padding: 25px;
+  }
+
+  .info {
+    margin-left: 0;
+    align-items: center;
+  }
+
+  .actions {
+    width: 100%;
+    flex-direction: row; /* Mantém botões lado a lado ou column se preferir */
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .actions button {
+    flex: 1; /* Faz os botões dividirem o espaço igualmente */
+    padding: 12px;
+  }
+  
+  /* Ajuste do fundo para não ficar estranho no mobile */
+  body {
+    background: linear-gradient(to bottom, #000 70%, #d4af37);
+  }
+
+}
+
+/* BARRA DE CONTROLES (Busca + Botão) */
+.controls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-input:focus {
+  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-add {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  padding: 0 25px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.btn-add:hover {
+  transform: scale(1.05);
+  background: #f1c40f;
+}
+
+.empty-msg {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* AJUSTES DE RESPONSIVIDADE PARA OS NOVOS ELEMENTOS */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column; /* No celular, um fica em cima do outro */
+  }
+
+  .btn-add {
+    padding: 15px;
+    width: 100%;
+  }
+}
+
+
+/* MODAL - Ocupa a tela inteira */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85); /* Fundo escuro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Garante que fique acima de tudo */
+  padding: 20px;
+}
+
+/* CONTEÚDO DO MODAL */
+.modal-content {
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 450px; /* Largura máxima do formulário */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid #333;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-content h2 {
+  color: #d4af37;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* INPUTS DENTRO DO MODAL */
+.modal-content input:not([type="checkbox"]) {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #000;
+  color: white;
+  font-size: 16px;
+}
+
+.modal-content input:focus {
+  border-color: #d4af37;
+  outline: none;
+}
+
+/* CHECKBOX */
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+/* BOTÕES DO MODAL */
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modal-buttons button:first-child {
+  background: #d4af37;
+  color: #000;
+}
+
+.modal-buttons button:last-child {
+  background: #444;
+  color: white;
+}
+
+.modal-buttons button:hover {
+  opacity: 0.8;
+}
+
+
+/* Estilo específico para o modal de confirmação */
+.confirm-modal {
+  max-width: 350px; /* Um pouco menor que o de edição */
+  text-align: center;
+}
+
+.confirm-modal p {
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.btn-confirm-delete {
+  background: #ff4444 !important; /* Vermelho para exclusão */
+  color: white !important;
+}
+
+.btn-confirm-delete:hover {
+  background: #cc0000 !important;
+}

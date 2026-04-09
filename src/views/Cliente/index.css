@@ -1,0 +1,187 @@
+/* GERAL */
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(to right, #000 60%, #111 75%, #d4af37);
+  background-attachment: fixed;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+}
+
+/* LAYOUT */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.list-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.list-container h1 { font-size: clamp(28px, 5vw, 42px); margin-bottom: 8px; color: #fff; }
+.list-container p { color: #aaa; margin-bottom: 30px; }
+
+/* CONTROLES */
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  background: rgba(255,255,255,0.05);
+  color: white;
+  font-size: 16px;
+}
+
+.btn-add {
+  background: #d4af37;
+  color: #000;
+  padding: 0 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* LISTA E CARDS */
+.list { display: flex; flex-direction: column; gap: 15px; }
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(20, 20, 20, 0.95);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid #333;
+  transition: 0.3s;
+  text-align: left;
+}
+
+.card:hover { border-color: #d4af37; transform: translateY(-3px); }
+
+.card img {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #d4af37;
+  flex-shrink: 0;
+}
+
+.info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.info h3 { font-size: 20px; color: #fff; }
+.desc { color: #888; font-size: 14px; }
+.price { color: #d4af37; font-weight: bold; font-size: 18px; margin-top: 5px; }
+.time { color: #ccc; font-size: 13px; }
+.ativo { color: #00ff88; font-weight: bold; font-size: 12px; margin-top: 5px; }
+.inativo { color: #ff4444; font-weight: bold; font-size: 12px; margin-top: 5px; }
+
+.actions { display: flex; gap: 10px; }
+.actions button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.actions button:first-child { background: #333; color: white; }
+.actions button:last-child { background: #ff4444; color: white; }
+
+/* MODAL GERAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: #181818;
+  padding: 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid #d4af3744;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content input:not([type="checkbox"]) {
+  background: #000;
+  border: 1px solid #333;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.input-group { display: flex; gap: 10px; }
+.input-group input { flex: 1; }
+
+.checkbox { display: flex; align-items: center; gap: 10px; color: #ccc; cursor: pointer; }
+
+/* BOTÕES MODAL */
+.modal-buttons { display: flex; gap: 12px; margin-top: 10px; }
+.modal-buttons button {
+  flex: 1;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary { background: #d4af37; color: #000; }
+.btn-secondary { background: #333; color: #fff; }
+.btn-danger { background: #ff4444; color: #fff; }
+
+/* RESPONSIVIDADE */
+@media (max-width: 650px) {
+  .controls { flex-direction: column; }
+  .btn-add { height: 50px; }
+  .card { flex-direction: column; text-align: center; padding: 25px; }
+  .actions { width: 100%; margin-top: 10px; }
+  .actions button { flex: 1; }
+  .modal-buttons { flex-direction: column; }
+  body { background: linear-gradient(to bottom, #000 70%, #d4af37); }
+}
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: -5px;
+}

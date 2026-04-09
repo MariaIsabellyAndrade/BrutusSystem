@@ -1,20 +1,22 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
 
-import CadastroBrutus from "./Barbeiro/CadastroBrutus";
-import ListaBarbeiros from "./Barbeiro/ListaBarbeiros";
-import CadastroServico from "./Servicos/CadastrarServico";
-import ListaServicos from "./Servicos/ListaServico";
-import React from "react";
-import ReactDOM from 'react-dom/client'
+import ServicoList from "./views/ServicoList";
+import Barbeiros from "./views/Barbeiros";
+import Cliente from "./views/Cliente";
 
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
-  <React.StrictMode>
-    <ListaServicos/>
-  </React.StrictMode>
-)
-
-/*function App() {
-  return <ListaServicos/>;
-}*/
+function App() {
+  return (
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/servico" element={<ServicoList />} />
+          <Route path="/cliente" element={<Cliente />} />
+          <Route path="/barbeiro" element={<Barbeiros />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
+}
 
 export default App;

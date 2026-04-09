@@ -1,0 +1,82 @@
+/* CONTAINER PRINCIPAL (Ajuste para não cobrir o conteúdo) */
+.container {
+  /* Aumente este valor se o header ficar maior */
+  margin-top: clamp(120px, 15vh, 180px); 
+  padding: 20px;
+}
+
+/* HEADER PRINCIPAL (Flexível agora) */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  height: 70px; /* 👈 fixa o tamanho */
+  padding: 0 5%; /* remove padding vertical */
+
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  z-index: 1000;
+
+  overflow: visible; /* 👈 permite a logo "sair" */
+}
+
+.logo {
+  height: 80px; /* pode aumentar */
+  transform: scale(1.5); /* 👈 aumenta visualmente */
+  transform-origin: left center; 
+}
+
+/* MENU (Sem alterações) */
+.menu ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.menu a:hover {
+  color: #d4af37;
+}
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  /* Diminua a logo no celular para não ocupar a tela toda */
+  .logo {
+    height: 80px; 
+    margin-bottom: 15px;
+  }
+
+  .menu ul {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .menu a {
+    font-size: 13px;
+  }
+}
