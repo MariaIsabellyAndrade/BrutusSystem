@@ -86,10 +86,15 @@ const abrirEdicao = (servico) => {
 };
 
   const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
+  const { name, value, type, checked,files } = e.target;
     setForm({
       ...form,
-      [name]: type === "checkbox" ? checked : value
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "file"
+          ? files[0]
+          : value
     });
 };
 
@@ -175,7 +180,7 @@ return (
           onClick={(e) => e.stopPropagation()}
         >
 
-          <h2>Editar Serviço</h2>
+            <h2>{modo === "editar" ? "Editar Cliente" : "Novo Cliente"}</h2>
 
           <input
             name="nome"
@@ -206,6 +211,8 @@ return (
             onChange={handleChange}
             placeholder="Duração (min)"
           />
+
+            <input type="file" name="foto" onChange={handleChange} />
 
           {/* ATIVO */}
           <label className="checkbox">

@@ -16,17 +16,17 @@ export default function ListarBarbeiros() {
   const [busca, setBusca] = useState("");
 
   const [form, setForm] = useState({
-    nome: "",
-    sobrenome: "",
-    dataNascimento: "", 
-    dataAdmissao:"", 
-    email: "",
-    senha:"", 
-    cnpj:"", 
-    endereco:"", 
-    ativo:"",
-    telefone: "",
-    foto: ""
+      nome: "",
+      sobrenome: "",
+      dataNascimento: "", 
+      dataAdmissao:"", 
+      email: "",
+      senha:"", 
+      cnpj:"", 
+      endereco:"", 
+      ativo:"",
+      telefone: "",
+      foto: ""
   });
 
   const [confirmarExclusao, setConfirmarExclusao] = useState(null);
@@ -39,15 +39,33 @@ const validate = () => {
 
   if (!form.nome) newErrors.nome = "Obrigatório";
   if (!form.sobrenome) newErrors.sobrenome = "Obrigatório";
-  if (!form.email) newErrors.email = "Obrigatório";
   if (!form.senha) newErrors.senha = "Obrigatório";
-  if (!form.telefone) newErrors.telefone = "Obrigatório";
+
+  if (!form.email) {
+    newErrors.email = "Obrigatório";
+  } else if (!validarEmail(form.email)) {
+    newErrors.email = "Email inválido";
+}
+
+  if (!form.telefone) {
+    newErrors.telefone = "Obrigatório";
+  } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(form.telefone)) {
+    newErrors.telefone = "Telefone inválido";
+  }
+
   if (!form.endereco) newErrors.endereco = "Obrigatório";
-  if (!form.cnpj) newErrors.cnpj = "Obrigatório";
+
+
+  if (!form.cnpj) {
+    newErrors.cnpj = "Obrigatório";
+  } else if (!validarCNPJ(form.cnpj)) {
+    newErrors.cnpj = "CNPJ inválido";
+  }
+
   if (!form.dataNascimento) newErrors.dataNascimento = "Obrigatório";
   if (!form.dataAdmissao) newErrors.dataAdmissao = "Obrigatório";
 
-  // 📅 idade mínima
+
   if (form.dataNascimento) {
     const hoje = new Date();
     const nascimento = new Date(form.dataNascimento);
@@ -64,7 +82,7 @@ const validate = () => {
     }
   }
 
-  // 📅 admissão
+  
   if (form.dataAdmissao) {
     const hoje = new Date();
     const admissao = new Date(form.dataAdmissao);
@@ -78,14 +96,61 @@ const validate = () => {
   return Object.keys(newErrors).length === 0;
 };
 
-  // 🔥 FILTRO
+function validarCNPJ(cnpj) {
+  cnpj = cnpj.replace(/[^\d]+/g, '');
+
+  if (cnpj.length !== 14) return false;
+
+  if (/^(\d)\1+$/.test(cnpj)) return false;
+
+  let tamanho = cnpj.length - 2;
+  let numeros = cnpj.substring(0, tamanho);
+  let digitos = cnpj.substring(tamanho);
+
+  let soma = 0;
+  let pos = tamanho - 7;
+
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+
+  let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+  if (resultado != digitos.charAt(0)) return false;
+
+  tamanho++;
+  numeros = cnpj.substring(0, tamanho);
+  soma = 0;
+  pos = tamanho - 7;
+
+  for (let i = tamanho; i >= 1; i--) {
+    soma += numeros.charAt(tamanho - i) * pos--;
+    if (pos < 2) pos = 9;
+  }
+
+  resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+
+  return resultado == digitos.charAt(1);
+}
+
+const formatarCNPJ = (value) => {
+  value = value.replace(/\D/g, ""); 
+
+  value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+  value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+  value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+  value = value.replace(/(\d{4})(\d)/, "$1-$2");
+
+  return value.slice(0, 18);
+};
+  
   const barbeirosFiltrados = barbeiros.filter((b) =>
     `${b.nome} ${b.sobrenome}`
       .toLowerCase()
       .includes(busca.toLowerCase())
   );
 
-  // 🔥 CARREGAR
+
   const carregarBarbeiros = async () => {
     try {
       const res = await listarBarbeiros();
@@ -99,7 +164,6 @@ const validate = () => {
     carregarBarbeiros();
   }, []);
 
-  // 🔥 DELETE
   const handleDelete = async (id) => {
     try {
       await deletarBarbeiros(id);
@@ -109,7 +173,7 @@ const validate = () => {
     }
   };
 
-  // 🔥 MODAL DELETE
+
   const abrirConfirmacao = (id) => setConfirmarExclusao(id);
   const cancelarExclusao = () => setConfirmarExclusao(null);
 
@@ -118,23 +182,23 @@ const validate = () => {
     setConfirmarExclusao(null);
   };
 
-  // 🔥 MODAL FORM
+
   const abrirCadastro = () => {
-    setModo("criar");
-    setForm({
-    nome: "",
-    sobrenome: "",
-    dataNascimento: "", 
-    dataAdmissao:"", 
-    email: "",
-    senha:"", 
-    cnpj:"", 
-    endereco:"", 
-    ativo:true,
-    telefone: "",
-    foto: ""
-    });
-    setEditando(true);
+      setModo("criar");
+      setForm({
+      nome: "",
+      sobrenome: "",
+      dataNascimento: "", 
+      dataAdmissao:"", 
+      email: "",
+      senha:"", 
+      cnpj:"", 
+      endereco:"", 
+      ativo:true,
+      telefone: "",
+      foto: ""
+      });
+      setEditando(true);
   };
 
   const abrirEdicao = (b) => {
@@ -144,10 +208,10 @@ const validate = () => {
     setForm({
       nome: b.nome || "",
       sobrenome: b.sobrenome || "",
-dataNascimento: b.dataNascimento
+      dataNascimento: b.dataNascimento
     ? b.dataNascimento.split("T")[0]
     : "",
-  dataAdmissao: b.dataAdmissao
+    dataAdmissao: b.dataAdmissao
     ? b.dataAdmissao.split("T")[0]
     : "",
       email: b.email || "",
@@ -162,24 +226,54 @@ dataNascimento: b.dataNascimento
 
   const fecharModal = () => setEditando(null);
 
+  const validarEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  return regex.test(email);
+};
+
+  const formatarTelefone = (value) => {
+  let tel = value.replace(/\D/g, "");
+  tel = tel.slice(0, 11);
+
+  if (tel.length <= 2) return tel;
+  if (tel.length <= 6) return tel.replace(/^(\d{2})(\d+)/, "($1) $2");
+  if (tel.length <= 10) return tel.replace(/^(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+  
+  return tel.replace(/^(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+};
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
+      let newValue = value; 
+  if (name === "cnpj") {
+    newValue = formatarCNPJ(value);
+  }
+
+    if (name === "telefone") {
+    newValue = formatarTelefone(value);
+  }
+
     setForm({
-      ...form,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : type === "file"
-          ? files[0]
-          : value
-    });
+  ...form,
+  [name]:
+    type === "checkbox"
+      ? checked
+      : type === "file"
+      ? files[0]
+      : newValue 
+});
+
+setErrors((prev) => ({
+    ...prev,
+    [name]: ""
+  }));
   };
 
-  // 🔥 SALVAR (CREATE + UPDATE)
+ 
   const handleSalvar = async () => {
       if (!validate()) {
-        return; // ❌ para aqui se tiver erro
+        return; 
       }
     try {
       if (modo === "editar") {
@@ -202,10 +296,6 @@ dataNascimento: b.dataNascimento
         <BarbeiroCards/>
 
       <div className="list-container">
-       
-      
-
-        {/* 🔍 BUSCA */}
         <div className="controls">
           <input
             type="text"
@@ -220,7 +310,7 @@ dataNascimento: b.dataNascimento
           </button>
         </div>
 
-        {/* 🔥 LISTA */}
+
         <div className="list">
           {barbeirosFiltrados.length === 0 ? (
             <p className="empty-msg">Nenhum barbeiro encontrado</p>
@@ -259,7 +349,7 @@ dataNascimento: b.dataNascimento
         </div>
       </div>
 
-      {/* 🔥 MODAL FORM */}
+ 
       {editando !== null && (
         <div className="modal" onClick={fecharModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -272,9 +362,11 @@ dataNascimento: b.dataNascimento
             <input name="sobrenome" value={form.sobrenome} onChange={handleChange} placeholder="Sobrenome" />
             {errors.sobrenome && <span className="error">{errors.sobrenome}</span>}
 
+            <h5>Data Nascimento </h5>
             <input type="date" name="dataNascimento" value={form.dataNascimento} onChange={handleChange} placeholder="dataNascimento" />
             {errors.dataNascimento && <span className="error">{errors.dataNascimento}</span>}
            
+           <h5>Data Admissão </h5>
             <input type="date" name="dataAdmissao" value={form.dataAdmissao} onChange={handleChange} placeholder="dataAdmissao" />
             {errors.dataAdmissao && <span className="error">{errors.dataAdmissao}</span>}        
            
@@ -284,14 +376,13 @@ dataNascimento: b.dataNascimento
             <input name="senha" value={form.senha} onChange={handleChange} placeholder="senha" />
             {errors.senha && <span className="error">{errors.senha}</span>}
             
-            <input name="cnpj" value={form.cnpj} onChange={handleChange} placeholder="cnpj" />
+            <input name="cnpj"  value={form.cnpj || ""} onChange={handleChange} placeholder="cnpj" />
             {errors.cnpj && <span className="error">{errors.cnpj}</span>}
             
             <input name="endereco" value={form.endereco} onChange={handleChange} placeholder="endereco" />
             {errors.endereco && <span className="error">{errors.endereco}</span>}
             
-            <input name="ativo" value={form.ativo} onChange={handleChange} placeholder="ativo" />
-            {errors.ativo && <span className="error">{errors.ativo}</span>}
+
             
             <input name="telefone" value={form.telefone} onChange={handleChange} placeholder="Telefone" />
             {errors.telefone && <span className="error">{errors.telefone}</span>}

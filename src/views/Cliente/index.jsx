@@ -46,6 +46,30 @@ export default function ListarClientes() {
     if (!form.rg) newErrors.rg = "Obrigatório";
     if (!form.dataNascimento) newErrors.dataNascimento = "Obrigatório";
 
+      if (!form.email) {
+        newErrors.email = "Obrigatório";
+      } else if (!validarEmail(form.email)) {
+        newErrors.email = "Email inválido";
+      }
+
+        if (!form.telefone) {
+          newErrors.telefone = "Obrigatório";
+        } else if (!/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(form.telefone)) {
+          newErrors.telefone = "Telefone inválido";
+        }
+
+
+        if (!form.cpf) {
+          newErrors.cpf = "Obrigatório";
+        } else if (!validarCPF(form.cpf)) {
+          newErrors.cpf = "CPF inválido";
+        }
+
+        if (!form.rg) {
+          newErrors.rg = "Obrigatório";
+        } else if (!validarRG(form.rg)) {
+          newErrors.rg = "RG inválido";
+        }
     // 📅 idade mínima
     if (form.dataNascimento) {
       const hoje = new Date();
@@ -67,14 +91,31 @@ export default function ListarClientes() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // 🔍 FILTRO
+
+    const validarEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  return regex.test(email);
+};
+
+  const formatarTelefone = (value) => {
+  let tel = value.replace(/\D/g, "");
+  tel = tel.slice(0, 11);
+
+  if (tel.length <= 2) return tel;
+  if (tel.length <= 6) return tel.replace(/^(\d{2})(\d+)/, "($1) $2");
+  if (tel.length <= 10) return tel.replace(/^(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+  
+  return tel.replace(/^(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+};
+
+
   const clientesFiltrados = clientes.filter((c) =>
     `${c.nome} ${c.sobrenome}`
       .toLowerCase()
       .includes(busca.toLowerCase())
   );
 
-  // 🔥 CARREGAR
+
   const carregarClientes = async () => {
     try {
       const res = await listarClientes();
@@ -88,7 +129,7 @@ export default function ListarClientes() {
     carregarClientes();
   }, []);
 
-  // 🔥 DELETE
+  
   const handleDelete = async (id) => {
     try {
       await deletarClientes(id);
@@ -106,7 +147,6 @@ export default function ListarClientes() {
     setConfirmarExclusao(null);
   };
 
-  // 🔥 MODAL
   const abrirCadastro = () => {
     setModo("criar");
     setForm({
@@ -146,10 +186,89 @@ export default function ListarClientes() {
     });
   };
 
+  const validarCPF = (cpf) => {
+  cpf = cpf.replace(/\D/g, "");
+
+  if (cpf.length !== 11) return false;
+
+
+  if (/^(\d)\1+$/.test(cpf)) return false;
+
+  let soma = 0;
+  let resto;
+
+
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+  soma = 0;
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+
+  return resto === parseInt(cpf.substring(10, 11));
+};
+
+
+const validarRG = (rg) => {
+  rg = rg.replace(/[^\dXx]/g, "");
+
+  
+  if (rg.length < 8 || rg.length > 9) return false;
+
+  // evita repetidos
+  if (/^(\d)\1+$/.test(rg)) return false;
+
+  return true;
+};
+
+const formatarCPF = (value) => {
+  value = value.replace(/\D/g, "");
+
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+  return value.slice(0, 14);
+};
+
+const formatarRG = (value) => {
+  value = value.replace(/\D/g, "");
+
+  value = value.replace(/(\d{2})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d)/, "$1.$2");
+  value = value.replace(/(\d{3})(\d{1})$/, "$1-$2");
+
+  return value.slice(0, 12);
+};
+
   const fecharModal = () => setEditando(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
+
+     let newValue = value; 
+
+    if (name === "telefone") {
+      newValue = formatarTelefone(value);
+    }
+
+      if (name === "cpf") {
+    newValue = formatarCPF(value);
+  }
+
+
+  if (name === "rg") {
+    newValue = formatarRG(value);
+  }
 
     setForm({
       ...form,
@@ -158,8 +277,13 @@ export default function ListarClientes() {
           ? checked
           : type === "file"
           ? files[0]
-          : value
-    });
+          : newValue 
+});
+
+    setErrors((prev) => ({
+    ...prev,
+    [name]: ""
+  }));
   };
 
   // 🔥 SALVAR
