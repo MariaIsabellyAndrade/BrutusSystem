@@ -373,7 +373,13 @@ setErrors((prev) => ({
             <input name="email" value={form.email} onChange={handleChange} placeholder="Email" />
             {errors.email && <span className="error">{errors.email}</span>}
             
-            <input name="senha" value={form.senha} onChange={handleChange} placeholder="senha" />
+            <input
+              type="password"
+              name="senha"
+              value={form.senha}
+              onChange={handleChange}
+              placeholder="Senha"
+            />
             {errors.senha && <span className="error">{errors.senha}</span>}
             
             <input name="cnpj"  value={form.cnpj || ""} onChange={handleChange} placeholder="cnpj" />

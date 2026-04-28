@@ -42,6 +42,26 @@ body {
   margin-bottom: 25px;
 }
 
+
+
+h5 {
+  font-size: 12px;
+  font-weight: 30;
+  color: #fff;
+  letter-spacing: 0.5px;
+
+  background: linear-gradient(90deg, #000, #1a1a1a);
+  padding: 8px 14px;
+
+  border-left: 4px solid #d4af37;
+  border-radius: 8px;
+
+  display: inline-block;
+  width: fit-content;
+
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+  transition: all 0.3s ease;
+}
 .search-input {
   flex: 1;
   padding: 14px;

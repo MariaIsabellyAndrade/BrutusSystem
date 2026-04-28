@@ -15,9 +15,9 @@ export const criarClientes = (dados) => {
   formData.append("cpf",dados.cpf);
   formData.append("rg",dados.rg);
   formData.append("endereco",dados.endereco);
+  formData.append("ativo",dados.ativo); 
   formData.append("email",dados.email); 
   formData.append("senha",dados.senha); 
-  formData.append("ativo",dados.ativo); 
   if (dados.foto) {
     formData.append("foto", dados.foto);
   }
@@ -36,8 +36,6 @@ export const atualizarClientes = (id, dados) => {
   formData.append("cpf",dados.cpf);
   formData.append("rg",dados.rg);
   formData.append("endereco",dados.endereco);
-  formData.append("email",dados.email); 
-  formData.append("senha",dados.senha); 
   formData.append("ativo",dados.ativo); 
   if (dados.foto) {
     formData.append("foto", dados.foto);

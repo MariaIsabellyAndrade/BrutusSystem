@@ -16,17 +16,17 @@ export default function ListarClientes() {
   const [busca, setBusca] = useState("");
 
   const [form, setForm] = useState({
-    nome: "",
-    sobrenome: "",
-    dataNascimento: "",
-    email: "",
-    senha: "",
-    cpf: "",
-    rg: "",
-    endereco: "",
-    ativo: true,
-    telefone: "",
-    foto: ""
+      nome: "",
+      sobrenome: "",
+      dataNascimento: "",
+      cpf: "",
+      rg: "",
+      endereco: "",
+      ativo: true,
+      telefone: "",
+      foto: "",
+      email: "",
+      senha: ""
   });
 
   const [confirmarExclusao, setConfirmarExclusao] = useState(null);
@@ -38,8 +38,6 @@ export default function ListarClientes() {
 
     if (!form.nome) newErrors.nome = "Obrigatório";
     if (!form.sobrenome) newErrors.sobrenome = "Obrigatório";
-    if (!form.email) newErrors.email = "Obrigatório";
-    if (!form.senha) newErrors.senha = "Obrigatório";
     if (!form.telefone) newErrors.telefone = "Obrigatório";
     if (!form.endereco) newErrors.endereco = "Obrigatório";
     if (!form.cpf) newErrors.cpf = "Obrigatório";
@@ -150,18 +148,18 @@ export default function ListarClientes() {
   const abrirCadastro = () => {
     setModo("criar");
     setForm({
-      nome: "",
-      sobrenome: "",
-      dataNascimento: "",
-      email: "",
-      senha: "",
-      cpf: "",
-      rg: "",
-      endereco: "",
-      ativo: true,
-      telefone: "",
-      foto: ""
-    });
+        nome: "",
+        sobrenome: "",
+        dataNascimento: "",
+        cpf: "",
+        rg: "",
+        endereco: "",
+        ativo: true,
+        telefone: "",
+        foto: "",
+        email: "",
+        senha: ""
+      });
     setEditando(true);
   };
 
@@ -175,14 +173,14 @@ export default function ListarClientes() {
       dataNascimento: c.dataNascimento
         ? c.dataNascimento.split("T")[0]
         : "",
-      email: c.email || "",
-      senha: c.senha || "",
       cpf: c.cpf || "",
       rg: c.rg || "",
       endereco: c.endereco || "",
       ativo: c.ativo ?? true,
       telefone: c.telefone || "",
-      foto: ""
+      foto: "", 
+      email: c.email || "",
+      senha: c.senha || "",
     });
   };
 
@@ -346,7 +344,6 @@ const formatarRG = (value) => {
 
                 <div className="info">
                   <h3>{c.nome} {c.sobrenome}</h3>
-                  <span>{c.email}</span>
                   <span>{c.cpf}</span>
                   <span>{c.telefone}</span>
 
@@ -379,14 +376,10 @@ const formatarRG = (value) => {
             <input name="sobrenome" value={form.sobrenome} onChange={handleChange} placeholder="Sobrenome" />
             {errors.sobrenome && <span className="error">{errors.sobrenome}</span>}
 
+
+            <h5>Data Nascimento </h5>
             <input type="date" name="dataNascimento" value={form.dataNascimento} onChange={handleChange} />
             {errors.dataNascimento && <span className="error">{errors.dataNascimento}</span>}
-
-            <input name="email" value={form.email} onChange={handleChange} placeholder="Email" />
-            {errors.email && <span className="error">{errors.email}</span>}
-
-            <input name="senha" value={form.senha} onChange={handleChange} placeholder="Senha" />
-            {errors.senha && <span className="error">{errors.senha}</span>}
 
             <input name="cpf" value={form.cpf} onChange={handleChange} placeholder="CPF" />
             {errors.cpf && <span className="error">{errors.cpf}</span>}
@@ -399,6 +392,18 @@ const formatarRG = (value) => {
 
             <input name="telefone" value={form.telefone} onChange={handleChange} placeholder="Telefone" />
             {errors.telefone && <span className="error">{errors.telefone}</span>}
+
+             <input name="email" value={form.email} onChange={handleChange} placeholder="Email" />
+            {errors.email && <span className="error">{errors.email}</span>}
+            
+            <input
+              type="password"
+              name="senha"
+              value={form.senha}
+              onChange={handleChange}
+              placeholder="Senha"
+            />
+            {errors.senha && <span className="error">{errors.senha}</span>}
 
             <input type="file" name="foto" onChange={handleChange} />
 
