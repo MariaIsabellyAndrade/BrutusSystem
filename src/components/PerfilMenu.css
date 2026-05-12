@@ -1,0 +1,109 @@
+/* CONTAINER */
+.perfil-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* O BOTÃO (Onde estava o erro visual) */
+.perfil-botao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1a1a1a; /* Fundo escuro */
+  border: 1px solid #d4af37; /* Borda dourada sutil */
+  padding: 5px 15px 5px 5px; /* Menos espaço na esquerda por causa da foto */
+  border-radius: 50px; /* Arredondado estilo pílula */
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.perfil-botao:hover {
+  background: #252525;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+/* FOTO DE PERFIL */
+.perfil-foto {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #d4af37;
+}
+
+/* MENU DROPDOWN */
+.perfil-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  width: 200px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  overflow: hidden;
+  z-index: 1001;
+  padding: 8px;
+}
+
+/* HEADER DO MENU (Email e Tipo) */
+.perfil-info {
+  padding: 10px;
+  border-bottom: 1px solid #222;
+  margin-bottom: 5px;
+}
+
+.perfil-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #d4af37;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.perfil-info span {
+  font-size: 11px;
+  color: #888;
+}
+
+/* ITENS DO MENU */
+.perfil-item, .perfil-sair {
+  width: 100%;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.perfil-item:hover {
+  background: #222;
+  color: white;
+}
+
+.perfil-sair {
+  color: #ff4d4d;
+  margin-top: 5px;
+  border-top: 1px solid #222;
+  border-radius: 0 0 6px 6px;
+}
+
+.perfil-sair:hover {
+  background: rgba(255, 77, 77, 0.1);
+}
+
+.perfil-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}

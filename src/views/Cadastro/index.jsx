@@ -119,7 +119,7 @@ export default function Cadastro() {
           <input name="email" placeholder="Email" onChange={handleChange} />
           {errors.email && <span className="error">{errors.email}</span>}
 
-          <input type="password" name="senha" placeholder="Senha" onChange={handleChange} />
+          <input type="password"  minLength={8} name="senha" placeholder="Senha" onChange={handleChange} />
           {errors.senha && <span className="error">{errors.senha}</span>}
 
           <input name="cpf" placeholder="CPF" onChange={handleChange} />

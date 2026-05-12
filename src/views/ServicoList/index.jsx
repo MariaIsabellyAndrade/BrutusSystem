@@ -16,11 +16,9 @@ export default function ListaServicos() {
 });
   const [busca, setBusca] = useState("");
   const [modo, setModo] = useState("editar");
+  const [filtroStatus, setFiltroStatus] = useState("todos");
+  const [confirmarExclusao, setConfirmarExclusao] = useState(null); 
 
-
-  const [confirmarExclusao, setConfirmarExclusao] = useState(null); // Armazena o ID do serviço
-
-// Função que substitui o window.confirm
 const abrirConfirmacao = (id) => {
   setConfirmarExclusao(id);
 };
@@ -30,14 +28,25 @@ const cancelarExclusao = () => {
 };
 
 const confirmarEDeletar = () => {
-  handleDelete(confirmarExclusao); // Chama sua função original de deletar
-  setConfirmarExclusao(null); // Fecha o modal
+  handleDelete(confirmarExclusao); 
+  setConfirmarExclusao(null); 
 };
 
 
-const servicosFiltrados = servicos.filter((s) =>
-  s.nome?.toLowerCase().includes(busca.toLowerCase())
-);
+const servicosFiltrados = servicos.filter((s) => {
+  const matchBusca = s.nome
+    ?.toLowerCase()
+    .includes(busca.toLowerCase());
+
+  const matchStatus =
+    filtroStatus === "todos"
+      ? true
+      : filtroStatus === "ativos"
+      ? s.ativo
+      : !s.ativo;
+
+  return matchBusca && matchStatus;
+});
 
   const fecharModal = () => {
   setEditando(null);
@@ -135,6 +144,29 @@ return (
           + Novo Serviço
         </button>
       </div>
+
+      <div className="filtros-status">
+          <button
+            className={filtroStatus === "todos" ? "active" : ""}
+            onClick={() => setFiltroStatus("todos")}
+          >
+            Todos
+          </button>
+
+          <button
+            className={filtroStatus === "ativos" ? "active" : ""}
+            onClick={() => setFiltroStatus("ativos")}
+          >
+            Ativos
+          </button>
+
+          <button
+            className={filtroStatus === "inativos" ? "active" : ""}
+            onClick={() => setFiltroStatus("inativos")}
+          >
+            Inativos
+          </button>
+        </div>
 
       <div className="list">
         {servicosFiltrados.length === 0? (

@@ -8,6 +8,13 @@ export const login = (dados) => {
   });
 };
 
+export const registrarAdmin = (dados) => {
+  return api.post("/registrar-admin", {
+    email: dados.email,
+    senha: dados.senha
+  });
+};
+
 
 export const registrarCliente = (dados) => {
   const formData = new FormData();
@@ -50,4 +57,8 @@ export const registrarBarbeiro = (dados) => {
   }
 
   return api.post("/registrar-barbeiro", formData);
+};
+
+export const getUsuarioLogado = () => {
+  return api.get("/me");
 };

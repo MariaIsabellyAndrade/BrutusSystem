@@ -8,6 +8,7 @@ import Home from "./views/HomePage";
 import Login from "./views/Login";
 import Cadastro from "./views/Cadastro";
 import ProtectedRoute from "../Protected/ProtectedRoute";
+import CadastroAdmin from "./views/CadastroAdmin";
 
 function App() {
   return (
@@ -24,6 +25,15 @@ function App() {
     element={
       <ProtectedRoute allowed={["BARBEIRO", "ADMIN"]}>
         <Cliente />
+      </ProtectedRoute>
+    }
+  />
+
+    <Route
+    path="/cadastro-admin"
+    element={
+      <ProtectedRoute allowed={["ADMIN"]}>
+        <CadastroAdmin />
       </ProtectedRoute>
     }
   />
