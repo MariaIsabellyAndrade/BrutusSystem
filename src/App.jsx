@@ -9,6 +9,7 @@ import Login from "./views/Login";
 import Cadastro from "./views/Cadastro";
 import ProtectedRoute from "../Protected/ProtectedRoute";
 import CadastroAdmin from "./views/CadastroAdmin";
+import AgendamentoPage from "./views/Agendamento";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
   <Route path="/" element={<Home />} />
   <Route path="/login" element={<Login />} />
   <Route path="/cadastro" element={<Cadastro />} />
+  <Route path="/Agendamento" element={<AgendamentoPage />} />
 
 
   <Route

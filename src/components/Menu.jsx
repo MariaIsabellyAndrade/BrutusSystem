@@ -15,7 +15,7 @@ export default function Menu() {
       <ul>
 
         {/* 🔓 TODOS */}
-        <li><Link to="/">Agendamento</Link></li>
+        <li><Link to="/Agendamento">Agendamento</Link></li>
 
         {/* 💈 BARBEIRO + ADMIN */}
         {logado && (tipo === "BARBEIRO" || tipo === "ADMIN") && (

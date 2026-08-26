@@ -1,60 +1,406 @@
-.login-container {
-  height: 100vh;
+.login-page {
+  min-height: 100vh;
+  background: #111416;
+  color: #fff;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438");
-  background-size: cover;
-  background-position: center;
+  flex-direction: column;
 }
 
-.login-box {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 40px;
-  border-radius: 15px;
-  width: 350px;
-  color: white;
+.login-main {
+  flex: 1;
+  display: flex;
+  min-height: calc(100vh - 90px);
+}
+
+/* =========================
+   LADO ESQUERDO
+========================= */
+
+.login-left {
+  width: 50%;
+  position: relative;
+  background-image:
+    linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.78)
+    ),
+    url("https://images.unsplash.com/photo-1503951914875-452162b0f3f1");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.login-left-content {
+  width: 100%;
+  max-width: 560px;
   text-align: center;
 }
 
-.login-box h1 {
+.login-logo {
+  margin-bottom: 35px;
+}
+
+.login-logo-icon {
+  font-size: 55px;
+  color: #c99b3b;
+  margin-bottom: 8px;
+}
+
+.login-logo h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 42px;
+  letter-spacing: 7px;
+  font-weight: 500;
+}
+
+.login-logo span {
+  display: block;
+  margin-top: 8px;
+  color: #c99b3b;
+  font-size: 14px;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+.login-description {
+  text-align: left;
+  margin: 0 auto 45px;
+  max-width: 470px;
+}
+
+.login-description h2 {
+  font-size: 27px;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.login-description p {
+  color: #ddd;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.login-benefits {
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.login-benefit {
+  flex: 1;
+  text-align: center;
+}
+
+.login-benefit-icon {
+  font-size: 28px;
+  color: #c99b3b;
+  margin-bottom: 10px;
+}
+
+.login-benefit h3 {
+  font-size: 14px;
+  margin: 0 0 5px;
+}
+
+.login-benefit p {
+  color: #ccc;
+  font-size: 12px;
+  margin: 0;
+}
+
+/* =========================
+   LADO DIREITO
+========================= */
+
+.login-right {
+  width: 50%;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  color: #222;
+  padding: 45px 35px;
+  border-radius: 8px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.login-header h2 {
+  margin: 0 0 10px;
+  font-size: 27px;
+  color: #17191b;
+}
+
+.login-header p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-group {
   margin-bottom: 20px;
 }
 
-.input-group {
-  text-align: left;
-  margin-bottom: 15px;
-}
-
 .input-group label {
+  display: block;
+  margin-bottom: 8px;
   font-size: 14px;
+  font-weight: 500;
+  color: #333;
 }
 
-.input-group input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: none;
-  border-radius: 5px;
+.input-wrapper {
+  position: relative;
 }
+
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 43px;
+  box-sizing: border-box;
+  padding: 0 45px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  transition: 0.2s;
+}
+
+.input-wrapper input:focus {
+  border-color: #c99b3b;
+  box-shadow: 0 0 0 2px rgba(201, 155, 59, 0.12);
+}
+
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  padding: 3px;
+}
+
+/* =========================
+   OPÇÕES
+========================= */
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0 25px;
+  font-size: 13px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #555;
+}
+
+.remember-me input {
+  accent-color: #c99b3b;
+}
+
+.forgot-password {
+  color: #b58a35;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   BOTÕES
+========================= */
 
 .btn-login {
   width: 100%;
-  padding: 10px;
-  background: gold;
+  height: 45px;
   border: none;
-  border-radius: 8px;
-  margin-top: 15px;
+  border-radius: 4px;
+  background: #171a1c;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-login:hover {
+  background: #292d2f;
+}
+
+.register-button {
+  width: 100%;
+  height: 43px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.register-button:hover {
+  background: #f8f8f8;
+}
+
+/* =========================
+   DIVISOR
+========================= */
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 22px 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd;
 }
 
 .register-text {
-  margin-top: 15px;
-  font-size: 14px;
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-top: 22px;
 }
 
 .register-text a {
-  color: gold;
+  color: #b58a35;
+  font-weight: 600;
   text-decoration: none;
+}
+
+/* =========================
+   ERRO
+========================= */
+
+.error {
+  color: #d33;
+  font-size: 13px;
+  margin: -8px 0 15px;
+  text-align: center;
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
+.login-footer {
+  min-height: 90px;
+  background: #111416;
+  border-top: 1px solid #292d2f;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 50px;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ddd;
+}
+
+.footer-icon {
+  color: #c99b3b;
+  font-size: 24px;
+}
+
+.footer-item strong {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.footer-item span {
+  display: block;
+  font-size: 11px;
+  color: #999;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width: 900px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    width: 100%;
+    min-height: calc(100vh - 90px);
+  }
+
+  .login-footer {
+    gap: 20px;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-right {
+    padding: 20px;
+  }
+
+  .login-box {
+    padding: 35px 25px;
+  }
+
+  .login-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 30px;
+  }
 }

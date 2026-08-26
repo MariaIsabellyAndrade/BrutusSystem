@@ -1,0 +1,828 @@
+.agendamento-page {
+  min-height: calc(100vh - 70px);
+  background: #f5f5f5;
+  padding: 45px 25px 70px;
+  box-sizing: border-box;
+  color: #171717;
+}
+
+.agendamento-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.agendamento-header {
+  margin-bottom: 28px;
+}
+
+.agendamento-tag {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #777;
+}
+
+.agendamento-header h1 {
+  margin: 0;
+  font-size: 38px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #161616;
+}
+
+.agendamento-header p {
+  margin: 10px 0 0;
+  color: #777;
+  font-size: 15px;
+}
+
+/* CARD */
+
+.agendamento-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* STEPS */
+
+.agendamento-steps {
+  display: flex;
+  align-items: center;
+  padding: 24px 30px;
+  border-bottom: 1px solid #eeeeee;
+  background: #fff;
+}
+
+.agendamento-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+  opacity: 0.45;
+}
+
+.agendamento-step.active {
+  opacity: 1;
+}
+
+.agendamento-step > span {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eeeeee;
+  color: #777;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.agendamento-step.active > span {
+  background: #171717;
+  color: #fff;
+}
+
+.agendamento-step div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.agendamento-step strong {
+  font-size: 12px;
+  color: #222;
+}
+
+.agendamento-step small {
+  font-size: 10px;
+  color: #999;
+}
+
+.agendamento-step-line {
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
+  margin: 0 18px;
+}
+
+/* SECTIONS */
+
+.agendamento-section {
+  padding: 32px 34px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.section-number {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: #171717;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 750;
+  color: #181818;
+}
+
+.section-title p {
+  margin: 5px 0 0;
+  color: #888;
+  font-size: 13px;
+}
+
+/* BARBEIROS */
+
+.barbeiros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.barbeiro-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 82px;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid #dedede;
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.barbeiro-card:hover {
+  border-color: #999;
+  transform: translateY(-1px);
+}
+
+.barbeiro-card.selected {
+  border: 2px solid #171717;
+  background: #fafafa;
+}
+
+.barbeiro-avatar {
+  width: 47px;
+  height: 47px;
+  min-width: 47px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #171717;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.barbeiro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.barbeiro-info strong {
+  font-size: 14px;
+  color: #222;
+}
+
+.barbeiro-info span {
+  font-size: 11px;
+  color: #999;
+}
+
+.selection-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #171717;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* SERVIÇOS */
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.servico-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 76px;
+  padding: 15px 17px;
+  border: 1px solid #dedede;
+  border-radius: 11px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.2s ease;
+}
+
+.servico-card:hover {
+  border-color: #999;
+}
+
+.servico-card.selected {
+  border: 2px solid #171717;
+  background: #fafafa;
+}
+
+.servico-check {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.servico-card.selected .servico-check {
+  background: #171717;
+  border-color: #171717;
+}
+
+.servico-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.servico-content strong {
+  font-size: 14px;
+  color: #222;
+}
+
+.servico-content span {
+  font-size: 11px;
+  color: #999;
+}
+
+.servico-preco {
+  font-size: 14px;
+  font-weight: 800;
+  color: #171717;
+}
+
+/* DATA */
+
+.data-wrapper {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.data-wrapper label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #555;
+}
+
+.data-wrapper input {
+  width: 100%;
+  height: 47px;
+  padding: 0 13px;
+  box-sizing: border-box;
+  border: 1px solid #d5d5d5;
+  border-radius: 9px;
+  background: #fff;
+  color: #222;
+  font-size: 13px;
+  outline: none;
+}
+
+.data-wrapper input:focus {
+  border-color: #171717;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* HORÁRIOS */
+
+.horarios-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.horario-button {
+  height: 45px;
+  border: 1px solid #d8d8d8;
+  border-radius: 9px;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.horario-button:hover {
+  border-color: #171717;
+  background: #fafafa;
+}
+
+.horario-button.selected {
+  background: #171717;
+  border-color: #171717;
+  color: #fff;
+}
+
+.horario-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 90px;
+  border: 1px dashed #d5d5d5;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #888;
+}
+
+.horario-empty span {
+  font-size: 18px;
+}
+
+.horario-empty p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* RESUMO */
+
+.resumo-card {
+  margin: 28px 34px;
+  border: 1px solid #dedede;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.resumo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  background: #171717;
+  color: #fff;
+}
+
+.resumo-header span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  opacity: 0.65;
+}
+
+.resumo-header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.resumo-icon {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.resumo-body {
+  padding: 18px 22px;
+}
+
+.resumo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.resumo-row:last-child {
+  border-bottom: none;
+}
+
+.resumo-row span {
+  font-size: 12px;
+  color: #888;
+}
+
+.resumo-row strong {
+  font-size: 13px;
+  color: #222;
+}
+
+.resumo-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-top: 1px solid #dedede;
+  background: #fff;
+}
+
+.resumo-total span {
+  font-size: 13px;
+  color: #777;
+}
+
+.resumo-total strong {
+  font-size: 22px;
+  color: #171717;
+}
+
+/* MENSAGENS */
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 34px 20px;
+  padding: 13px 15px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.message > span {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.message.error {
+  background: #fff3f3;
+  border: 1px solid #ffd4d4;
+  color: #b42318;
+}
+
+.message.error > span {
+  background: #b42318;
+  color: #fff;
+}
+
+.message.success {
+  background: #f0fdf4;
+  border: 1px solid #c9efd5;
+  color: #18753b;
+}
+
+.message.success > span {
+  background: #18753b;
+  color: #fff;
+}
+
+/* FOOTER */
+
+.agendamento-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  padding: 24px 34px;
+  border-top: 1px solid #eeeeee;
+  background: #fff;
+}
+
+.footer-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.footer-lock {
+  width: 37px;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  border-radius: 9px;
+  font-size: 15px;
+}
+
+.footer-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.footer-info strong {
+  font-size: 12px;
+  color: #333;
+}
+
+.footer-info small {
+  font-size: 10px;
+  color: #999;
+}
+
+.btn-confirmar {
+  min-width: 230px;
+  height: 48px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  border: none;
+  border-radius: 9px;
+  background: #171717;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-confirmar:hover {
+  background: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.15);
+}
+
+.btn-confirmar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-confirmar > span:last-child {
+  font-size: 18px;
+}
+
+/* PIX */
+
+.pix-card {
+  margin: 0 34px 28px;
+  padding: 25px;
+  border: 1px solid #d9d9d9;
+  border-radius: 14px;
+  background: #fafafa;
+  text-align: center;
+}
+
+.pix-header {
+  display: flex;
+  justify-content: center;
+}
+
+.pix-header span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #777;
+}
+
+.pix-header h2 {
+  margin: 5px 0 0;
+  font-size: 19px;
+}
+
+.pix-card > p {
+  color: #777;
+  font-size: 13px;
+}
+
+.pix-qrcode {
+  display: block;
+  width: 220px;
+  height: 220px;
+  margin: 20px auto;
+  object-fit: contain;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.pix-code {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.pix-code span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #555;
+}
+
+.pix-code textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  box-sizing: border-box;
+  resize: none;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 11px;
+}
+
+/* LOADING */
+
+.agendamento-loading {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #777;
+}
+
+.loading-spinner,
+.button-spinner {
+  border: 3px solid #e5e5e5;
+  border-top-color: #171717;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+}
+
+.button-spinner {
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+  border-top-color: #fff;
+}
+
+.agendamento-loading p {
+  font-size: 13px;
+}
+
+/* EMPTY */
+
+.empty-message {
+  grid-column: 1 / -1;
+  padding: 25px;
+  border: 1px dashed #d5d5d5;
+  border-radius: 10px;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}
+
+/* ANIMATION */
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 950px) {
+  .agendamento-steps {
+    overflow-x: auto;
+  }
+
+  .agendamento-step {
+    min-width: 125px;
+  }
+
+  .barbeiros-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .horarios-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .agendamento-page {
+    padding: 25px 12px 45px;
+  }
+
+  .agendamento-header h1 {
+    font-size: 30px;
+  }
+
+  .agendamento-steps {
+    display: none;
+  }
+
+  .agendamento-section {
+    padding: 25px 20px;
+  }
+
+  .barbeiros-grid,
+  .servicos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .horarios-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .resumo-card {
+    margin: 22px 20px;
+  }
+
+  .message {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .pix-card {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .agendamento-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 22px 20px;
+  }
+
+  .btn-confirmar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  .agendamento-page {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .agendamento-header h1 {
+    font-size: 26px;
+  }
+
+  .horarios-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resumo-row {
+    gap: 15px;
+  }
+
+  .resumo-row strong {
+    text-align: right;
+  }
+}
