@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-
 import "./index.css";
-
 import BarbeiroCards from "./BarbeiroCards";
-
 import {
     listarBarbeiros,
     criarBarbeiros,
     atualizarBarbeiros,
-    deletarBarbeiros
+    deletarBarbeiros,
+    getUrlFotoBarbeiro
 } from "../../service/serviceBarbeiro";
+import { useNavigate } from "react-router-dom";
+
 
 export default function ListarBarbeiros() {
 
+    const navigate = useNavigate();
     const [barbeiros, setBarbeiros] = useState([]);
     const [editando, setEditando] = useState(null);
     const [modo, setModo] = useState("editar");
@@ -646,23 +647,21 @@ const barbeirosFiltrados = barbeiros.filter((b) => {
 
                         barbeirosFiltrados.map((b) => (
 
-                            <div
-                                key={b._id}
-                                className="barbeiro-card"
-                            >
+                      <div
+                          key={b._id}
+                          className="barbeiro-card"
+                          onClick={() => navigate(`/barbeiros/${b._id}`)}
+                      >
 
                                 {/* FOTO */}
-
-                                <img
-                                    src={
-                                        b.foto
-                                            ? `/uploads/${b.foto}`
-                                            : "/placeholder.png"
-                                    }
-                                    alt={b.nome}
-                                    className="barbeiro-foto"
-                                />
-
+<img
+    src={getUrlFotoBarbeiro(b.foto)}
+    alt={`${b.nome} ${b.sobrenome}`}
+    className="barbeiro-foto"
+    onError={(e) => {
+        console.log("❌ ERRO NA FOTO:", e.currentTarget.src);
+    }}
+/>
 
                                 {/* INFORMAÇÕES */}
 
@@ -705,18 +704,20 @@ const barbeirosFiltrados = barbeiros.filter((b) => {
 
                                     <button
                                         className="barbeiro-btn-editar"
-                                        onClick={() =>
-                                            abrirEdicao(b)
-                                        }
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            abrirEdicao(b);
+                                        }}
                                     >
                                         Editar
                                     </button>
 
                                     <button
                                         className="barbeiro-btn-excluir"
-                                        onClick={() =>
-                                            abrirConfirmacao(b._id)
-                                        }
+                                   onClick={(e) => {
+                                      e.stopPropagation();
+                                      abrirConfirmacao(b._id);
+                                  }}
                                     >
                                         Excluir
                                     </button>

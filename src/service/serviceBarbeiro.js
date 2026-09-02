@@ -56,3 +56,11 @@ export async function getResumoBarbeiros() {
   const res = await fetch("http://localhost:3000/barbeiros/resumo");
   return res.json();
 }
+
+export const getUrlFotoBarbeiro = (foto) => {
+    if (!foto) {
+        return "/placeholder.png";
+    }
+
+    return `${api.defaults.baseURL}/uploads/${encodeURIComponent(foto)}`;
+};

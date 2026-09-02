@@ -1,6 +1,5 @@
 import Header from "./Header";
 import MenuLateral from "./MenuLateral";
-
 import { useLocation } from "react-router-dom";
 
 export default function Layout({ children }) {
@@ -18,11 +17,12 @@ export default function Layout({ children }) {
         "/barbeiro",
         "/servico",
         "/relatorios",
-        "/configuracoes",
+        "/configuracoes"
     ];
 
     const estaNaAreaAdministrativa =
-        rotasAdministrativas.includes(location.pathname);
+        rotasAdministrativas.includes(location.pathname) ||
+        location.pathname.startsWith("/barbeiros/");
 
     const usuarioAdministrativo =
         tipo === "ADMIN" ||

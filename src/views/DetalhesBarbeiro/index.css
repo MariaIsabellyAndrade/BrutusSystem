@@ -1,0 +1,592 @@
+/* =========================================================
+   BRUTUS SYSTEM - DETALHES DO BARBEIRO
+   ========================================================= */
+
+
+/* =========================================================
+   PÁGINA
+   ========================================================= */
+
+.detalhes-barbeiro-page {
+    width: calc(100% - 250px);
+    min-height: 100vh;
+
+    margin-left: 250px;
+
+    position: relative;
+
+    box-sizing: border-box;
+
+    padding: 45px 25px 70px;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(212, 175, 55, 0.08),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(212, 175, 55, 0.05),
+            transparent 35%
+        ),
+        #050505;
+
+    color: #ffffff;
+
+    font-family: 'Manrope', sans-serif;
+}
+
+
+/* =========================================================
+   CONTAINER DO CONTEÚDO
+   ========================================================= */
+
+.detalhes-barbeiro-page > .detalhes-voltar,
+.detalhes-barbeiro-page > .detalhes-barbeiro-card {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* =========================================================
+   BOTÃO VOLTAR
+   ========================================================= */
+
+.detalhes-voltar {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 0;
+    margin-bottom: 25px;
+
+    padding: 0;
+
+    background: transparent;
+
+    border: none;
+
+    color: #c99a3a;
+
+    font-family: 'Manrope', sans-serif;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.detalhes-voltar:hover {
+    color: #d9ae55;
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================================================
+   CARD PRINCIPAL
+   ========================================================= */
+
+.detalhes-barbeiro-card {
+    display: flex;
+    align-items: stretch;
+
+    box-sizing: border-box;
+
+    background: #0b0b0b;
+
+    border: 1px solid rgba(201, 154, 58, 0.18);
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.35);
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.detalhes-barbeiro-card:hover {
+    border-color: rgba(201, 154, 58, 0.28);
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.42);
+}
+
+
+/* =========================================================
+   ÁREA DA FOTO
+   ========================================================= */
+
+.detalhes-barbeiro-foto-area {
+    width: 350px;
+    min-height: 455px;
+
+    flex-shrink: 0;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(201, 154, 58, 0.07),
+            transparent 55%
+        ),
+        #090909;
+
+    border-right: 1px solid #262626;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   DETALHE SUPERIOR DA FOTO
+   ========================================================= */
+
+.detalhes-barbeiro-foto-area::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background: #c99a3a;
+
+    opacity: 0.65;
+}
+
+
+/* =========================================================
+   BRILHO DA FOTO
+   ========================================================= */
+
+.detalhes-barbeiro-foto-area::after {
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+    height: 220px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 154, 58, 0.07);
+
+    filter: blur(65px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   FOTO
+   ========================================================= */
+
+.detalhes-barbeiro-foto {
+    position: relative;
+
+    z-index: 1;
+
+    width: 235px;
+    height: 300px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    border: 2px solid #c99a3a;
+
+    background: #0b0b0b;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.5);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.detalhes-barbeiro-foto:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+   ========================================================= */
+
+.detalhes-barbeiro-info {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 45px 50px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   TÍTULO PEQUENO
+   ========================================================= */
+
+.detalhes-eyebrow {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #c99a3a;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.3px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   NOME
+   ========================================================= */
+
+.detalhes-barbeiro-info h1 {
+    margin: 0 0 14px;
+
+    color: #f5f2eb;
+
+    font-size: clamp(28px, 4vw, 40px);
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.7px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.detalhes-status {
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 6px 11px;
+
+    margin-bottom: 30px;
+
+    border-radius: 6px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.detalhes-status.ativo {
+    color: #00d889;
+
+    background: rgba(0, 216, 137, 0.07);
+
+    border: 1px solid rgba(0, 216, 137, 0.18);
+}
+
+
+.detalhes-status.inativo {
+    color: #ff5555;
+
+    background: rgba(255, 85, 85, 0.07);
+
+    border: 1px solid rgba(255, 85, 85, 0.18);
+}
+
+
+/* =========================================================
+   INFORMAÇÕES
+   ========================================================= */
+
+.detalhes-informacoes {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px 40px;
+}
+
+
+/* =========================================================
+   ITEM DE INFORMAÇÃO
+   ========================================================= */
+
+.detalhes-informacoes > div {
+    min-width: 0;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1px solid #262626;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.detalhes-informacoes small {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #8d929a;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.1px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   VALOR
+   ========================================================= */
+
+.detalhes-informacoes p {
+    margin: 0;
+
+    color: #d9d9d9;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   CARREGANDO
+   ========================================================= */
+
+.detalhes-barbeiro-page > p {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 80px auto;
+
+    text-align: center;
+
+    color: #c99a3a;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   BARBEIRO NÃO ENCONTRADO
+   ========================================================= */
+
+.detalhes-barbeiro-page > h2 {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 80px auto 20px;
+
+    text-align: center;
+
+    color: #f5f2eb;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+.detalhes-barbeiro-page > h2 + button {
+    display: block;
+
+    margin: 0 auto;
+
+    padding: 10px 20px;
+
+    background: #c99a3a;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-family: 'Manrope', sans-serif;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.detalhes-barbeiro-page > h2 + button:hover {
+    background: #d9ae55;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 20px rgba(201, 154, 58, 0.16);
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 900PX
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .detalhes-barbeiro-page {
+        width: calc(100% - 250px);
+
+        padding: 35px 20px 60px;
+    }
+
+    .detalhes-barbeiro-card {
+        flex-direction: column;
+    }
+
+    .detalhes-barbeiro-foto-area {
+        width: 100%;
+
+        min-height: 370px;
+
+        border-right: none;
+
+        border-bottom: 1px solid #262626;
+    }
+
+    .detalhes-barbeiro-foto {
+        width: 210px;
+        height: 270px;
+    }
+
+    .detalhes-barbeiro-info {
+        padding: 35px;
+    }
+
+    .detalhes-informacoes {
+        gap: 18px 30px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 700PX
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .detalhes-barbeiro-page {
+        width: calc(100% - 70px);
+
+        padding: 30px 15px 50px;
+    }
+
+    .detalhes-barbeiro-info {
+        padding: 30px 25px;
+    }
+
+    .detalhes-barbeiro-info h1 {
+        font-size: 30px;
+    }
+
+    .detalhes-informacoes {
+        grid-template-columns: 1fr;
+
+        gap: 17px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE - 450PX
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+    .detalhes-barbeiro-page {
+        width: calc(100% - 70px);
+
+        padding: 25px 12px 40px;
+    }
+
+    .detalhes-voltar {
+        margin-bottom: 20px;
+    }
+
+    .detalhes-barbeiro-foto-area {
+        min-height: 310px;
+    }
+
+    .detalhes-barbeiro-foto {
+        width: 180px;
+        height: 230px;
+    }
+
+    .detalhes-barbeiro-info {
+        padding: 25px 18px;
+    }
+
+    .detalhes-barbeiro-info h1 {
+        font-size: 27px;
+    }
+
+    .detalhes-status {
+        margin-bottom: 25px;
+    }
+
+    .detalhes-informacoes {
+        gap: 15px;
+    }
+
+    .detalhes-informacoes p {
+        font-size: 12px;
+    }
+}

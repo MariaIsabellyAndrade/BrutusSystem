@@ -1,77 +1,20 @@
-/* =========================================================
-   LAYOUT
-   ========================================================= */
-
-.layout-logado {
-    width: 100%;
+.layout-com-menu {
     min-height: 100vh;
-
-    display: flex;
-
-    background: #050505;
+    background: #0d0d0d;
 }
 
-
-/* =========================================================
-   CONTEÚDO QUANDO ESTÁ LOGADO
-   ========================================================= */
-
-.conteudo-logado {
-    flex: 1;
-
-    min-width: 0;
+.layout-conteudo {
+    margin-left: 260px;
     min-height: 100vh;
-
-    margin-left: 250px;
-
-    box-sizing: border-box;
-
-    background: #050505;
-}
-
-
-/* =========================================================
-   LAYOUT PÚBLICO
-   ========================================================= */
-
-.layout-publico {
-    width: 100%;
-    min-height: 100vh;
-
-    background: #050505;
-}
-
-.conteudo-publico {
-    width: 100%;
-    min-height: 100vh;
-
+    width: calc(100% - 260px);
     box-sizing: border-box;
 }
 
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 900px) {
-
-    .conteudo-logado {
-        margin-left: 220px;
-    }
-
+.layout-sem-menu {
+    min-height: 100vh;
 }
 
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-    .conteudo-logado {
-        margin-left: 70px;
-    }
-
+.layout-conteudo-full {
+    min-height: 100vh;
+    width: 100%;
 }
-
-
