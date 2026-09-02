@@ -1,83 +1,526 @@
-.cadastro-container {
+/* ============================= */
+/* PÁGINA */
+/* ============================= */
+
+.cadastro-page {
   min-height: 100vh;
+  width: 100%;
+  display: flex;
+  background: #050607;
+  color: #fff;
+  overflow: hidden;
+}
+
+
+/* ============================= */
+/* IMAGEM ESQUERDA */
+/* ============================= */
+
+.cadastro-image {
+  width: 51%;
+  min-height: 100vh;
+
+  position: relative;
+
+  background-image: url("/image.png");
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: flex-end;
+
+  overflow: hidden;
+}
+
+
+/* ESCURECER IMAGEM */
+
+.image-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.30),
+      rgba(0, 0, 0, 0.55)
+    ),
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.80),
+      transparent 55%
+    );
+}
+
+
+/* TEXTO SOBRE A IMAGEM */
+
+.image-content {
+  position: relative;
+  z-index: 2;
+
+  padding: 0 0 140px 60px;
+}
+
+.image-content span {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #d2a43a;
+  font-weight: 600;
+}
+
+.image-content h2 {
+  margin: 10px 0 0;
+
+  font-size: 36px;
+  line-height: 0.95;
+
+  font-weight: 400;
+  letter-spacing: -1.5px;
+}
+
+.image-content h2 strong {
+  color: #d2a43a;
+  font-weight: 500;
+}
+
+
+/* ============================= */
+/* LADO DIREITO */
+/* ============================= */
+
+.cadastro-content {
+  width: 49%;
+  min-height: 100vh;
+
   display: flex;
   justify-content: center;
-  align-items: center; /* Centraliza verticalmente */
-  background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438") no-repeat center center;
-  background-size: cover;
-  padding: 80px 20px; /* Aumentamos o padding superior e inferior (80px) */
+
+  overflow-y: auto;
+}
+
+
+/* ============================= */
+/* CONTAINER DO FORMULÁRIO */
+/* ============================= */
+
+.cadastro-form-container {
+  width: 100%;
+  max-width: 520px;
+
+  padding: 25px 70px 30px;
+
   box-sizing: border-box;
 }
 
-.cadastro-box {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 30px;
-  border-radius: 15px;
-  width: 100%;
-  max-width: 400px;
-  color: white;
-  
-  /* --- AJUSTE DE ALTURA E ROLAGEM --- */
-  max-height: 80vh; /* Diminuímos um pouco para não encostar nas bordas da tela */
-  overflow-y: auto;
-  
-  /* Adiciona uma sombra para destacar do fundo */
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
 
-/* Garante que o título não fique colado no topo do box */
-.cadastro-box h1 {
-  text-align: center;
-  margin-top: 10px;
+/* ============================= */
+/* VOLTAR */
+/* ============================= */
+
+.voltar-home {
+  display: inline-block;
+
   margin-bottom: 25px;
-  font-size: 2rem;
+
+  font-size: 10px;
+
+  color: #777;
+
+  text-decoration: none;
+
+  transition: 0.3s;
 }
 
-/* Customização do Scroll (Opcional - para ficar mais bonito) */
-.cadastro-box::-webkit-scrollbar {
-  width: 8px;
-}
-.cadastro-box::-webkit-scrollbar-thumb {
-  background: gold;
-  border-radius: 10px;
+.voltar-home:hover {
+  color: #d2a43a;
 }
 
-.cadastro-box h1 {
-  text-align: center;
-  margin-bottom: 20px;
+
+/* ============================= */
+/* LOGO */
+/* ============================= */
+
+.cadastro-logo {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 25px;
 }
 
-.cadastro-box input {
+.cadastro-logo img {
+  width: 34px;
+  height: 34px;
+
+  object-fit: contain;
+}
+
+.cadastro-logo div {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-logo strong {
+  font-size: 13px;
+
+  letter-spacing: 1.2px;
+
+  color: #fff;
+}
+
+.cadastro-logo span {
+  margin-top: 3px;
+
+  font-size: 7px;
+
+  letter-spacing: 2px;
+
+  color: #777;
+}
+
+
+/* ============================= */
+/* CABEÇALHO */
+/* ============================= */
+
+.cadastro-header {
+  margin-bottom: 18px;
+}
+
+.cadastro-eyebrow {
+  font-size: 9px;
+
+  letter-spacing: 2px;
+
+  color: #d2a43a;
+
+  font-weight: 600;
+}
+
+.cadastro-header h1 {
+  margin: 13px 0 8px;
+
+  font-size: 28px;
+
+  font-weight: 400;
+
+  letter-spacing: -0.8px;
+}
+
+.cadastro-header h1 span {
+  color: #d2a43a;
+}
+
+.cadastro-header p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 11px;
+}
+
+
+/* ============================= */
+/* FORMULÁRIO */
+/* ============================= */
+.cadastro-form {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px 12px;
+}
+
+
+/* ============================= */
+/* CAMPOS */
+/* ============================= */
+
+.form-group {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  border: none;
-  box-sizing: border-box; /* Garante que o padding não "empurre" o input para fora */
 }
 
-.cadastro-box span {
-  color: red;
-  font-size: 12px;
-  display: block; /* Garante que o erro fique em sua própria linha */
-  margin-bottom: 5px;
+.form-group.full {
+  grid-column: span 2;
 }
 
-.cadastro-box button {
+.form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 8px;
+
+  color: #8b8b8b;
+
+  letter-spacing: 0.3px;
+}
+
+.form-group input {
   width: 100%;
-  padding: 10px;
-  background: gold;
-  border: none;
-  border-radius: 8px;
-  margin-top: 10px;
+
+  height: 36px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #25282b;
+
+  border-radius: 4px;
+
+  background: #171a1e;
+
+  color: #fff;
+
+  outline: none;
+
+  font-size: 10px;
+
+  transition: 0.3s;
+}
+
+.form-group input::placeholder {
+  color: #62666b;
+}
+
+.form-group input:focus {
+  border-color: #b88927;
+
+  background: #191c20;
+}
+
+
+/* DATA */
+
+.form-group input[type="date"] {
+  color-scheme: dark;
+}
+
+
+/* ============================= */
+/* FOTO */
+/* ============================= */
+
+.file-input {
+  width: 100%;
+
+  height: 36px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px dashed #34373b;
+
+  border-radius: 4px;
+
+  background: #171a1e;
+
+  color: #777;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
   cursor: pointer;
-  font-weight: bold;
+
+  font-size: 10px;
+
+  transition: 0.3s;
 }
 
-/* --- RESPONSIVIDADE PARA CELULARES --- */
-@media (max-width: 480px) {
-  .cadastro-box {
-    padding: 20px;
-    margin: 10px;
+.file-input:hover {
+  border-color: #b88927;
+
+  color: #d2a43a;
+}
+
+.file-input input {
+  display: none;
+}
+
+.file-input strong {
+  font-size: 18px;
+
+  color: #d2a43a;
+
+  font-weight: 300;
+}
+
+
+/* ============================= */
+/* ERROS */
+/* ============================= */
+
+.error {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #d95c5c;
+
+  font-size: 8px;
+}
+
+
+/* ============================= */
+/* BOTÃO */
+/* ============================= */
+
+.btn-cadastro {
+  grid-column: span 2;
+
+  width: 100%;
+
+  height: 38px;
+
+  margin-top: 8px;
+
+  border: none;
+
+  border-radius: 4px;
+
+  background: #d0a039;
+
+  color: #080808;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  transition: 0.3s;
+}
+
+.btn-cadastro:hover {
+  background: #e0b34d;
+
+  transform: translateY(-1px);
+}
+
+.btn-cadastro strong {
+  font-size: 15px;
+
+  font-weight: 400;
+}
+
+
+/* ============================= */
+/* LOGIN */
+/* ============================= */
+
+.login-text {
+  margin-top: 20px;
+
+  text-align: center;
+
+  color: #666;
+
+  font-size: 9px;
+}
+
+.login-text a {
+  margin-left: 4px;
+
+  color: #d2a43a;
+
+  text-decoration: none;
+}
+
+.login-text a:hover {
+  text-decoration: underline;
+}
+
+
+/* ============================= */
+/* RESPONSIVO */
+/* ============================= */
+
+@media (max-width: 900px) {
+
+  .cadastro-image {
+    width: 40%;
+  }
+
+  .cadastro-content {
+    width: 60%;
+  }
+
+  .cadastro-form-container {
+    padding: 50px 35px;
+  }
+
+  .image-content {
+    padding-left: 30px;
+  }
+
+  .image-content h2 {
+    font-size: 28px;
+  }
+}
+
+
+@media (max-width: 700px) {
+
+  .cadastro-page {
+    display: block;
+
+    overflow: auto;
+  }
+
+  .cadastro-image {
+    width: 100%;
+    min-height: 230px;
+
+    height: 230px;
+  }
+
+  .image-content {
+    padding: 0 25px 30px;
+  }
+
+  .image-content h2 {
+    font-size: 26px;
+  }
+
+  .cadastro-content {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .cadastro-form-container {
+    padding: 40px 25px;
+  }
+
+  .voltar-home {
+    margin-bottom: 30px;
+  }
+
+  .cadastro-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full {
+    grid-column: span 1;
+  }
+
+  .btn-cadastro {
+    grid-column: span 1;
   }
 }

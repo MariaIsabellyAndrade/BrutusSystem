@@ -1,13 +1,13 @@
 import api from "./api";
 
-export const criarAgendamento = (dados) => {
-  const formData = new FormData();
+export const criarAgendamento = async (dados) => {
+    const response = await api.post("/agendar", {
+        Cliente: dados.Cliente,
+        Barbeiro: dados.Barbeiro,
+        Servicos: dados.Servicos,
+        data: dados.data,
+        hora: dados.hora,
+    });
 
-  formData.append("Cliente", dados.Cliente);
-  formData.append("Barbeiro", dados.Barbeiro);
-  formData.append("Servicos", JSON.stringify(dados.Servicos));
-  formData.append("data", dados.data);
-  formData.append("hora", dados.hora);
-
-  return api.post("/agendar", formData);
+    return response.data;
 };

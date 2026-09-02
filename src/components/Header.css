@@ -1,82 +1,113 @@
-/* CONTAINER PRINCIPAL (Ajuste para não cobrir o conteúdo) */
-.container {
-  /* Aumente este valor se o header ficar maior */
-  margin-top: clamp(120px, 15vh, 180px); 
-  padding: 20px;
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --brutus-gold: #c99a3a;
+    --brutus-gold-light: #d9ae55;
+    --brutus-black: #050505;
+    --brutus-border: rgba(255, 255, 255, 0.08);
+    --brutus-text: #f5f2eb;
+    --brutus-muted: #8d929a;
 }
 
-/* HEADER PRINCIPAL (Flexível agora) */
+/* =========================
+   HEADER
+========================= */
+
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+    width: 100%;
+    height: 92px;
 
-  height: 70px; /* 👈 fixa o tamanho */
-  padding: 0 5%; /* remove padding vertical */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
+    padding: 0 6%;
+    box-sizing: border-box;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    background: rgba(5, 5, 5, 0.96);
+    border-bottom: 1px solid var(--brutus-border);
 
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-  z-index: 1000;
+    /* FIXO NO TOPO */
+    position: fixed;
+    top: 0;
+    left: 0;
 
-  overflow: visible; /* 👈 permite a logo "sair" */
+    z-index: 1000;
+
+    font-family: 'Manrope', sans-serif;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.header > a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 .logo {
-  height: 80px; /* pode aumentar */
-  transform: scale(1.5); /* 👈 aumenta visualmente */
-  transform-origin: left center; 
+    width: 145px;
+    height: auto;
+    object-fit: contain;
+    display: block;
 }
 
-/* MENU (Sem alterações) */
-.menu ul {
-  list-style: none;
-  display: flex;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
 }
 
-.menu a {
-  text-decoration: none;
-  color: white;
-  font-size: 15px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: 0.3s;
+/* =========================
+   LAYOUT
+========================= */
+
+.app-layout {
+    min-height: 100vh;
+    background: #050505;
+
+    /* espaço reservado para o header */
+    padding-top: 92px;
+    box-sizing: border-box;
 }
 
-.menu a:hover {
-  color: #d4af37;
+.main-content {
+    min-height: calc(100vh - 92px);
 }
 
-/* --- RESPONSIVIDADE (MOBILE) --- */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    padding: 15px;
-  }
+/* =========================
+   RESPONSIVO
+========================= */
 
-  /* Diminua a logo no celular para não ocupar a tela toda */
-  .logo {
-    height: 80px; 
-    margin-bottom: 15px;
-  }
+@media (max-width: 900px) {
 
-  .menu ul {
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+    .header {
+        height: 78px;
+        padding: 0 30px;
+    }
 
-  .menu a {
-    font-size: 13px;
-  }
+    .logo {
+        width: 125px;
+    }
+
+    .app-layout {
+        padding-top: 78px;
+    }
+
+    .main-content {
+        min-height: calc(100vh - 78px);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .header {
+        padding: 0 20px;
+    }
+
+    .logo {
+        width: 115px;
+    }
 }

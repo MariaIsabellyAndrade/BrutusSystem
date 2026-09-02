@@ -1,42 +1,103 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PerfilMenu from "./PerfilMenu";
+import "./Menu.css";
 
 export default function Menu() {
   const tipo = localStorage.getItem("tipo");
   const token = localStorage.getItem("token");
-
   const logado = !!token;
 
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const navigate = useNavigate();
+
+  const irParaSecao = (id) => {
+    // Se já estiver na Home
+    if (location.pathname === "/") {
+      const elemento = document.getElementById(id);
+
+      if (elemento) {
+        elemento.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+
+      return;
+    }
+
+    // Se estiver em outra página, volta para Home
+    navigate(`/#${id}`);
+  };
 
   return (
     <nav className="menu">
-      <ul>
 
-        {/* 🔓 TODOS */}
-        <li><Link to="/Agendamento">Agendamento</Link></li>
+      {/* LINKS PRINCIPAIS */}
+      <div className="menu-links">
 
-        {/* 💈 BARBEIRO + ADMIN */}
-        {logado && (tipo === "BARBEIRO" || tipo === "ADMIN") && (
-          <>
-            <li><Link to="/servico">Serviços</Link></li>
-            <li><Link to="/cliente">Clientes</Link></li>
-          </>
-        )}
+        <button
+          type="button"
+          className="menu-link"
+          onClick={() => irParaSecao("sobre")}
+        >
+          Sobre
+        </button>
 
-        {/* 👑 ADMIN */}
-        {logado && tipo === "ADMIN" && (
-          <>
-          <li><Link to="/barbeiro">Cadastrar Barbeiros</Link></li>
-           <li><Link to="/cadastro-admin">ADMIN</Link></li>
-           </>
-        )}
+        <button
+          type="button"
+          className="menu-link"
+          onClick={() => irParaSecao("servicos")}
+        >
+          Serviços
+        </button>
 
-        {/* 👤 PERFIL */}
-        {!(isHome && !logado) && logado && <PerfilMenu />}
+        <button
+          type="button"
+          className="menu-link"
+          onClick={() => irParaSecao("profissionais")}
+        >
+          Barbeiros
+        </button>
 
-      </ul>
+        <button
+          type="button"
+          className="menu-link"
+          onClick={() => irParaSecao("como-funciona")}
+        >
+          Como funciona
+        </button>
+
+      </div>
+
+      {/* AÇÕES */}
+{/* AÇÕES */}
+<div className="menu-actions">
+
+  {!logado && (
+    <Link
+      to="/Login"
+      className="login-link"
+    >
+      Entrar
+    </Link>
+  )}
+
+  {logado && (
+    <>
+      <Link
+        to="/Agendamento"
+        className="header-agendar"
+      >
+        <span>AGENDAR HORÁRIO</span>
+        <span className="arrow">→</span>
+      </Link>
+
+      <PerfilMenu />
+    </>
+  )}
+
+</div>
+
     </nav>
   );
 }

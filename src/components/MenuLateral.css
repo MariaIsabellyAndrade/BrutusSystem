@@ -1,0 +1,448 @@
+/* =========================================================
+   BRUTUS SYSTEM - MENU LATERAL
+   ========================================================= */
+
+.menu-lateral {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 250px;
+    height: 100vh;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0a0a0a 0%,
+            #070707 100%
+        );
+
+    border-right: 1px solid rgba(201, 154, 58, 0.18);
+
+    color: #ffffff;
+
+    z-index: 1100;
+
+    font-family: 'Manrope', sans-serif;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.menu-logo {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 92px;
+
+    padding: 0 24px;
+
+    box-sizing: border-box;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.logo-icone {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    color: #c99a3a;
+
+    border: 1px solid rgba(201, 154, 58, 0.45);
+
+    border-radius: 9px;
+
+    font-size: 20px;
+
+    background: rgba(201, 154, 58, 0.05);
+}
+
+.logo-texto {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+.logo-texto strong {
+    color: #f5f2eb;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+    white-space: nowrap;
+}
+
+.logo-texto strong span {
+    color: #c99a3a;
+}
+
+.logo-texto small {
+    color: #62666b;
+
+    font-size: 7px;
+
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+.perfil-ativo {
+    margin: 25px 18px 18px;
+
+    padding: 14px 15px;
+
+    background: #0f0f0f;
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 10px;
+}
+
+.perfil-titulo {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #666b71;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+.perfil-tipo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.perfil-tipo strong {
+    color: #c99a3a;
+
+    font-size: 12px;
+
+    letter-spacing: 0.8px;
+}
+
+.perfil-seta {
+    color: #777c82;
+
+    font-size: 16px;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.menu-lateral-links {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 5px 12px;
+
+    flex: 1;
+}
+
+
+/* =========================================================
+   LINK
+   ========================================================= */
+
+.menu-lateral-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-height: 46px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    color: #858a91;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.menu-lateral-link:hover {
+    color: #f5f2eb;
+
+    background: rgba(255, 255, 255, 0.035);
+}
+
+
+/* =========================================================
+   ÍCONE
+   ========================================================= */
+
+.menu-icone {
+    width: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #777c82;
+
+    font-size: 17px;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.menu-lateral-link:hover .menu-icone {
+    color: #c99a3a;
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   LINK ATIVO
+   ========================================================= */
+
+.menu-lateral-link.ativo {
+    color: #f5f2eb;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(201, 154, 58, 0.13),
+            rgba(201, 154, 58, 0.035)
+        );
+
+    border: 1px solid rgba(201, 154, 58, 0.12);
+}
+
+.menu-lateral-link.ativo::before {
+    content: "";
+
+    position: absolute;
+
+    left: -12px;
+
+    top: 8px;
+    bottom: 8px;
+
+    width: 3px;
+
+    background: #c99a3a;
+
+    border-radius: 0 4px 4px 0;
+
+    box-shadow:
+        0 0 10px rgba(201, 154, 58, 0.4);
+}
+
+.menu-lateral-link.ativo .menu-icone {
+    color: #c99a3a;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+.menu-lateral-footer {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 18px;
+
+    padding: 18px 5px;
+
+    color: #555a60;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+}
+
+.footer-status {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #00c878;
+
+    box-shadow:
+        0 0 8px rgba(0, 200, 120, 0.5);
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .menu-lateral {
+        width: 220px;
+    }
+
+    .menu-logo {
+        padding: 0 18px;
+    }
+
+    .perfil-ativo {
+        margin-left: 14px;
+        margin-right: 14px;
+    }
+
+    .menu-lateral-links {
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .menu-lateral {
+        width: 70px;
+    }
+
+    .menu-logo {
+        justify-content: center;
+
+        padding: 0;
+
+        min-height: 78px;
+    }
+
+    .logo-texto {
+        display: none;
+    }
+
+    .logo-icone {
+        width: 38px;
+        height: 38px;
+    }
+
+    .perfil-ativo {
+        margin: 18px 10px;
+
+        padding: 10px 0;
+
+        display: flex;
+        justify-content: center;
+    }
+
+    .perfil-titulo {
+        display: none;
+    }
+
+    .perfil-tipo {
+        justify-content: center;
+    }
+
+    .perfil-tipo strong {
+        font-size: 9px;
+
+        writing-mode: vertical-rl;
+    }
+
+    .perfil-seta {
+        display: none;
+    }
+
+    .menu-lateral-links {
+        padding: 5px 8px;
+    }
+
+    .menu-lateral-link {
+        justify-content: center;
+
+        padding: 0;
+
+        min-height: 46px;
+    }
+
+    .menu-lateral-link > span:last-child {
+        display: none;
+    }
+
+    .menu-icone {
+        width: auto;
+
+        font-size: 18px;
+    }
+
+    .menu-lateral-link.ativo::before {
+        left: -8px;
+    }
+
+    .menu-lateral-footer {
+        justify-content: center;
+
+        margin: 0;
+
+        padding: 18px 0;
+    }
+
+    .menu-lateral-footer > span:last-child {
+        display: none;
+    }
+}

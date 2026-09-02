@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./index.css";
+
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../service/loginService";
 
@@ -7,14 +8,8 @@ import {
   Mail,
   Lock,
   Eye,
+  EyeOff,
   LogIn,
-  UserPlus,
-  CalendarDays,
-  Users,
-  Scissors,
-  ShieldCheck,
-  Cloud,
-  Headphones
 } from "lucide-react";
 
 export default function Login() {
@@ -22,16 +17,19 @@ export default function Login() {
 
   const [form, setForm] = useState({
     email: "",
-    senha: ""
+    senha: "",
   });
 
   const [erro, setErro] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleChange = (e) => {
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
+
+    setErro("");
   };
 
   const handleSubmit = async (e) => {
@@ -40,12 +38,10 @@ export default function Login() {
     try {
       const res = await login(form);
 
-      // 🔐 salva token e tipo
-localStorage.setItem("token", res.data.token);
-localStorage.setItem("tipo", res.data.tipo);
-localStorage.setItem("entidadeId", res.data.entidadeId);
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("tipo", res.data.tipo);
+      localStorage.setItem("entidadeId", res.data.entidadeId);
 
-      // 🔥 REDIRECIONAMENTO
       if (res.data.tipo === "ADMIN") {
         navigate("/barbeiro");
       } else if (res.data.tipo === "BARBEIRO") {
@@ -53,111 +49,98 @@ localStorage.setItem("entidadeId", res.data.entidadeId);
       } else {
         navigate("/cliente");
       }
-
     } catch (err) {
       console.error(err);
-      setErro(err.response?.data?.erro || "Erro ao fazer login");
+
+      setErro(
+        err.response?.data?.erro ||
+        "E-mail ou senha inválidos"
+      );
     }
   };
 
-return (
-  <div className="login-page">
+  return (
+    <div className="login-page">
 
-    <div className="login-main">
-
+      {/* ========================= */}
       {/* LADO ESQUERDO */}
-      <div className="login-left">
+      {/* ========================= */}
 
-        <div className="login-left-content">
+      <div className="login-image">
 
-          <div className="login-logo">
-            <div className="login-logo-icon">
-              ✂
-            </div>
+        <div className="login-image-overlay"></div>
 
-            <h1>BRUTUS</h1>
+        <div className="login-image-content">
 
-            <span>SISTEMA DE GESTÃO</span>
-          </div>
+          <span>BARBEARIA BRUTUS</span>
 
-          <div className="login-description">
-
-            <h2>Gestão completa para sua barbearia</h2>
-
-            <p>
-              Agendamentos, clientes, serviços e barbeiros
-              organizados em um só lugar.
-            </p>
-
-          </div>
-
-          <div className="login-benefits">
-
-            <div className="login-benefit">
-              <div className="login-benefit-icon">
-                <CalendarDays />
-              </div>
-
-              <h3>Agendamentos</h3>
-              <p>inteligentes</p>
-            </div>
-
-            <div className="login-benefit">
-              <div className="login-benefit-icon">
-                <Users />
-              </div>
-
-              <h3>Clientes</h3>
-              <p>satisfeitos</p>
-            </div>
-
-            <div className="login-benefit">
-              <div className="login-benefit-icon">
-                <Scissors />
-              </div>
-
-              <h3>Barbearia</h3>
-              <p>organizada</p>
-            </div>
-
-          </div>
+          <h2>
+            SEU ESTILO,
+            <br />
+            <strong>NO SEU TEMPO.</strong>
+          </h2>
 
         </div>
 
       </div>
 
 
+      {/* ========================= */}
       {/* LADO DIREITO */}
-      <div className="login-right">
+      {/* ========================= */}
 
-        <div className="login-box">
+      <div className="login-content">
 
+        <div className="login-form-container">
+
+          {/* VOLTAR */}
+          <Link to="/" className="login-voltar">
+            ← Voltar para a home
+          </Link>
+
+
+
+
+          {/* CABEÇALHO */}
           <div className="login-header">
 
-            <h2>Bem-vindo de volta!</h2>
+            <span className="login-eyebrow">
+              BEM-VINDO DE VOLTA
+            </span>
+
+            <h1>
+              Entre na sua <span>conta.</span>
+            </h1>
 
             <p>
-              Faça login para acessar sua conta
+              Acesse sua conta para continuar.
             </p>
 
           </div>
 
 
-          <form onSubmit={handleSubmit}>
+          {/* FORMULÁRIO */}
+          <form
+            onSubmit={handleSubmit}
+            className="login-form"
+          >
 
-            {/* EMAIL */}
-            <div className="input-group">
+            {/* E-MAIL */}
+            <div className="login-form-group">
 
               <label>E-mail</label>
 
-              <div className="input-wrapper">
+              <div className="login-input-wrapper">
 
-                <Mail className="input-icon" size={17} />
+                <Mail
+                  className="login-input-icon"
+                  size={15}
+                />
 
                 <input
                   type="email"
                   name="email"
-                  placeholder="Digite seu e-mail"
+                  placeholder="voce@email.com"
                   value={form.email}
                   onChange={handleChange}
                   required
@@ -169,18 +152,21 @@ return (
 
 
             {/* SENHA */}
-            <div className="input-group">
+            <div className="login-form-group">
 
               <label>Senha</label>
 
-              <div className="input-wrapper">
+              <div className="login-input-wrapper">
 
-                <Lock className="input-icon" size={17} />
+                <Lock
+                  className="login-input-icon"
+                  size={15}
+                />
 
                 <input
-                  type="password"
+                  type={mostrarSenha ? "text" : "password"}
                   name="senha"
-                  placeholder="Digite sua senha"
+                  placeholder="••••••••"
                   value={form.senha}
                   onChange={handleChange}
                   required
@@ -188,9 +174,16 @@ return (
 
                 <button
                   type="button"
-                  className="password-toggle"
+                  className="login-password-toggle"
+                  onClick={() =>
+                    setMostrarSenha(!mostrarSenha)
+                  }
                 >
-                  <Eye size={17} />
+                  {mostrarSenha ? (
+                    <EyeOff size={15} />
+                  ) : (
+                    <Eye size={15} />
+                  )}
                 </button>
 
               </div>
@@ -198,17 +191,18 @@ return (
             </div>
 
 
+            {/* ERRO */}
             {erro && (
-              <p className="error">
+              <p className="login-error">
                 {erro}
               </p>
             )}
 
 
-            {/* LEMBRAR / ESQUECI */}
+            {/* OPÇÕES */}
             <div className="login-options">
 
-              <label className="remember-me">
+              <label className="login-remember">
 
                 <input type="checkbox" />
 
@@ -218,7 +212,8 @@ return (
 
               <a
                 href="#"
-                className="forgot-password"
+                className="login-forgot"
+                onClick={(e) => e.preventDefault()}
               >
                 Esqueci minha senha
               </a>
@@ -229,38 +224,25 @@ return (
             {/* ENTRAR */}
             <button
               type="submit"
-              className="btn-login"
+              className="login-button"
             >
-              <LogIn size={16} />
+              <span>ENTRAR</span>
 
-              <span>Entrar</span>
+              <strong>→</strong>
             </button>
-
-
-            {/* OU */}
-            <div className="login-divider">
-              ou
-            </div>
-
-
-            {/* CADASTRO */}
-            <Link
-              to="/cadastro"
-              className="register-button"
-            >
-              <UserPlus size={16} />
-
-              <span>Cadastre-se</span>
-            </Link>
 
           </form>
 
 
-          <p className="register-text">
-            Ainda não tem conta?{" "}
+          {/* CADASTRO */}
+          <p className="login-register">
+
+            Ainda não possui uma conta?
+
             <Link to="/cadastro">
-              Cadastre-se
+              Criar conta
             </Link>
+
           </p>
 
         </div>
@@ -268,58 +250,5 @@ return (
       </div>
 
     </div>
-
-
-    {/* RODAPÉ */}
-    <footer className="login-footer">
-
-      <div className="footer-item">
-
-        <ShieldCheck className="footer-icon" />
-
-        <div>
-          <strong>Seguro</strong>
-          <span>Seus dados protegidos</span>
-        </div>
-
-      </div>
-
-
-      <div className="footer-item">
-
-        <Cloud className="footer-icon" />
-
-        <div>
-          <strong>Em qualquer lugar</strong>
-          <span>Acesse de onde estiver</span>
-        </div>
-
-      </div>
-
-
-      <div className="footer-item">
-
-        <Headphones className="footer-icon" />
-
-        <div>
-          <strong>Suporte</strong>
-          <span>Estamos aqui para ajudar</span>
-        </div>
-
-      </div>
-
-
-      <div className="footer-item">
-
-        <div>
-          <strong>Versão 1.0.0</strong>
-          <span>Sistema sempre atualizado</span>
-        </div>
-
-      </div>
-
-    </footer>
-
-  </div>
-);
+  );
 }

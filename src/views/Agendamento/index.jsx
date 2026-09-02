@@ -1,131 +1,130 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import "./index.css";
+import {listarBarbeiros} from "../../service/serviceBarbeiro"
+import {listarClientes} from "../../service/serviceCliente"
+import {listarServicos} from "../../service/serviceServico"
+import {criarAgendamento} from "../../service/serviceAgenda"
 
-const API_URL = "http://localhost:3000";
 
 export default function AgendamentoPage() {
   const [barbeiros, setBarbeiros] = useState([]);
   const [servicos, setServicos] = useState([]);
+  const [clientes, setClientes] = useState([]);
 
-const [clientes, setClientes] = useState([]);
-const [cliente, setCliente] = useState("");
-
+  const [cliente, setCliente] = useState("");
   const [barbeiro, setBarbeiro] = useState("");
   const [servicosSelecionados, setServicosSelecionados] = useState([]);
   const [data, setData] = useState("");
   const [hora, setHora] = useState("");
 
+
+  const [etapa, setEtapa] = useState(1);
   const [carregando, setCarregando] = useState(true);
   const [enviando, setEnviando] = useState(false);
+
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
 
   const [qrCode, setQrCode] = useState("");
   const [qrCodeBase64, setQrCodeBase64] = useState("");
+  const [pixCopiado, setPixCopiado] = useState(false);
 
-const token = localStorage.getItem("token");
-const tipo = localStorage.getItem("tipo");
-const entidadeId = localStorage.getItem("entidadeId");
+  const token = localStorage.getItem("token");
+  const tipo = localStorage.getItem("tipo");
+  const entidadeId = localStorage.getItem("entidadeId");
 
-  useEffect(() => {
-    carregarDados();
-  }, []);
+  /*
+   * ETAPA 1 depende do tipo de usuário.
+   * CLIENTE -> escolhe barbeiro
+   * BARBEIRO -> escolhe cliente
+   */
+  const etapaNomes =
+    tipo === "BARBEIRO"
+      ? ["Cliente", "Serviços", "Data", "Horário", "Resumo"]
+      : ["Barbeiro", "Serviços", "Data", "Horário", "Resumo"];
 
-  async function carregarDados() {
+
+      useEffect(() => {
+  const carregarDados = async () => {
     try {
-        setCarregando(true);
-        setErro("");
+      setCarregando(true);
+      setErro("");
 
-        const tipoUsuario = localStorage.getItem("tipo");
+      const tipoUsuario = localStorage.getItem("tipo");
 
-        const requests = [
-            fetch(`${API_URL}/servicos`)
-        ];
+      // =========================
+      // SERVIÇOS
+      // =========================
+      const servicosResponse = await listarServicos();
 
-        if (tipoUsuario === "CLIENTE") {
-            requests.push(
-                fetch(`${API_URL}/barbeiros`)
-            );
-        }
+      const listaServicos = Array.isArray(servicosResponse)
+        ? servicosResponse
+        : servicosResponse?.servicos ||
+          servicosResponse?.data ||
+          [];
 
-        if (tipoUsuario === "BARBEIRO") {
-            requests.push(
-                fetch(`${API_URL}/clientes`)
-            );
-        }
+      // SOMENTE SERVIÇOS ATIVOS
+      const servicosAtivos = listaServicos.filter(
+        (servico) => servico.ativo === true
+      );
 
-        const responses = await Promise.all(requests);
+      setServicos(servicosAtivos);
 
-        const servicosResponse = responses[0];
+      // =========================
+      // BARBEIROS
+      // =========================
+      if (tipoUsuario === "CLIENTE") {
+        const barbeirosResponse = await listarBarbeiros();
 
-        if (!servicosResponse.ok) {
-            throw new Error(
-                "Não foi possível carregar os serviços."
-            );
-        }
+        const listaBarbeiros = Array.isArray(barbeirosResponse)
+          ? barbeirosResponse
+          : barbeirosResponse?.barbeiros ||
+            barbeirosResponse?.data ||
+            [];
 
-        const servicosData = await servicosResponse.json();
-
-        setServicos(
-            Array.isArray(servicosData)
-                ? servicosData
-                : servicosData.servicos ||
-                  servicosData.data ||
-                  []
+        // SOMENTE BARBEIROS ATIVOS
+        const barbeirosAtivos = listaBarbeiros.filter(
+          (barbeiro) => barbeiro.ativo === true
         );
 
-        if (tipoUsuario === "CLIENTE") {
-            const barbeirosResponse = responses[1];
+        setBarbeiros(barbeirosAtivos);
+      }
 
-            if (!barbeirosResponse.ok) {
-                throw new Error(
-                    "Não foi possível carregar os barbeiros."
-                );
-            }
+      // =========================
+      // CLIENTES
+      // =========================
+      if (tipoUsuario === "BARBEIRO") {
+        const clientesResponse = await listarClientes();
 
-            const barbeirosData =
-                await barbeirosResponse.json();
+        const listaClientes = Array.isArray(clientesResponse)
+          ? clientesResponse
+          : clientesResponse?.clientes ||
+            clientesResponse?.data ||
+            [];
 
-            setBarbeiros(
-                Array.isArray(barbeirosData)
-                    ? barbeirosData
-                    : barbeirosData.barbeiros ||
-                      barbeirosData.data ||
-                      []
-            );
-        }
+        // SOMENTE CLIENTES ATIVOS
+        const clientesAtivos = listaClientes.filter(
+          (cliente) => cliente.ativo === true
+        );
 
-        if (tipoUsuario === "BARBEIRO") {
-            const clientesResponse = responses[1];
-
-            if (!clientesResponse.ok) {
-                throw new Error(
-                    "Não foi possível carregar os clientes."
-                );
-            }
-
-            const clientesData =
-                await clientesResponse.json();
-
-            setClientes(
-                Array.isArray(clientesData)
-                    ? clientesData
-                    : clientesData.clientes ||
-                      clientesData.data ||
-                      []
-            );
-        }
-
+        setClientes(clientesAtivos);
+      }
     } catch (error) {
-        console.error(error);
-        setErro(
-            error.message ||
-            "Erro ao carregar os dados."
-        );
+      console.error("Erro ao carregar os dados:", error);
+
+      setErro(
+        error?.message || "Erro ao carregar os dados."
+      );
     } finally {
-        setCarregando(false);
+      setCarregando(false);
     }
-}
+  };
+
+  carregarDados();
+}, []);
+
+
 
   function getId(item) {
     return item?._id || item?.id;
@@ -148,18 +147,18 @@ const entidadeId = localStorage.getItem("entidadeId");
   function getPrecoServico(item) {
     return Number(
       item?.preco ??
-      item?.valor ??
-      item?.precoServico ??
-      item?.Preco ??
-      0
+        item?.valor ??
+        item?.precoServico ??
+        item?.Preco ??
+        0
     );
   }
 
   function getDuracaoServico(item) {
     return Number(
       item?.duracao ??
-      item?.Duracao ??
-      0
+        item?.Duracao ??
+        0
     );
   }
 
@@ -183,14 +182,16 @@ const entidadeId = localStorage.getItem("entidadeId");
 
   const valorTotal = useMemo(() => {
     return servicosEscolhidos.reduce(
-      (total, servico) => total + getPrecoServico(servico),
+      (total, servico) =>
+        total + getPrecoServico(servico),
       0
     );
   }, [servicosEscolhidos]);
 
   const duracaoTotal = useMemo(() => {
     return servicosEscolhidos.reduce(
-      (total, servico) => total + getDuracaoServico(servico),
+      (total, servico) =>
+        total + getDuracaoServico(servico),
       0
     );
   }, [servicosEscolhidos]);
@@ -222,8 +223,14 @@ const entidadeId = localStorage.getItem("entidadeId");
     const hoje = new Date();
 
     const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    const mes = String(
+      hoje.getMonth() + 1
+    ).padStart(2, "0");
+
+    const dia = String(
+      hoje.getDate()
+    ).padStart(2, "0");
 
     return `${ano}-${mes}-${dia}`;
   }
@@ -242,12 +249,70 @@ const entidadeId = localStorage.getItem("entidadeId");
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
   }
 
+  function validarEtapaAtual() {
+    setErro("");
+
+    if (etapa === 1) {
+      if (tipo === "CLIENTE" && !barbeiro) {
+        setErro("Selecione um barbeiro.");
+        return false;
+      }
+
+      if (tipo === "BARBEIRO" && !cliente) {
+        setErro("Selecione um cliente.");
+        return false;
+      }
+    }
+
+    if (etapa === 2) {
+      if (servicosSelecionados.length === 0) {
+        setErro("Selecione pelo menos um serviço.");
+        return false;
+      }
+    }
+
+    if (etapa === 3) {
+      if (!data) {
+        setErro("Selecione uma data.");
+        return false;
+      }
+    }
+
+    if (etapa === 4) {
+      if (!hora) {
+        setErro("Selecione um horário.");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function proximaEtapa() {
+    if (!validarEtapaAtual()) {
+      return;
+    }
+
+    setErro("");
+
+    if (etapa < 5) {
+      setEtapa((atual) => atual + 1);
+    }
+  }
+
+  function etapaAnterior() {
+    setErro("");
+
+    if (etapa > 1) {
+      setEtapa((atual) => atual - 1);
+    }
+  }
 async function confirmarAgendamento() {
     setErro("");
     setSucesso("");
 
     const tipoUsuario = localStorage.getItem("tipo");
-    const entidadeId = localStorage.getItem("entidadeId");
+    const idUsuario = localStorage.getItem("entidadeId");
 
     if (!token) {
         setErro(
@@ -256,7 +321,7 @@ async function confirmarAgendamento() {
         return;
     }
 
-    if (!entidadeId) {
+    if (!idUsuario) {
         setErro(
             "Não foi possível identificar o usuário logado."
         );
@@ -265,26 +330,31 @@ async function confirmarAgendamento() {
 
     if (tipoUsuario === "CLIENTE" && !barbeiro) {
         setErro("Selecione um barbeiro.");
+        setEtapa(1);
         return;
     }
 
     if (tipoUsuario === "BARBEIRO" && !cliente) {
         setErro("Selecione um cliente.");
+        setEtapa(1);
         return;
     }
 
     if (servicosSelecionados.length === 0) {
         setErro("Selecione pelo menos um serviço.");
+        setEtapa(2);
         return;
     }
 
     if (!data) {
         setErro("Selecione uma data.");
+        setEtapa(3);
         return;
     }
 
     if (!hora) {
         setErro("Selecione um horário.");
+        setEtapa(4);
         return;
     }
 
@@ -294,325 +364,270 @@ async function confirmarAgendamento() {
         const dados = {
             Cliente:
                 tipoUsuario === "CLIENTE"
-                    ? entidadeId
+                    ? idUsuario
                     : cliente,
 
             Barbeiro:
                 tipoUsuario === "BARBEIRO"
-                    ? entidadeId
+                    ? idUsuario
                     : barbeiro,
 
             Servicos: servicosSelecionados,
-
             data,
-
-            hora
+            hora,
         };
 
         console.log("DADOS ENVIADOS:", dados);
 
-        const response = await fetch(
-            `${API_URL}/agendar`,
-            {
-                method: "POST",
+       const resultado = await criarAgendamento(dados);
 
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
+console.log("RESULTADO DO AGENDAMENTO:", resultado);
 
-                body: JSON.stringify(dados)
-            }
-        );
+const pagamento = resultado?.pagamento;
 
-        const resultado = await response.json();
+if (!pagamento) {
+    throw new Error("Os dados do pagamento PIX não foram retornados.");
+}
 
-        if (!response.ok) {
-            throw new Error(
-                resultado?.message ||
-                resultado?.erro ||
-                resultado?.error ||
-                "Não foi possível realizar o agendamento."
-            );
-        }
+setQrCode(pagamento.qrCode || "");
+setQrCodeBase64(pagamento.qrCodeBase64 || "");
 
-        setSucesso(
-            "Agendamento criado com sucesso! Realize o pagamento do PIX para confirmar."
-        );
+setSucesso(
+    "Agendamento criado com sucesso! Realize o pagamento do PIX para confirmar."
+);
 
-        setQrCode(
-            resultado?.pagamento?.qrCode ||
-            resultado?.qrCode ||
-            ""
-        );
-
-        setQrCodeBase64(
-            resultado?.pagamento?.qrCodeBase64 ||
-            resultado?.qrCodeBase64 ||
-            ""
-        );
+setEtapa(6);
 
     } catch (error) {
-        console.error(error);
+        console.error("ERRO AO CRIAR AGENDAMENTO:", error);
 
         setErro(
-            error.message ||
+            error?.response?.data?.erro ||
+            error?.response?.data?.message ||
+            error?.message ||
             "Erro ao realizar agendamento."
         );
+
     } finally {
         setEnviando(false);
     }
 }
 
+  function getNomeClienteSelecionado() {
+    const item = clientes.find(
+      (clienteItem) =>
+        getId(clienteItem) === cliente
+    );
+
+    if (!item) {
+      return "Não selecionado";
+    }
+
+    return `${item?.nome || ""} ${
+      item?.sobrenome || ""
+    }`.trim();
+  }
+
+  function getNomeBarbeiroSelecionado() {
+    const item = barbeiros.find(
+      (barbeiroItem) =>
+        getId(barbeiroItem) === barbeiro
+    );
+
+    return item
+      ? getNomeBarbeiro(item)
+      : "Não selecionado";
+  }
+
+  if (carregando) {
+    return (
+      <main className="agendamento-page">
+        <div className="agendamento-loading">
+          <div className="loading-spinner"></div>
+
+          <p>Carregando informações...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="agendamento-page">
+
+      <div className="agendamento-background"></div>
+
       <div className="agendamento-container">
 
-        <div className="agendamento-header">
-          <div>
-            <span className="agendamento-tag">
-              BRUTUS SYSTEM
-            </span>
+        {/* HEADER */}
 
-            <h1>Agendamento</h1>
+        <header className="agendamento-header">
 
+          <Link
+            to="/"
+            className="agendamento-back"
+          >
+            ← Voltar para a home
+          </Link>
+          <div className="agendamento-title">
             <p>
-              Escolha o barbeiro, os serviços, a data e o melhor horário para você.
+              Escolha os detalhes do seu
+              atendimento de forma rápida e simples.
             </p>
-          </div>
-        </div>
-
-        <div className="agendamento-card">
-
-          <div className="agendamento-steps">
-
-            <div className="agendamento-step active">
-              <span>01</span>
-              <div>
-                <strong>Barbeiro</strong>
-                <small>Escolha o profissional</small>
-              </div>
-            </div>
-
-            <div className="agendamento-step-line"></div>
-
-            <div
-              className={
-                `agendamento-step ${
-                  servicosSelecionados.length > 0 ? "active" : ""
-                }`
-              }
-            >
-              <span>02</span>
-              <div>
-                <strong>Serviços</strong>
-                <small>Escolha os serviços</small>
-              </div>
-            </div>
-
-            <div className="agendamento-step-line"></div>
-
-            <div
-              className={
-                `agendamento-step ${
-                  data ? "active" : ""
-                }`
-              }
-            >
-              <span>03</span>
-              <div>
-                <strong>Data</strong>
-                <small>Escolha o dia</small>
-              </div>
-            </div>
-
-            <div className="agendamento-step-line"></div>
-
-            <div
-              className={
-                `agendamento-step ${
-                  hora ? "active" : ""
-                }`
-              }
-            >
-              <span>04</span>
-              <div>
-                <strong>Horário</strong>
-                <small>Escolha o horário</small>
-              </div>
-            </div>
 
           </div>
 
-          {carregando ? (
-            <div className="agendamento-loading">
-              <div className="loading-spinner"></div>
-              <p>Carregando informações...</p>
+        </header>
+
+
+        {/* PROGRESSO */}
+
+        {etapa <= 5 && (
+          <div className="agendamento-progress">
+
+            <div className="progress-line">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${((etapa - 1) / 4) * 100}%`,
+                }}
+              ></div>
             </div>
-          ) : (
-            <>
-              <section className="agendamento-section">
 
-               {tipo === "CLIENTE" ? (
-    <section className="agendamento-section">
-        <div className="section-title">
-            <div className="section-number">01</div>
+            <div className="progress-steps">
 
-            <div>
-                <h2>Escolha o barbeiro</h2>
-                <p>
-                    Selecione o profissional que irá realizar
-                    seu atendimento.
-                </p>
-            </div>
-        </div>
+              {etapaNomes.map(
+                (nome, index) => {
 
-        <div className="barbeiros-grid">
-            {barbeiros.map((item) => {
-                const id = getId(item);
-                const selecionado = barbeiro === id;
+                  const numero = index + 1;
 
-                return (
-                    <button
-                        type="button"
-                        key={id}
-                        className={`barbeiro-card ${
-                            selecionado ? "selected" : ""
-                        }`}
-                        onClick={() => {
-                            setBarbeiro(id);
-                            setErro("");
-                        }}
+                  return (
+                    <div
+                      key={nome}
+                      className={`progress-step ${
+                        numero <= etapa
+                          ? "active"
+                          : ""
+                      }`}
                     >
-                        <div className="barbeiro-avatar">
-                            {getNomeBarbeiro(item)
-                                .charAt(0)
-                                .toUpperCase()}
-                        </div>
 
-                        <div className="barbeiro-info">
-                            <strong>
-                                {getNomeBarbeiro(item)}
-                            </strong>
+                      <div className="progress-number">
+                        {String(numero).padStart(
+                          2,
+                          "0"
+                        )}
+                      </div>
 
-                            <span>Barbeiro</span>
-                        </div>
+                      <span>
+                        {nome}
+                      </span>
 
-                        <div className="selection-check">
-                            {selecionado ? "✓" : ""}
-                        </div>
-                    </button>
-                );
-            })}
-        </div>
-    </section>
-) : (
-    <section className="agendamento-section">
-        <div className="section-title">
-            <div className="section-number">01</div>
+                    </div>
+                  );
+                }
+              )}
 
-            <div>
-                <h2>Escolha o cliente</h2>
-                <p>
-                    Selecione o cliente para o atendimento.
-                </p>
             </div>
-        </div>
 
-        <div className="barbeiros-grid">
-            {clientes.map((item) => {
-                const id = getId(item);
-                const selecionado = cliente === id;
+          </div>
+        )}
 
-                return (
-                    <button
-                        type="button"
-                        key={id}
-                        className={`barbeiro-card ${
-                            selecionado ? "selected" : ""
-                        }`}
-                        onClick={() => {
-                            setCliente(id);
-                            setErro("");
-                        }}
-                    >
-                        <div className="barbeiro-avatar">
-                            {item?.nome
-                                ?.charAt(0)
-                                .toUpperCase()}
-                        </div>
 
-                        <div className="barbeiro-info">
-                            <strong>
-                                {item?.nome} {item?.sobrenome}
-                            </strong>
+        {/* MODAL */}
 
-                            <span>Cliente</span>
-                        </div>
+        <div className="agendamento-modal">
 
-                        <div className="selection-check">
-                            {selecionado ? "✓" : ""}
-                        </div>
-                    </button>
-                );
-            })}
-        </div>
-    </section>
-)}
+          {erro && (
+            <div className="message error">
+              <span>!</span>
+              {erro}
+            </div>
+          )}
 
-              </section>
+          {/* ETAPA 1 */}
 
-              <section className="agendamento-section">
+          {etapa === 1 && (
+            <section className="modal-content">
 
-                <div className="section-title">
-                  <div className="section-number">02</div>
+              <div className="modal-heading">
 
-                  <div>
-                    <h2>Escolha os serviços</h2>
-                    <p>Você pode selecionar mais de um serviço.</p>
-                  </div>
+                <span>01</span>
+
+                <div>
+                  <small>
+                    {tipo === "BARBEIRO"
+                      ? "ATENDIMENTO"
+                      : "PROFISSIONAL"}
+                  </small>
+
+                  <h2>
+                    {tipo === "BARBEIRO"
+                      ? "Escolha o cliente"
+                      : "Escolha o barbeiro"}
+                  </h2>
+
+                  <p>
+                    {tipo === "BARBEIRO"
+                      ? "Selecione o cliente para o atendimento."
+                      : "Selecione o profissional que irá realizar seu atendimento."}
+                  </p>
                 </div>
 
-                <div className="servicos-grid">
+              </div>
 
-                  {servicos.length === 0 ? (
+              {tipo === "CLIENTE" ? (
+                <div className="barbeiros-grid">
+
+                  {barbeiros.length === 0 ? (
                     <div className="empty-message">
-                      Nenhum serviço disponível.
+                      Nenhum barbeiro disponível.
                     </div>
                   ) : (
-                    servicos.map((servico) => {
-                      const id = getId(servico);
+                    barbeiros.map((item) => {
+
+                      const id = getId(item);
+
                       const selecionado =
-                        servicosSelecionados.includes(id);
+                        barbeiro === id;
 
                       return (
                         <button
                           type="button"
                           key={id}
-                          className={
-                            `servico-card ${
-                              selecionado ? "selected" : ""
-                            }`
-                          }
-                          onClick={() => selecionarServico(id)}
+                          className={`barbeiro-card ${
+                            selecionado
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            setBarbeiro(id);
+                            setErro("");
+                          }}
                         >
 
-                          <div className="servico-check">
-                            {selecionado ? "✓" : ""}
+                          <div className="barbeiro-avatar">
+
+                            {getNomeBarbeiro(item)
+                              .charAt(0)
+                              .toUpperCase()}
+
                           </div>
 
-                          <div className="servico-content">
+                          <div className="barbeiro-info">
+
                             <strong>
-                              {getNomeServico(servico)}
+                              {getNomeBarbeiro(item)}
                             </strong>
 
                             <span>
-                              {getDuracaoServico(servico)} minutos
+                              Profissional
                             </span>
+
                           </div>
 
-                          <div className="servico-preco">
-                            R$ {getPrecoServico(servico).toFixed(2).replace(".", ",")}
+                          <div className="selection-check">
+                            {selecionado
+                              ? "✓"
+                              : ""}
                           </div>
 
                         </button>
@@ -621,251 +636,624 @@ async function confirmarAgendamento() {
                   )}
 
                 </div>
+              ) : (
+                <div className="barbeiros-grid">
 
-              </section>
-
-              <section className="agendamento-section">
-
-                <div className="section-title">
-                  <div className="section-number">03</div>
-
-                  <div>
-                    <h2>Escolha a data</h2>
-                    <p>Selecione o dia do seu atendimento.</p>
-                  </div>
-                </div>
-
-                <div className="data-wrapper">
-
-                  <label htmlFor="data">
-                    Data do atendimento
-                  </label>
-
-                  <input
-                    id="data"
-                    type="date"
-                    min={dataMinima()}
-                    value={data}
-                    onChange={(event) => {
-                      setData(event.target.value);
-                      setHora("");
-                      setErro("");
-                    }}
-                  />
-
-                </div>
-
-              </section>
-
-              <section className="agendamento-section">
-
-                <div className="section-title">
-                  <div className="section-number">04</div>
-
-                  <div>
-                    <h2>Escolha o horário</h2>
-                    <p>
-                      Horários disponíveis a cada 30 minutos.
-                    </p>
-                  </div>
-                </div>
-
-                {!data ? (
-                  <div className="horario-empty">
-                    <span>📅</span>
-                    <p>
-                      Selecione uma data para visualizar os horários.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="horarios-grid">
-
-                    {horarios.map((horario) => (
-                      <button
-                        type="button"
-                        key={horario}
-                        className={
-                          `horario-button ${
-                            hora === horario ? "selected" : ""
-                          }`
-                        }
-                        onClick={() => {
-                          setHora(horario);
-                          setErro("");
-                        }}
-                      >
-                        {horario}
-                      </button>
-                    ))}
-
-                  </div>
-                )}
-
-              </section>
-
-              <section className="resumo-card">
-
-                <div className="resumo-header">
-                  <div>
-                    <span>RESUMO</span>
-                    <h2>Seu agendamento</h2>
-                  </div>
-
-                  <div className="resumo-icon">
-                    ✓
-                  </div>
-                </div>
-
-                <div className="resumo-body">
-
-                  <div className="resumo-row">
-                    <span>Barbeiro</span>
-                    <strong>
-                      {barbeiro
-                        ? getNomeBarbeiro(
-                            barbeiros.find(
-                              (item) => getId(item) === barbeiro
-                            )
-                          )
-                        : "Não selecionado"}
-                    </strong>
-                  </div>
-
-                  <div className="resumo-row">
-                    <span>Serviços</span>
-
-                    <strong>
-                      {servicosSelecionados.length === 0
-                        ? "Nenhum serviço"
-                        : `${servicosSelecionados.length} ${
-                            servicosSelecionados.length === 1
-                              ? "serviço"
-                              : "serviços"
-                          }`}
-                    </strong>
-                  </div>
-
-                  <div className="resumo-row">
-                    <span>Data</span>
-
-                    <strong>
-                      {formatarData(data)}
-                    </strong>
-                  </div>
-
-                  <div className="resumo-row">
-                    <span>Horário</span>
-
-                    <strong>
-                      {hora || "Não selecionado"}
-                    </strong>
-                  </div>
-
-                  <div className="resumo-row">
-                    <span>Duração</span>
-
-                    <strong>
-                      {duracaoTotal > 0
-                        ? `${duracaoTotal} minutos`
-                        : "Não calculada"}
-                    </strong>
-                  </div>
-
-                </div>
-
-                <div className="resumo-total">
-                  <span>Total dos serviços</span>
-
-                  <strong>
-                    R$ {valorTotal.toFixed(2).replace(".", ",")}
-                  </strong>
-                </div>
-
-              </section>
-
-              {erro && (
-                <div className="message error">
-                  <span>!</span>
-                  {erro}
-                </div>
-              )}
-
-              {sucesso && (
-                <div className="message success">
-                  <span>✓</span>
-                  {sucesso}
-                </div>
-              )}
-
-              {qrCodeBase64 && (
-                <div className="pix-card">
-
-                  <div className="pix-header">
-                    <div>
-                      <span>PIX</span>
-                      <h2>Pagamento do sinal</h2>
+                  {clientes.length === 0 ? (
+                    <div className="empty-message">
+                      Nenhum cliente disponível.
                     </div>
-                  </div>
+                  ) : (
+                    clientes.map((item) => {
+
+                      const id = getId(item);
+
+                      const selecionado =
+                        cliente === id;
+
+                      return (
+                        <button
+                          type="button"
+                          key={id}
+                          className={`barbeiro-card ${
+                            selecionado
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            setCliente(id);
+                            setErro("");
+                          }}
+                        >
+
+                          <div className="barbeiro-avatar">
+
+                            {item?.nome
+                              ?.charAt(0)
+                              .toUpperCase()}
+
+                          </div>
+
+                          <div className="barbeiro-info">
+
+                            <strong>
+                              {item?.nome}{" "}
+                              {item?.sobrenome}
+                            </strong>
+
+                            <span>
+                              Cliente
+                            </span>
+
+                          </div>
+
+                          <div className="selection-check">
+                            {selecionado
+                              ? "✓"
+                              : ""}
+                          </div>
+
+                        </button>
+                      );
+                    })
+                  )}
+
+                </div>
+              )}
+
+            </section>
+          )}
+
+
+          {/* ETAPA 2 */}
+
+          {etapa === 2 && (
+            <section className="modal-content">
+
+              <div className="modal-heading">
+
+                <span>02</span>
+
+                <div>
+
+                  <small>
+                    SERVIÇOS
+                  </small>
+
+                  <h2>
+                    Escolha os serviços
+                  </h2>
 
                   <p>
-                    Escaneie o QR Code abaixo para realizar o pagamento.
+                    Você pode selecionar mais de um serviço.
                   </p>
 
-                  <img
-                    src={`data:image/png;base64,${qrCodeBase64}`}
-                    alt="QR Code PIX"
-                    className="pix-qrcode"
-                  />
-
-                  {qrCode && (
-                    <div className="pix-code">
-                      <span>Código PIX</span>
-
-                      <textarea
-                        value={qrCode}
-                        readOnly
-                      />
-                    </div>
-                  )}
-
                 </div>
-              )}
-
-              <div className="agendamento-footer">
-
-                <div className="footer-info">
-                  <span className="footer-lock">🔒</span>
-
-                  <div>
-                    <strong>Pagamento seguro</strong>
-                    <small>
-                      Você pagará apenas R$ 15,00 de sinal.
-                    </small>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="btn-confirmar"
-                  disabled={enviando}
-                  onClick={confirmarAgendamento}
-                >
-                  {enviando ? (
-                    <>
-                      <span className="button-spinner"></span>
-                      Processando...
-                    </>
-                  ) : (
-                    <>
-                      Confirmar agendamento
-                      <span>→</span>
-                    </>
-                  )}
-                </button>
 
               </div>
 
+              <div className="servicos-grid">
+
+                {servicos.length === 0 ? (
+                  <div className="empty-message">
+                    Nenhum serviço disponível.
+                  </div>
+                ) : (
+                  servicos.map((servico) => {
+
+                    const id = getId(servico);
+
+                    const selecionado =
+                      servicosSelecionados.includes(
+                        id
+                      );
+
+                    return (
+                      <button
+                        type="button"
+                        key={id}
+                        className={`servico-card ${
+                          selecionado
+                            ? "selected"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          selecionarServico(id)
+                        }
+                      >
+
+                        <div className="servico-check">
+                          {selecionado
+                            ? "✓"
+                            : ""}
+                        </div>
+
+                        <div className="servico-content">
+
+                          <strong>
+                            {getNomeServico(
+                              servico
+                            )}
+                          </strong>
+
+                          <span>
+                            {getDuracaoServico(
+                              servico
+                            )}{" "}
+                            minutos
+                          </span>
+
+                        </div>
+
+                        <div className="servico-preco">
+                          R${" "}
+                          {getPrecoServico(
+                            servico
+                          )
+                            .toFixed(2)
+                            .replace(".", ",")}
+                        </div>
+
+                      </button>
+                    );
+                  })
+                )}
+
+              </div>
+
+            </section>
+          )}
+
+
+          {/* ETAPA 3 */}
+
+          {etapa === 3 && (
+            <section className="modal-content">
+
+              <div className="modal-heading">
+
+                <span>03</span>
+
+                <div>
+
+                  <small>
+                    DATA
+                  </small>
+
+                  <h2>
+                    Escolha a data
+                  </h2>
+
+                  <p>
+                    Selecione o dia do seu atendimento.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="data-wrapper">
+
+                <label htmlFor="data">
+                  Data do atendimento
+                </label>
+
+                <input
+                  id="data"
+                  type="date"
+                  min={dataMinima()}
+                  value={data}
+                  onChange={(event) => {
+                    setData(
+                      event.target.value
+                    );
+
+                    setHora("");
+
+                    setErro("");
+                  }}
+                />
+
+              </div>
+
+              {data && (
+                <div className="selected-date">
+
+                  <span>
+                    DATA SELECIONADA
+                  </span>
+
+                  <strong>
+                    {formatarData(data)}
+                  </strong>
+
+                </div>
+              )}
+
+            </section>
+          )}
+
+
+          {/* ETAPA 4 */}
+
+          {etapa === 4 && (
+            <section className="modal-content">
+
+              <div className="modal-heading">
+
+                <span>04</span>
+
+                <div>
+
+                  <small>
+                    HORÁRIO
+                  </small>
+
+                  <h2>
+                    Escolha o horário
+                  </h2>
+
+                  <p>
+                    Horários disponíveis a cada 30 minutos.
+                  </p>
+
+                </div>
+
+              </div>
+
+              {!data ? (
+                <div className="horario-empty">
+                  <span>◷</span>
+
+                  <p>
+                    Selecione uma data primeiro.
+                  </p>
+                </div>
+              ) : (
+                <div className="horarios-grid">
+
+                  {horarios.map((horario) => (
+
+                    <button
+                      type="button"
+                      key={horario}
+                      className={`horario-button ${
+                        hora === horario
+                          ? "selected"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setHora(horario);
+                        setErro("");
+                      }}
+                    >
+                      {horario}
+                    </button>
+
+                  ))}
+
+                </div>
+              )}
+
+            </section>
+          )}
+
+
+          {/* ETAPA 5 - RESUMO */}
+
+          {etapa === 5 && (
+            <section className="modal-content resumo-modal">
+
+              <div className="modal-heading">
+
+                <span>05</span>
+
+                <div>
+
+                  <small>
+                    RESUMO
+                  </small>
+
+                  <h2>
+                    Confira seu agendamento
+                  </h2>
+
+                  <p>
+                    Verifique os dados antes de confirmar.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="resumo-body">
+
+                {tipo === "BARBEIRO" && (
+                  <div className="resumo-row">
+                    <span>
+                      Cliente
+                    </span>
+
+                    <strong>
+                      {getNomeClienteSelecionado()}
+                    </strong>
+                  </div>
+                )}
+
+                {tipo === "CLIENTE" && (
+                  <div className="resumo-row">
+                    <span>
+                      Barbeiro
+                    </span>
+
+                    <strong>
+                      {getNomeBarbeiroSelecionado()}
+                    </strong>
+                  </div>
+                )}
+
+                <div className="resumo-row">
+
+                  <span>
+                    Serviços
+                  </span>
+
+                  <strong>
+                    {servicosSelecionados.length}{" "}
+                    {servicosSelecionados.length === 1
+                      ? "serviço"
+                      : "serviços"}
+                  </strong>
+
+                </div>
+
+                <div className="resumo-row">
+
+                  <span>
+                    Data
+                  </span>
+
+                  <strong>
+                    {formatarData(data)}
+                  </strong>
+
+                </div>
+
+                <div className="resumo-row">
+
+                  <span>
+                    Horário
+                  </span>
+
+                  <strong>
+                    {hora}
+                  </strong>
+
+                </div>
+
+                <div className="resumo-row">
+
+                  <span>
+                    Duração
+                  </span>
+
+                  <strong>
+                    {duracaoTotal} minutos
+                  </strong>
+
+                </div>
+
+              </div>
+
+              <div className="resumo-total">
+
+                <span>
+                  Total dos serviços
+                </span>
+
+                <strong>
+                  R${" "}
+                  {valorTotal
+                    .toFixed(2)
+                    .replace(".", ",")}
+                </strong>
+
+              </div>
+
+              <div className="sinal-info">
+
+                <div>
+                  <span>
+                    SINAL
+                  </span>
+
+                  <strong>
+                    R$ 15,00
+                  </strong>
+                </div>
+
+                <p>
+                  Você pagará apenas R$ 15,00
+                  de sinal via PIX.
+                </p>
+
+              </div>
+
+            </section>
+          )}
+
+
+          {/* ETAPA 6 - PIX */}
+{/* ETAPA 6 - PIX */}
+{etapa === 6 && (
+    <section className="modal-content pix-modal">
+
+        <div className="pix-success-icon">
+            ✓
+        </div>
+
+        <div className="modal-heading centered">
+            <small>
+                AGENDAMENTO CRIADO
+            </small>
+
+            <h2>
+                Quase lá.
+            </h2>
+
+            <p>
+                Realize o pagamento do sinal
+                para confirmar seu horário.
+            </p>
+        </div>
+
+        {/* QR CODE */}
+        {qrCodeBase64 && (
+            <>
+                <img
+                    src={
+                        qrCodeBase64.startsWith("data:image")
+                            ? qrCodeBase64
+                            : `data:image/png;base64,${qrCodeBase64}`
+                    }
+                    alt="QR Code PIX"
+                    className="pix-qrcode"
+                />
+
+                <p className="pix-instruction">
+                    Escaneie o QR Code acima
+                    utilizando o aplicativo do seu banco.
+                </p>
             </>
+        )}
+
+        {/* CÓDIGO COPIA E COLA */}
+        {qrCode && (
+            <div className="pix-code">
+
+                <span>
+                    CÓDIGO PIX
+                </span>
+
+                <textarea
+                    value={qrCode}
+                    readOnly
+                />
+
+                <button
+                    type="button"
+                    className={`btn-copy-pix ${
+                        pixCopiado ? "copiado" : ""
+                    }`}
+                    onClick={async () => {
+                        try {
+                            await navigator.clipboard.writeText(qrCode);
+
+                            setPixCopiado(true);
+
+                            setTimeout(() => {
+                                setPixCopiado(false);
+                            }, 2500);
+
+                        } catch (error) {
+                            console.error(
+                                "Erro ao copiar o PIX:",
+                                error
+                            );
+                        }
+                    }}
+                >
+                    {pixCopiado
+                        ? "✓ Código PIX copiado!"
+                        : "Copiar código PIX"}
+                </button>
+
+            </div>
+        )}
+
+        {/* CASO NÃO TENHA QR CODE */}
+        {!qrCodeBase64 && !qrCode && (
+            <div className="pix-waiting">
+                <p>
+                    Não foi possível carregar os dados do PIX.
+                </p>
+            </div>
+        )}
+
+    </section>
+)}
+
+
+          {/* FOOTER DO MODAL */}
+
+          {etapa <= 5 && (
+            <div className="modal-footer">
+
+              <div className="footer-info">
+
+                <div className="footer-icon">
+                  ✦
+                </div>
+
+                <div>
+
+                  <strong>
+                    Pagamento seguro
+                  </strong>
+
+                  <small>
+                    Sinal de R$ 15,00 via PIX
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div className="modal-actions">
+
+                {etapa > 1 && (
+                  <button
+                    type="button"
+                    className="btn-back"
+                    onClick={etapaAnterior}
+                  >
+                    ← Voltar
+                  </button>
+                )}
+
+                {etapa < 5 ? (
+                  <button
+                    type="button"
+                    className="btn-next"
+                    onClick={proximaEtapa}
+                  >
+                    Continuar
+                    <span>→</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-next"
+                    disabled={enviando}
+                    onClick={confirmarAgendamento}
+                  >
+                    {enviando ? (
+                      <>
+                        <span className="button-spinner"></span>
+                        Processando...
+                      </>
+                    ) : (
+                      <>
+                        Confirmar agendamento
+                        <span>→</span>
+                      </>
+                    )}
+                  </button>
+                )}
+
+              </div>
+
+            </div>
           )}
 
         </div>

@@ -1,109 +1,235 @@
-/* CONTAINER */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 .perfil-container {
   position: relative;
-  display: inline-block;
+
+  font-family: 'Manrope', sans-serif;
 }
 
-/* O BOTÃO (Onde estava o erro visual) */
+/* =========================
+   BOTÃO
+========================= */
+
 .perfil-botao {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #1a1a1a; /* Fundo escuro */
-  border: 1px solid #d4af37; /* Borda dourada sutil */
-  padding: 5px 15px 5px 5px; /* Menos espaço na esquerda por causa da foto */
-  border-radius: 50px; /* Arredondado estilo pílula */
+  gap: 7px;
+
+  background: transparent;
+
+  border: none;
+
+  color: #b9bec5;
+
   cursor: pointer;
-  color: white;
-  font-size: 14px;
+
+  font-family: inherit;
+
+  font-size: 12px;
   font-weight: 500;
-  transition: all 0.3s ease;
+
+  padding: 8px 0;
+
+  transition: color 0.25s ease;
 }
 
 .perfil-botao:hover {
-  background: #252525;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+  color: #ffffff;
 }
 
-/* FOTO DE PERFIL */
-.perfil-foto {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #d4af37;
+.perfil-icone {
+  transition: transform 0.25s ease;
 }
 
-/* MENU DROPDOWN */
-.perfil-menu {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 10px);
-  width: 200px;
-  background: #111;
-  border: 1px solid #333;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  overflow: hidden;
-  z-index: 1001;
-  padding: 8px;
+.perfil-icone.aberto {
+  transform: rotate(180deg);
 }
 
-/* HEADER DO MENU (Email e Tipo) */
-.perfil-info {
-  padding: 10px;
-  border-bottom: 1px solid #222;
-  margin-bottom: 5px;
-}
-
-.perfil-info p {
-  margin: 0;
-  font-size: 12px;
-  color: #d4af37;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.perfil-info span {
-  font-size: 11px;
-  color: #888;
-}
-
-/* ITENS DO MENU */
-.perfil-item, .perfil-sair {
-  width: 100%;
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: transparent;
-  border: none;
-  color: #ccc;
-  cursor: pointer;
-  text-align: left;
-  font-size: 13px;
-  border-radius: 6px;
-  transition: 0.2s;
-}
-
-.perfil-item:hover {
-  background: #222;
-  color: white;
-}
-
-.perfil-sair {
-  color: #ff4d4d;
-  margin-top: 5px;
-  border-top: 1px solid #222;
-  border-radius: 0 0 6px 6px;
-}
-
-.perfil-sair:hover {
-  background: rgba(255, 77, 77, 0.1);
-}
+/* =========================
+   OVERLAY
+========================= */
 
 .perfil-overlay {
   position: fixed;
+
   inset: 0;
-  z-index: 1000;
+
+  background: transparent;
+
+  z-index: 998;
+}
+
+/* =========================
+   DROPDOWN
+========================= */
+
+.perfil-menu {
+  position: absolute;
+
+  top: calc(100% + 15px);
+  right: 0;
+
+  width: 270px;
+
+  background: #0b0c0e;
+
+  border: 1px solid rgba(201, 154, 58, 0.22);
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  z-index: 999;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6);
+
+  animation: perfilEntrada 0.2s ease;
+}
+
+@keyframes perfilEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.perfil-header {
+  padding: 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.perfil-tipo {
+  margin: 0 0 5px;
+
+  color: #c99a3a;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1.2px;
+}
+
+.perfil-email {
+  margin: 0;
+
+  color: #7f858d;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================
+   OPÇÕES
+========================= */
+
+.perfil-opcoes {
+  padding: 8px;
+}
+
+.perfil-item,
+.perfil-sair {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  border: none;
+
+  background: transparent;
+
+  border-radius: 6px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.perfil-item {
+  color: #c4c8cd;
+}
+
+.perfil-item svg {
+  color: #c99a3a;
+}
+
+.perfil-item:hover {
+  background: rgba(201, 154, 58, 0.09);
+
+  color: #ffffff;
+}
+
+/* =========================
+   LINHA
+========================= */
+
+.perfil-linha {
+  border: none;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+  margin: 7px 0;
+}
+
+/* =========================
+   SAIR
+========================= */
+
+.perfil-sair {
+  color: #999fa7;
+}
+
+.perfil-sair svg {
+  color: #999fa7;
+}
+
+.perfil-sair:hover {
+  background: rgba(255, 255, 255, 0.04);
+
+  color: #ffffff;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+  .perfil-menu {
+    right: -10px;
+
+    width: 245px;
+  }
+
+  .perfil-texto {
+    display: none;
+  }
 }

@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import "./index.css";
+
 import { registrarCliente } from "../../service/loginService";
 
 export default function Cadastro() {
@@ -14,12 +17,11 @@ export default function Cadastro() {
     endereco: "",
     telefone: "",
     ativo: true,
-    foto: null
+    foto: null,
   });
 
   const [errors, setErrors] = useState({});
 
-  // 🔥 VALIDAÇÃO
   const validate = () => {
     let newErrors = {};
 
@@ -31,16 +33,22 @@ export default function Cadastro() {
     if (!form.endereco) newErrors.endereco = "Obrigatório";
     if (!form.cpf) newErrors.cpf = "Obrigatório";
     if (!form.rg) newErrors.rg = "Obrigatório";
-    if (!form.dataNascimento) newErrors.dataNascimento = "Obrigatório";
-    if (!form.foto) newErrors.foto = "Foto obrigatória";
-
-    // email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (form.email && !emailRegex.test(form.email)) {
-      newErrors.email = "Email inválido";
+    if (!form.dataNascimento) {
+      newErrors.dataNascimento = "Obrigatório";
     }
 
-    // telefone
+    if (!form.foto) {
+      newErrors.foto = "Foto obrigatória";
+    }
+
+    // Validação de e-mail
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (form.email && !emailRegex.test(form.email)) {
+      newErrors.email = "E-mail inválido";
+    }
+
+    // Validação de telefone
     if (
       form.telefone &&
       !/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(form.telefone)
@@ -48,15 +56,21 @@ export default function Cadastro() {
       newErrors.telefone = "Telefone inválido";
     }
 
-    // idade mínima
+    // Idade mínima
     if (form.dataNascimento) {
       const hoje = new Date();
       const nascimento = new Date(form.dataNascimento);
 
-      let idade = hoje.getFullYear() - nascimento.getFullYear();
-      const mes = hoje.getMonth() - nascimento.getMonth();
+      let idade =
+        hoje.getFullYear() - nascimento.getFullYear();
 
-      if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+      const mes =
+        hoje.getMonth() - nascimento.getMonth();
+
+      if (
+        mes < 0 ||
+        (mes === 0 && hoje.getDate() < nascimento.getDate())
+      ) {
         idade--;
       }
 
@@ -66,25 +80,24 @@ export default function Cadastro() {
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
-  // 🔥 HANDLE CHANGE (com suporte a file)
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
 
     setForm((prev) => ({
       ...prev,
-      [name]: type === "file" ? files[0] : value
+      [name]: type === "file" ? files[0] : value,
     }));
 
     setErrors((prev) => ({
       ...prev,
-      [name]: ""
+      [name]: "",
     }));
   };
 
-  // 🔥 SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,7 +105,9 @@ export default function Cadastro() {
 
     try {
       await registrarCliente(form);
+
       alert("Cadastro realizado com sucesso!");
+
       window.location.href = "/login";
     } catch (err) {
       console.error("Erro ao cadastrar:", err);
@@ -101,46 +116,278 @@ export default function Cadastro() {
   };
 
   return (
-    <div className="cadastro-container">
-      <div className="cadastro-box">
-        <h1>Cadastro</h1>
+    <div className="cadastro-page">
 
-        <form onSubmit={handleSubmit} encType="multipart/form-data">
+      {/* IMAGEM */}
+      <div className="cadastro-image">
 
-          <input name="nome" placeholder="Nome" onChange={handleChange} />
-          {errors.nome && <span className="error">{errors.nome}</span>}
+        <div className="image-overlay"></div>
 
-          <input name="sobrenome" placeholder="Sobrenome" onChange={handleChange} />
-          {errors.sobrenome && <span className="error">{errors.sobrenome}</span>}
+        <div className="image-content">
+          <span>BARBEARIA BRUTUS</span>
 
-          <input type="date" name="dataNascimento" onChange={handleChange} />
-          {errors.dataNascimento && <span className="error">{errors.dataNascimento}</span>}
+          <h2>
+            SEU ESTILO,
+            <br />
+            <strong>NO SEU TEMPO.</strong>
+          </h2>
+        </div>
 
-          <input name="email" placeholder="Email" onChange={handleChange} />
-          {errors.email && <span className="error">{errors.email}</span>}
-
-          <input type="password"  minLength={8} name="senha" placeholder="Senha" onChange={handleChange} />
-          {errors.senha && <span className="error">{errors.senha}</span>}
-
-          <input name="cpf" placeholder="CPF" onChange={handleChange} />
-          {errors.cpf && <span className="error">{errors.cpf}</span>}
-
-          <input name="rg" placeholder="RG" onChange={handleChange} />
-          {errors.rg && <span className="error">{errors.rg}</span>}
-
-          <input name="endereco" placeholder="Endereço" onChange={handleChange} />
-          {errors.endereco && <span className="error">{errors.endereco}</span>}
-
-          <input name="telefone" placeholder="Telefone" onChange={handleChange} />
-          {errors.telefone && <span className="error">{errors.telefone}</span>}
-
-          {/* 📸 FOTO */}
-          <input type="file" name="foto" onChange={handleChange} />
-          {errors.foto && <span className="error">{errors.foto}</span>}
-
-          <button type="submit">Cadastrar</button>
-        </form>
       </div>
+
+      {/* LADO DIREITO */}
+      <div className="cadastro-content">
+
+        <div className="cadastro-form-container">
+
+          {/* VOLTAR */}
+          <Link to="/" className="voltar-home">
+            ← Voltar para a home
+          </Link>
+
+          {/* TÍTULO */}
+          <div className="cadastro-header">
+
+            <span className="cadastro-eyebrow">
+              BEM-VINDO À BRUTUS
+            </span>
+
+            <h1>
+              Crie sua <span>conta.</span>
+            </h1>
+
+            <p>
+              Agende seu horário em poucos passos.
+            </p>
+
+          </div>
+
+          {/* FORMULÁRIO */}
+          <form
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+            className="cadastro-form"
+          >
+
+            {/* NOME */}
+            <div className="form-group">
+              <label>Nome</label>
+
+              <input
+                name="nome"
+                placeholder="Seu nome"
+                value={form.nome}
+                onChange={handleChange}
+              />
+
+              {errors.nome && (
+                <span className="error">
+                  {errors.nome}
+                </span>
+              )}
+            </div>
+
+            {/* SOBRENOME */}
+            <div className="form-group">
+              <label>Sobrenome</label>
+
+              <input
+                name="sobrenome"
+                placeholder="Seu sobrenome"
+                value={form.sobrenome}
+                onChange={handleChange}
+              />
+
+              {errors.sobrenome && (
+                <span className="error">
+                  {errors.sobrenome}
+                </span>
+              )}
+            </div>
+
+            {/* DATA NASCIMENTO */}
+            <div className="form-group">
+              <label>Data de nascimento</label>
+
+              <input
+                type="date"
+                name="dataNascimento"
+                value={form.dataNascimento}
+                onChange={handleChange}
+              />
+
+              {errors.dataNascimento && (
+                <span className="error">
+                  {errors.dataNascimento}
+                </span>
+              )}
+            </div>
+
+            {/* CPF */}
+            <div className="form-group">
+              <label>CPF</label>
+
+              <input
+                name="cpf"
+                placeholder="000.000.000-00"
+                value={form.cpf}
+                onChange={handleChange}
+              />
+
+              {errors.cpf && (
+                <span className="error">
+                  {errors.cpf}
+                </span>
+              )}
+            </div>
+
+            {/* RG */}
+            <div className="form-group">
+              <label>RG</label>
+
+              <input
+                name="rg"
+                placeholder="00.000.000-0"
+                value={form.rg}
+                onChange={handleChange}
+              />
+
+              {errors.rg && (
+                <span className="error">
+                  {errors.rg}
+                </span>
+              )}
+            </div>
+
+            {/* TELEFONE */}
+            <div className="form-group">
+              <label>Telefone</label>
+
+              <input
+                name="telefone"
+                placeholder="(11) 99999-9999"
+                value={form.telefone}
+                onChange={handleChange}
+              />
+
+              {errors.telefone && (
+                <span className="error">
+                  {errors.telefone}
+                </span>
+              )}
+            </div>
+
+            {/* EMAIL */}
+            <div className="form-group full">
+              <label>E-mail</label>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="voce@email.com"
+                value={form.email}
+                onChange={handleChange}
+              />
+
+              {errors.email && (
+                <span className="error">
+                  {errors.email}
+                </span>
+              )}
+            </div>
+
+            {/* ENDEREÇO */}
+            <div className="form-group full">
+              <label>Endereço</label>
+
+              <input
+                name="endereco"
+                placeholder="Seu endereço"
+                value={form.endereco}
+                onChange={handleChange}
+              />
+
+              {errors.endereco && (
+                <span className="error">
+                  {errors.endereco}
+                </span>
+              )}
+            </div>
+
+            {/* SENHA */}
+            <div className="form-group full">
+              <label>Senha</label>
+
+              <input
+                type="password"
+                minLength={8}
+                name="senha"
+                placeholder="••••••••"
+                value={form.senha}
+                onChange={handleChange}
+              />
+
+              {errors.senha && (
+                <span className="error">
+                  {errors.senha}
+                </span>
+              )}
+            </div>
+
+            {/* FOTO */}
+            <div className="form-group full">
+              <label>Foto de perfil</label>
+
+              <label className="file-input">
+
+                <span>
+                  {form.foto
+                    ? form.foto.name
+                    : "Selecionar foto"}
+                </span>
+
+                <input
+                  type="file"
+                  name="foto"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+
+                <strong>+</strong>
+
+              </label>
+
+              {errors.foto && (
+                <span className="error">
+                  {errors.foto}
+                </span>
+              )}
+            </div>
+
+            {/* BOTÃO */}
+            <button
+              type="submit"
+              className="btn-cadastro"
+            >
+              <span>CRIAR CONTA</span>
+              <strong>→</strong>
+            </button>
+
+          </form>
+
+          {/* LOGIN */}
+          <p className="login-text">
+            Já possui uma conta?
+
+            <Link to="/Login">
+              Entrar
+            </Link>
+          </p>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
