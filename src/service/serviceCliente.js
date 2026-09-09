@@ -53,3 +53,9 @@ export async function getResumoClientes() {
   const res = await fetch("http://localhost:3000/clientes/resumo");
   return res.json();
 }
+
+export const listarAgendamentosPorCliente = () => {
+  const clienteId = localStorage.getItem("entidadeId");
+
+  return api.get(`/cliente/${clienteId}`);
+};

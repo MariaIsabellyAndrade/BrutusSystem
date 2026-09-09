@@ -47,7 +47,7 @@ export default function Login() {
       } else if (res.data.tipo === "BARBEIRO") {
         navigate("/barbeiro");
       } else {
-        navigate("/cliente");
+        navigate("/cliente-home");
       }
     } catch (err) {
       console.error(err);

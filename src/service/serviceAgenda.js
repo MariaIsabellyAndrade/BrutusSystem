@@ -11,3 +11,15 @@ export const criarAgendamento = async (dados) => {
 
     return response.data;
 };
+
+
+export const deletarAgendamento = async (id) => {
+     const response = await api.delete(`/agendar-excluir/${id}`);
+      return response.data; 
+};
+
+
+export const reagendarAgendamento = async (id, data, hora) => {
+    const response = await api.put(`/agendar-reagendar/${id}`,{ data, hora, });
+    return response.data; 
+};

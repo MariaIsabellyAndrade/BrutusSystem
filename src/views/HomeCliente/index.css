@@ -1,0 +1,1049 @@
+/* =====================================================
+   BRUTUS SYSTEM - DASHBOARD CLIENTE
+===================================================== */
+
+.cliente-dashboard {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #050607;
+
+  color: #f4f2ed;
+
+  font-family: "Manrope", sans-serif;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.cliente-sidebar {
+  width: 210px;
+
+  min-height: 100vh;
+
+  position: fixed;
+
+  left: 0;
+  top: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  background: #090b0d;
+
+  border-right: 1px solid rgba(255,255,255,0.08);
+
+  z-index: 10;
+}
+
+
+/* PERFIL ATIVO */
+
+.perfil-ativo {
+  padding: 0 15px;
+
+  height: 54px;
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+.perfil-ativo > span {
+  font-size: 9px;
+
+  color: #8c96a0;
+
+  letter-spacing: 1.5px;
+
+  margin-bottom: 7px;
+}
+
+.perfil-ativo strong {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  font-size: 11px;
+
+  letter-spacing: 1px;
+}
+
+.perfil-arrow {
+  font-size: 17px;
+
+  color: #f4f2ed;
+}
+
+
+/* MENU */
+
+.cliente-menu {
+  padding-top: 28px;
+}
+
+.menu-item {
+  height: 40px;
+
+  margin: 0 15px 6px;
+
+  padding: 0 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color: #87919b;
+
+  font-size: 12px;
+
+  border-radius: 5px;
+
+  transition: 0.25s ease;
+}
+
+.menu-item span {
+  width: 15px;
+
+  font-size: 16px;
+
+  color: #89939d;
+}
+
+.menu-item:hover {
+  color: #f4f2ed;
+
+  background: rgba(255,255,255,0.04);
+}
+
+.menu-item.active {
+  color: #d6a438;
+
+  background: rgba(214,164,56,0.09);
+}
+
+.menu-item.active span {
+  color: #d6a438;
+}
+
+
+/* USUÁRIO */
+
+.sidebar-user {
+  padding: 15px;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.sidebar-avatar {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #29251d;
+
+  color: #d6a438;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+.sidebar-user strong {
+  display: block;
+
+  font-size: 11px;
+}
+
+.sidebar-user button {
+  border: none;
+
+  background: transparent;
+
+  color: #777f87;
+
+  font-size: 9px;
+
+  padding: 0;
+
+  margin-top: 2px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.cliente-main {
+  margin-left: 250px;
+  padding: 110px 60px 50px;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.cliente-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  max-width: 1270px;
+
+  margin: 0 auto 30px;
+}
+
+.cliente-date {
+  display: block;
+
+  color: #d6a438;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 18px;
+}
+
+.cliente-header h1 {
+  font-size: 38px;
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+
+  font-weight: 500;
+
+  margin-bottom: 15px;
+}
+
+.cliente-header p {
+  color: #8c96a0;
+
+  font-size: 12px;
+}
+
+
+/* BOTÃO */
+
+.novo-agendamento {
+  height: 41px;
+
+  padding: 0 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  background: #d6a438;
+
+  color: #070707;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+  border-radius: 6px;
+
+  transition: 0.25s ease;
+}
+
+.novo-agendamento span {
+  font-size: 16px;
+}
+
+.novo-agendamento:hover {
+  background: #e5bc68;
+
+  transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   PRÓXIMO AGENDAMENTO
+===================================================== */
+
+.proximo-card {
+  max-width: 1270px;
+
+  margin: 0 auto 18px;
+
+  padding: 25px 20px;
+
+  border: 1px solid rgba(214,164,56,0.35);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(214,164,56,0.055),
+      rgba(255,255,255,0.025)
+    );
+}
+
+.proximo-label,
+.perfil-label,
+.card-header > div > span {
+  display: block;
+
+  color: #d6a438;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.proximo-label {
+  margin-bottom: 12px;
+}
+
+.proximo-content {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.proximo-content h2 {
+  font-size: 27px;
+
+  letter-spacing: -1px;
+
+  margin-bottom: 5px;
+}
+
+.proximo-content p {
+  color: #8c96a0;
+
+  font-size: 12px;
+}
+
+.proximo-right {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 9px;
+}
+
+.proximo-right strong {
+  font-size: 20px;
+}
+
+.status {
+  padding: 4px 7px;
+
+  background: rgba(255,255,255,0.04);
+
+  font-size: 8px;
+
+  white-space: nowrap;
+}
+
+.status-confirmado,
+.status-pendente,
+.status-agendado {
+  color: #d6a438;
+}
+
+.status-concluido {
+  color: #8d969e;
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.dashboard-grid {
+  max-width: 1270px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 18px;
+}
+
+
+/* =====================================================
+   HISTÓRICO
+===================================================== */
+
+.historico-card,
+.perfil-card {
+  border: 1px solid rgba(255,255,255,0.08);
+
+  background: #0d1012;
+}
+
+.historico-card {
+  padding: 22px 20px;
+}
+
+.card-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-header h2 {
+  font-size: 16px;
+
+  margin-top: 8px;
+}
+
+.card-header a {
+  color: #8c96a0;
+
+  font-size: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+}
+
+.card-header a:hover {
+  color: #d6a438;
+}
+
+.card-header a span {
+  font-size: 18px;
+}
+
+
+/* ITENS */
+
+.historico-item {
+  min-height: 66px;
+
+  display: grid;
+
+  grid-template-columns: 55px 1fr auto;
+
+  align-items: center;
+
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.historico-item:last-child {
+  border-bottom: none;
+}
+
+.historico-hora {
+  color: #7e8993;
+
+  font-size: 12px;
+}
+
+.historico-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.historico-info strong {
+  font-size: 12px;
+}
+
+.historico-info span {
+  color: #7e8993;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+.perfil-card {
+  padding: 22px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.perfil-card h2 {
+  font-size: 16px;
+
+  margin-top: 8px;
+
+  margin-bottom: 20px;
+}
+
+.cliente-avatar {
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  background: #29251d;
+
+  color: #d6a438;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 800;
+
+  font-size: 14px;
+
+  margin-bottom: 15px;
+}
+
+.cliente-desde {
+  color: #8c96a0;
+
+  font-size: 11px;
+
+  margin-bottom: 22px;
+}
+
+.editar-perfil {
+  height: 40px;
+
+  border: 1px solid rgba(255,255,255,0.10);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #f4f2ed;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  transition: 0.25s ease;
+}
+
+.editar-perfil:hover {
+  border-color: #d6a438;
+
+  color: #d6a438;
+}
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .cliente-sidebar {
+    width: 180px;
+  }
+
+  .cliente-main {
+    margin-left: 180px;
+
+    width: calc(100% - 180px);
+
+    padding: 30px 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  .cliente-sidebar {
+    width: 65px;
+  }
+
+  .perfil-ativo {
+    padding: 0 8px;
+  }
+
+  .perfil-ativo > span,
+  .perfil-ativo strong,
+  .menu-item:not(.active) {
+    font-size: 0;
+  }
+
+  .menu-item {
+    justify-content: center;
+
+    padding: 0;
+
+    margin-left: 8px;
+
+    margin-right: 8px;
+  }
+
+  .menu-item span {
+    font-size: 17px;
+  }
+
+  .sidebar-user > div:last-child {
+    display: none;
+  }
+
+  .sidebar-user {
+    justify-content: center;
+
+    padding: 12px 5px;
+  }
+
+  .cliente-main {
+    margin-left: 65px;
+
+    width: calc(100% - 65px);
+
+    padding: 25px 15px;
+  }
+
+
+
+  .cliente-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 20px;
+  }
+
+  .cliente-header h1 {
+    font-size: 32px;
+  }
+
+  .novo-agendamento {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .proximo-content {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .proximo-right {
+    align-items: flex-start;
+  }
+
+  .historico-item {
+    grid-template-columns: 45px 1fr;
+  }
+
+  .historico-item .status {
+    display: none;
+  }
+}
+
+/* =========================================================
+   PERFIL DO CLIENTE
+   ========================================================= */
+
+.perfil-card {
+  background: #111111;
+  border: 1px solid #242424;
+  border-radius: 14px;
+  padding: 28px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.perfil-label {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #888;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  margin-bottom: 10px;
+}
+
+.perfil-card h2 {
+  width: 100%;
+  margin: 0 0 22px;
+  text-align: left;
+  color: #fff;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.cliente-avatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: #1d1d1d;
+  border: 2px solid #3a3a3a;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 1px;
+
+  margin: 5px 0 15px;
+}
+
+/* =========================================================
+   CLIENTE DESDE
+   ========================================================= */
+
+.cliente-desde {
+  margin: 0 0 25px;
+  color: #777;
+  font-size: 13px;
+}
+
+/* =========================================================
+   BOTÃO EDITAR PERFIL
+   ========================================================= */
+
+.editar-perfil {
+  width: 100%;
+  min-height: 44px;
+
+  border: 1px solid #333;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editar-perfil:hover {
+  background: #fff;
+  color: #111;
+  border-color: #fff;
+}
+
+
+/* =========================================================
+   FORMULÁRIO — EDITAR PERFIL
+   ========================================================= */
+
+.perfil-form {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+  margin-top: 2px;
+}
+
+.perfil-form input {
+  width: 100%;
+  height: 42px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  background: #181818;
+  border: 1px solid #2c2c2c;
+  border-radius: 7px;
+
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.perfil-form input::placeholder {
+  color: #666;
+}
+
+.perfil-form input:hover {
+  border-color: #3b3b3b;
+}
+
+.perfil-form input:focus {
+  border-color: #777;
+  background: #1c1c1c;
+}
+
+/* Endereço ocupa a linha inteira */
+.perfil-form input[name="endereco"] {
+  grid-column: 1 / -1;
+}
+
+/* Data ocupa uma coluna */
+.perfil-form input[type="date"] {
+  color-scheme: dark;
+}
+
+/* Campo de foto ocupa a linha inteira */
+.perfil-form input[type="file"] {
+  grid-column: 1 / -1;
+  height: auto;
+  min-height: 42px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.perfil-form input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 7px 10px;
+
+  border: 0;
+  border-radius: 5px;
+
+  background: #292929;
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   BOTÕES DO FORMULÁRIO
+   ========================================================= */
+
+.perfil-acoes {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.perfil-acoes button {
+  flex: 1;
+  height: 42px;
+
+  border-radius: 7px;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Cancelar */
+.perfil-acoes button:first-child {
+  background: transparent;
+  border: 1px solid #333;
+  color: #aaa;
+}
+
+.perfil-acoes button:first-child:hover {
+  border-color: #666;
+  color: #fff;
+}
+
+/* Salvar */
+.perfil-acoes button:last-child {
+  background: #fff;
+  border: 1px solid #fff;
+  color: #111;
+}
+
+.perfil-acoes button:last-child:hover {
+  background: #ddd;
+  border-color: #ddd;
+}
+
+.perfil-acoes button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ERRO DO PERFIL
+   ========================================================= */
+
+.erro-perfil {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 12px 0 0;
+  padding: 10px 12px;
+
+  border: 1px solid rgba(255, 70, 70, 0.25);
+  border-radius: 6px;
+
+  background: rgba(255, 70, 70, 0.08);
+
+  color: #ff7777;
+  font-size: 12px;
+  text-align: left;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .perfil-form {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-form input[name="endereco"],
+  .perfil-form input[type="file"] {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .perfil-card {
+    padding: 22px 18px;
+  }
+
+  .perfil-card h2 {
+    font-size: 20px;
+  }
+
+  .perfil-form {
+    gap: 9px;
+  }
+
+  .perfil-acoes {
+    flex-direction: column;
+  }
+
+  .perfil-acoes button {
+    width: 100%;
+  }
+}
+
+.historico-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.historico-info {
+  flex: 1;
+}
+
+.historico-info small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #777;
+}
+
+.agendamento-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agendamento-acoes button {
+  border: none;
+  padding: 9px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-atualizar {
+  background: transparent;
+  border: 1px solid #c99a32 !important;
+  color: #c99a32;
+}
+
+.btn-atualizar:hover {
+  background: #c99a32;
+  color: #111;
+}
+
+.btn-deletar {
+  background: transparent;
+  border: 1px solid #8f3535 !important;
+  color: #d65a5a;
+}
+
+.btn-deletar:hover {
+  background: #8f3535;
+  color: white;
+}

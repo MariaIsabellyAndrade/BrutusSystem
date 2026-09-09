@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./MenuLateral.css";
 
 export default function MenuLateral() {
-    const tipo = localStorage.getItem("tipo");
+    const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
     const location = useLocation();
 
     const menus = {
@@ -61,18 +61,43 @@ export default function MenuLateral() {
                 icon: "⚙",
             },
         ],
+
+        CLIENTE: [
+            {
+                label: "Agendamentos",
+                path: "/Agendamento",
+                icon: "▣",
+            },
+            {
+                label: "Meus agendamentos",
+                path: "/meus-agendamentos",
+                icon: "▤",
+            },
+            {
+                label: "Configurações",
+                path: "/configuracoes",
+                icon: "⚙",
+            },
+        ],
     };
 
     const menuAtual = menus[tipo] || [];
 
-    const nomePerfil = tipo === "ADMIN" ? "GESTOR" : "BARBEIRO";
+    let nomePerfil = "";
+
+    if (tipo === "ADMIN") {
+        nomePerfil = "GESTOR";
+    } else if (tipo === "BARBEIRO") {
+        nomePerfil = "BARBEIRO";
+    } else if (tipo === "CLIENTE") {
+        nomePerfil = "CLIENTE";
+    }
 
     return (
         <aside className="menu-lateral">
 
             {/* LOGO */}
             <div className="menu-logo">
-
                 <div className="logo-icone">
                     ✂
                 </div>
@@ -86,12 +111,10 @@ export default function MenuLateral() {
                         BARBER MANAGEMENT
                     </small>
                 </div>
-
             </div>
 
             {/* PERFIL ATIVO */}
             <div className="perfil-ativo">
-
                 <span className="perfil-titulo">
                     PERFIL ATIVO
                 </span>
@@ -105,14 +128,11 @@ export default function MenuLateral() {
                         ⌄
                     </span>
                 </div>
-
             </div>
 
             {/* MENU */}
             <nav className="menu-lateral-links">
-
                 {menuAtual.map((item) => {
-
                     const ativo =
                         location.pathname === item.path;
 
@@ -124,7 +144,6 @@ export default function MenuLateral() {
                                 ativo ? "ativo" : ""
                             }`}
                         >
-
                             <span className="menu-icone">
                                 {item.icon}
                             </span>
@@ -132,23 +151,10 @@ export default function MenuLateral() {
                             <span>
                                 {item.label}
                             </span>
-
                         </Link>
                     );
                 })}
-
             </nav>
-
-            {/* RODAPÉ */}
-            <div className="menu-lateral-footer">
-
-                <span className="footer-status"></span>
-
-                <span>
-                    Sistema online
-                </span>
-
-            </div>
 
         </aside>
     );

@@ -1,78 +1,57 @@
 /* =========================================================
-   BRUTUS SYSTEM - DETALHES DO BARBEIRO
-   ========================================================= */
-
-
-/* =========================================================
-   PÁGINA
+   BRUTUS SYSTEM — DETALHES DO BARBEIRO
    ========================================================= */
 
 .detalhes-barbeiro-page {
     width: calc(100% - 250px);
+    margin-left: 250px;
     min-height: 100vh;
 
-    margin-left: 250px;
-
-    position: relative;
+    padding: 35px 35px 70px;
 
     box-sizing: border-box;
 
-    padding: 45px 25px 70px;
-
     background:
         radial-gradient(
-            circle at 15% 20%,
-            rgba(212, 175, 55, 0.08),
-            transparent 35%
+            circle at 85% 5%,
+            rgba(184, 134, 11, 0.12),
+            transparent 28%
         ),
         radial-gradient(
-            circle at 85% 80%,
-            rgba(212, 175, 55, 0.05),
-            transparent 35%
+            circle at 10% 35%,
+            rgba(184, 134, 11, 0.06),
+            transparent 30%
         ),
-        #050505;
+        #080808;
 
-    color: #ffffff;
+    color: #f5f5f5;
 
-    font-family: 'Manrope', sans-serif;
+    font-family:
+        "Manrope",
+        Arial,
+        sans-serif;
+
+    overflow-x: hidden;
 }
 
 
 /* =========================================================
-   CONTAINER DO CONTEÚDO
-   ========================================================= */
-
-.detalhes-barbeiro-page > .detalhes-voltar,
-.detalhes-barbeiro-page > .detalhes-barbeiro-card {
-    width: 100%;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* =========================================================
-   BOTÃO VOLTAR
+   VOLTAR
    ========================================================= */
 
 .detalhes-voltar {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-
     gap: 8px;
 
-    margin-top: 0;
     margin-bottom: 25px;
 
     padding: 0;
 
     background: transparent;
-
     border: none;
 
-    color: #c99a3a;
-
-    font-family: 'Manrope', sans-serif;
+    color: #c9a227;
 
     font-size: 13px;
     font-weight: 700;
@@ -85,83 +64,44 @@
 }
 
 .detalhes-voltar:hover {
-    color: #d9ae55;
-
-    transform: translateX(-3px);
+    color: #e0bd45;
+    transform: translateX(-4px);
 }
 
 
 /* =========================================================
-   CARD PRINCIPAL
+   CABEÇALHO DO BARBEIRO
    ========================================================= */
 
-.detalhes-barbeiro-card {
+.barbeiro-header {
     display: flex;
-    align-items: stretch;
 
-    box-sizing: border-box;
+    width: 100%;
+    min-height: 310px;
 
-    background: #0b0b0b;
-
-    border: 1px solid rgba(201, 154, 58, 0.18);
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.35);
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.detalhes-barbeiro-card:hover {
-    border-color: rgba(201, 154, 58, 0.28);
-
-    box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.42);
-}
-
-
-/* =========================================================
-   ÁREA DA FOTO
-   ========================================================= */
-
-.detalhes-barbeiro-foto-area {
-    width: 350px;
-    min-height: 455px;
-
-    flex-shrink: 0;
-
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    box-sizing: border-box;
+    margin-bottom: 35px;
 
     background:
-        radial-gradient(
-            circle at center,
-            rgba(201, 154, 58, 0.07),
-            transparent 55%
-        ),
-        #090909;
+        linear-gradient(
+            135deg,
+            rgba(25, 25, 25, 0.98),
+            rgba(12, 12, 12, 0.98)
+        );
 
-    border-right: 1px solid #262626;
+    border: 1px solid rgba(201, 162, 39, 0.22);
+
+    border-radius: 16px;
 
     overflow: hidden;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+
+    position: relative;
 }
 
-
-/* =========================================================
-   DETALHE SUPERIOR DA FOTO
-   ========================================================= */
-
-.detalhes-barbeiro-foto-area::before {
+.barbeiro-header::before {
     content: "";
 
     position: absolute;
@@ -172,31 +112,14 @@
     width: 100%;
     height: 2px;
 
-    background: #c99a3a;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #c9a227,
+        transparent
+    );
 
-    opacity: 0.65;
-}
-
-
-/* =========================================================
-   BRILHO DA FOTO
-   ========================================================= */
-
-.detalhes-barbeiro-foto-area::after {
-    content: "";
-
-    position: absolute;
-
-    width: 220px;
-    height: 220px;
-
-    border-radius: 50%;
-
-    background: rgba(201, 154, 58, 0.07);
-
-    filter: blur(65px);
-
-    pointer-events: none;
+    opacity: 0.8;
 }
 
 
@@ -204,93 +127,107 @@
    FOTO
    ========================================================= */
 
-.detalhes-barbeiro-foto {
+.barbeiro-header-foto {
+    width: 290px;
+    min-width: 290px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(201, 162, 39, 0.12),
+            transparent 60%
+        );
+
+    border-right: 1px solid rgba(201, 162, 39, 0.15);
+
     position: relative;
+}
 
-    z-index: 1;
+.barbeiro-header-foto::after {
+    content: "";
 
-    width: 235px;
-    height: 300px;
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 162, 39, 0.08);
+
+    filter: blur(45px);
+
+    pointer-events: none;
+}
+
+.barbeiro-header-foto img {
+    width: 190px;
+    height: 235px;
 
     object-fit: cover;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    border: 2px solid #c99a3a;
-
-    background: #0b0b0b;
+    border: 1px solid rgba(201, 162, 39, 0.55);
 
     box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.5);
+        0 15px 40px rgba(0, 0, 0, 0.45),
+        0 0 25px rgba(201, 162, 39, 0.08);
 
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.detalhes-barbeiro-foto:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 15px 35px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 2;
 }
 
 
 /* =========================================================
-   INFORMAÇÕES
+   INFORMAÇÕES DO CABEÇALHO
    ========================================================= */
 
-.detalhes-barbeiro-info {
+.barbeiro-header-info {
     flex: 1;
 
-    min-width: 0;
-
-    padding: 45px 50px;
-
-    box-sizing: border-box;
+    padding: 40px 45px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    min-width: 0;
 }
-
-
-/* =========================================================
-   TÍTULO PEQUENO
-   ========================================================= */
 
 .detalhes-eyebrow {
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 
-    color: #c99a3a;
+    color: #c9a227;
 
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 800;
 
-    letter-spacing: 1.3px;
-
-    text-transform: uppercase;
+    letter-spacing: 3px;
 }
 
+.barbeiro-header-info h1 {
+    margin: 0 0 15px;
 
-/* =========================================================
-   NOME
-   ========================================================= */
+    color: #ffffff;
 
-.detalhes-barbeiro-info h1 {
-    margin: 0 0 14px;
+    font-size: clamp(30px, 4vw, 48px);
 
-    color: #f5f2eb;
-
-    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.05;
 
     font-weight: 800;
 
-    line-height: 1.15;
-
-    letter-spacing: -0.7px;
+    letter-spacing: -1.5px;
 }
 
 
@@ -299,37 +236,214 @@
    ========================================================= */
 
 .detalhes-status {
-    width: fit-content;
-
     display: inline-flex;
     align-items: center;
 
-    padding: 6px 11px;
+    width: fit-content;
 
-    margin-bottom: 30px;
+    padding: 7px 13px;
 
-    border-radius: 6px;
+    border-radius: 999px;
 
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
 }
 
-
 .detalhes-status.ativo {
-    color: #00d889;
+    color: #74d99b;
 
-    background: rgba(0, 216, 137, 0.07);
+    background: rgba(48, 190, 103, 0.09);
 
-    border: 1px solid rgba(0, 216, 137, 0.18);
+    border: 1px solid rgba(48, 190, 103, 0.25);
+}
+
+.detalhes-status.inativo {
+    color: #ff6b6b;
+
+    background: rgba(255, 70, 70, 0.08);
+
+    border: 1px solid rgba(255, 70, 70, 0.22);
 }
 
 
-.detalhes-status.inativo {
-    color: #ff5555;
+/* =========================================================
+   AÇÕES
+   ========================================================= */
 
-    background: rgba(255, 85, 85, 0.07);
+.barbeiro-acoes {
+    display: flex;
+    gap: 12px;
 
-    border: 1px solid rgba(255, 85, 85, 0.18);
+    margin-top: 28px;
+}
+
+.barbeiro-acoes button {
+    min-height: 42px;
+
+    padding: 0 20px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.barbeiro-acoes button:hover {
+    transform: translateY(-2px);
+}
+
+.btn-editar {
+    background: #c9a227;
+
+    border: 1px solid #c9a227;
+
+    color: #090909;
+}
+
+.btn-editar:hover {
+    background: #e0bd45;
+    border-color: #e0bd45;
+}
+
+.btn-desativar {
+    background: transparent;
+
+    border: 1px solid rgba(255, 82, 82, 0.4);
+
+    color: #ff7373;
+}
+
+.btn-desativar:hover {
+    background: rgba(255, 82, 82, 0.08);
+}
+
+.btn-ativar {
+    background: rgba(48, 190, 103, 0.1);
+
+    border: 1px solid rgba(48, 190, 103, 0.4);
+
+    color: #70d995;
+}
+
+.btn-ativar:hover {
+    background: rgba(48, 190, 103, 0.18);
+}
+
+
+/* =========================================================
+   ALERTA BARBEIRO INATIVO
+   ========================================================= */
+
+.barbeiro-inativo-alerta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    margin-bottom: 35px;
+
+    padding: 18px 22px;
+
+    background: rgba(255, 65, 65, 0.06);
+
+    border: 1px solid rgba(255, 65, 65, 0.2);
+
+    border-radius: 12px;
+}
+
+.alerta-icone {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255, 65, 65, 0.1);
+
+    color: #ff6b6b;
+
+    font-weight: 900;
+}
+
+.barbeiro-inativo-alerta strong {
+    display: block;
+
+    color: #ff7373;
+
+    font-size: 14px;
+}
+
+.barbeiro-inativo-alerta p {
+    margin: 4px 0 0;
+
+    color: #999;
+
+    font-size: 12px;
+}
+
+.alerta-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   SEÇÕES
+   ========================================================= */
+
+.detalhes-section {
+    margin-bottom: 45px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+.section-heading > span {
+    color: #c9a227;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    padding-top: 6px;
+}
+
+.section-heading h2 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 23px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+.section-heading p {
+    margin: 5px 0 0;
+
+    color: #777;
+
+    font-size: 12px;
 }
 
 
@@ -337,61 +451,56 @@
    INFORMAÇÕES
    ========================================================= */
 
-.detalhes-informacoes {
-    width: 100%;
-
+.informacoes-grid {
     display: grid;
 
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
-    gap: 20px 40px;
+    gap: 12px;
 }
 
-
-/* =========================================================
-   ITEM DE INFORMAÇÃO
-   ========================================================= */
-
-.detalhes-informacoes > div {
+.info-box {
     min-width: 0;
 
-    padding-bottom: 14px;
+    padding: 20px;
 
-    border-bottom: 1px solid #262626;
+    background: rgba(18, 18, 18, 0.92);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 10px;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
+.info-box:hover {
+    border-color: rgba(201, 162, 39, 0.2);
 
-/* =========================================================
-   LABEL
-   ========================================================= */
+    transform: translateY(-2px);
+}
 
-.detalhes-informacoes small {
+.info-box small {
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 
-    color: #8d929a;
+    color: #777;
 
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 9px;
+    font-weight: 800;
 
-    letter-spacing: 1.1px;
-
-    text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
 
+.info-box strong {
+    display: block;
 
-/* =========================================================
-   VALOR
-   ========================================================= */
-
-.detalhes-informacoes p {
-    margin: 0;
-
-    color: #d9d9d9;
+    color: #eeeeee;
 
     font-size: 13px;
-    font-weight: 500;
 
     line-height: 1.5;
 
@@ -400,193 +509,1885 @@
 
 
 /* =========================================================
-   CARREGANDO
+   INDICADORES
    ========================================================= */
 
-.detalhes-barbeiro-page > p {
-    width: 100%;
-    max-width: 1200px;
+.indicadores-grid {
+    display: grid;
 
-    margin: 80px auto;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
 
-    text-align: center;
+    gap: 13px;
+}
 
-    color: #c99a3a;
+.indicador-card {
+    min-height: 145px;
 
-    font-size: 13px;
-    font-weight: 600;
+    padding: 22px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 25, 25, 0.96),
+            rgba(14, 14, 14, 0.96)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.055);
+
+    border-radius: 12px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.indicador-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    right: -40px;
+    bottom: -45px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 162, 39, 0.08);
+
+    filter: blur(20px);
+}
+
+.indicador-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(201, 162, 39, 0.2);
+}
+
+.indicador-card small {
+    color: #777;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.indicador-card strong {
+    margin: 9px 0 5px;
+
+    color: #f1f1f1;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.indicador-card span {
+    color: #666;
+
+    font-size: 10px;
 }
 
 
 /* =========================================================
-   BARBEIRO NÃO ENCONTRADO
+   AGENDA — CABEÇALHO
    ========================================================= */
 
-.detalhes-barbeiro-page > h2 {
-    width: 100%;
-    max-width: 1200px;
-
-    margin: 80px auto 20px;
-
-    text-align: center;
-
-    color: #f5f2eb;
-
-    font-size: 22px;
-    font-weight: 700;
+.agenda-heading {
+    justify-content: space-between;
 }
 
+.agenda-heading > div:first-child {
+    min-width: 0;
+}
 
-.detalhes-barbeiro-page > h2 + button {
-    display: block;
+.agenda-filtros {
+    display: flex;
 
-    margin: 0 auto;
+    padding: 4px;
 
-    padding: 10px 20px;
+    background: #111;
 
-    background: #c99a3a;
+    border: 1px solid rgba(255, 255, 255, 0.07);
 
-    color: #050505;
+    border-radius: 9px;
+}
+
+.agenda-filtros button,
+.faturamento-filtros button {
+    padding: 9px 15px;
 
     border: none;
 
-    border-radius: 8px;
+    background: transparent;
 
-    font-family: 'Manrope', sans-serif;
+    color: #777;
+
+    border-radius: 6px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.agenda-filtros button:hover,
+.faturamento-filtros button:hover {
+    color: #ddd;
+}
+
+.agenda-filtros button.selecionado,
+.faturamento-filtros button.selecionado {
+    background: #c9a227;
+
+    color: #090909;
+}
+
+
+/* =========================================================
+   LEGENDA DA AGENDA
+   ========================================================= */
+
+.agenda-legenda {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 14px 20px;
+
+    margin-bottom: 15px;
+
+    padding: 14px 17px;
+
+    background: rgba(15, 15, 15, 0.8);
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius: 9px;
+}
+
+.agenda-legenda span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #888;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.agenda-legenda i {
+    width: 9px;
+    height: 9px;
+
+    display: block;
+
+    border-radius: 50%;
+}
+
+.legenda-livre {
+    background: #39c77a;
+}
+
+.legenda-agendado {
+    background: #4387e8;
+}
+
+.legenda-atendimento {
+    background: #e8963f;
+}
+
+.legenda-concluido {
+    background: #555;
+}
+
+.legenda-cancelado {
+    background: #e94d4d;
+}
+
+.legenda-fora {
+    background: #ddd;
+}
+
+
+/* =========================================================
+   CONTAINER DA AGENDA
+   ========================================================= */
+
+.agenda-calendario {
+    background: #101010;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 13px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO DA DATA
+   ========================================================= */
+
+.agenda-data {
+    min-height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    background: #141414;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.agenda-data button {
+    width: 34px;
+    height: 34px;
+
+    border-radius: 7px;
+
+    background: #1d1d1d;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    color: #ccc;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.agenda-data button:hover {
+    background: #c9a227;
+
+    color: #080808;
+}
+
+.agenda-data strong {
+    color: #ddd;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   AGENDA SEMANAL
+   ========================================================= */
+
+.agenda-semana {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.agenda-cabecalho {
+    display: grid;
+
+    grid-template-columns:
+        70px repeat(6, minmax(120px, 1fr));
+
+    min-width: 850px;
+
+    background: #151515;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.agenda-coluna-hora {
+    padding: 15px 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #555;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.agenda-dia-header {
+    min-height: 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.agenda-dia-header strong {
+    color: #777;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.agenda-dia-header span {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #ddd;
 
     font-size: 12px;
+    font-weight: 800;
+}
+
+.agenda-grade {
+    min-width: 850px;
+}
+
+.agenda-linha {
+    display: grid;
+
+    grid-template-columns:
+        70px repeat(6, minmax(120px, 1fr));
+
+    min-height: 82px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.agenda-linha:last-child {
+    border-bottom: none;
+}
+
+.agenda-linha > .agenda-hora {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding-top: 12px;
+
+    color: #555;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.agenda-grade-celula {
+    min-width: 0;
+
+    padding: 4px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.045);
+}
+
+.agenda-grade-celula:last-child {
+    border-right: none;
+}
+
+
+/* =========================================================
+   CÉLULAS DA AGENDA
+   ========================================================= */
+
+.agenda-celula {
+    width: 100%;
+    min-height: 72px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding: 9px;
+
+    border-radius: 7px;
+
+    text-align: left;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+}
+
+.agenda-celula:hover {
+    transform: scale(0.98);
+
+    filter: brightness(1.15);
+}
+
+.agenda-celula strong {
+    display: block;
+
+    max-width: 100%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 11px;
+}
+
+.agenda-celula span {
+    display: block;
+
+    max-width: 100%;
+
+    margin-top: 4px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 9px;
+}
+
+.agenda-celula small {
+    margin-top: 5px;
+
+    font-size: 8px;
+}
+
+
+/* LIVRE */
+
+.agenda-celula.livre {
+    background: rgba(57, 199, 122, 0.035);
+
+    border: 1px dashed rgba(57, 199, 122, 0.22);
+
+    color: #4fb879;
+}
+
+.agenda-celula.livre span {
+    opacity: 0.8;
+}
+
+
+/* AGENDADO */
+
+.agenda-celula.agendado {
+    background: rgba(67, 135, 232, 0.11);
+
+    border: 1px solid rgba(67, 135, 232, 0.27);
+
+    color: #9bbef3;
+}
+
+.agenda-celula.agendado strong {
+    color: #c7dcfa;
+}
+
+
+/* EM ATENDIMENTO */
+
+.agenda-celula.em-atendimento {
+    background: rgba(232, 150, 63, 0.11);
+
+    border: 1px solid rgba(232, 150, 63, 0.3);
+
+    color: #e9ae72;
+}
+
+.agenda-celula.em-atendimento strong {
+    color: #ffd09e;
+}
+
+
+/* CONCLUÍDO */
+
+.agenda-celula.concluido {
+    background: rgba(80, 80, 80, 0.14);
+
+    border: 1px solid rgba(130, 130, 130, 0.16);
+
+    color: #888;
+}
+
+.agenda-celula.concluido strong {
+    color: #aaa;
+}
+
+
+/* CANCELADO */
+
+.agenda-celula.cancelado {
+    background: rgba(233, 77, 77, 0.09);
+
+    border: 1px solid rgba(233, 77, 77, 0.25);
+
+    color: #db7373;
+}
+
+.agenda-celula.cancelado strong {
+    color: #ed9191;
+}
+
+
+/* FORA DO HORÁRIO */
+
+.agenda-celula.fora-horario {
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            #141414,
+            #141414 5px,
+            #181818 5px,
+            #181818 10px
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.035);
+
+    color: #444;
+
+    cursor: default;
+}
+
+.agenda-celula.fora-horario:hover {
+    transform: none;
+    filter: none;
+}
+
+.agenda-celula.fora-horario span {
+    font-size: 8px;
+
+    text-align: center;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   AGENDA DIÁRIA
+   ========================================================= */
+
+.agenda-dia {
+    padding: 20px;
+}
+
+.agenda-dia-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 5px 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.agenda-dia-titulo strong {
+    color: #eee;
+
+    font-size: 14px;
+
+    text-transform: capitalize;
+}
+
+.agenda-dia-titulo span {
+    color: #777;
+
+    font-size: 11px;
+}
+
+.agenda-horarios {
+    margin-top: 10px;
+}
+
+.agenda-horario-dia {
+    display: grid;
+
+    grid-template-columns: 75px 1fr;
+
+    min-height: 82px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.agenda-horario-dia .agenda-hora {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    padding-top: 18px;
+
+    color: #666;
+
+    font-size: 11px;
+}
+
+.agenda-dia-slot {
+    padding: 5px 0;
+}
+
+
+/* =========================================================
+   AGENDA MENSAL
+   ========================================================= */
+
+.agenda-mes {
+    padding: 15px;
+}
+
+.mes-cabecalho {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    margin-bottom: 6px;
+}
+
+.mes-cabecalho div {
+    padding: 12px;
+
+    text-align: center;
+
+    color: #666;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.mes-grade {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 5px;
+}
+
+.mes-dia {
+    min-height: 115px;
+
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    background: #151515;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius: 8px;
+
+    color: #ddd;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.mes-dia:hover {
+    background: #191919;
+
+    border-color: rgba(201, 162, 39, 0.25);
+}
+
+.mes-dia.selecionado {
+    border-color: rgba(201, 162, 39, 0.55);
+
+    box-shadow:
+        inset 0 2px 0 #c9a227;
+}
+
+.mes-dia > strong {
+    color: #bbb;
+
+    font-size: 12px;
+}
+
+.mes-eventos {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    margin-top: 8px;
+}
+
+.mes-eventos span {
+    display: block;
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 4px 5px;
+
+    border-radius: 4px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 8px;
+}
+
+.mes-eventos .agendado {
+    background: rgba(67, 135, 232, 0.12);
+    color: #9bbef3;
+}
+
+.mes-eventos .em-atendimento {
+    background: rgba(232, 150, 63, 0.12);
+    color: #e9ae72;
+}
+
+.mes-eventos .concluido {
+    background: rgba(100, 100, 100, 0.15);
+    color: #999;
+}
+
+.mes-eventos .cancelado {
+    background: rgba(233, 77, 77, 0.1);
+    color: #db7373;
+}
+
+
+/* =========================================================
+   FATURAMENTO
+   ========================================================= */
+
+.faturamento-filtros {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 5px;
+
+    margin-bottom: 18px;
+
+    padding: 5px;
+
+    width: fit-content;
+
+    background: #111;
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 9px;
+}
+
+.faturamento-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 13px;
+}
+
+.faturamento-card {
+    padding: 25px;
+
+    min-height: 120px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            145deg,
+            #181818,
+            #101010
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 12px;
+}
+
+.faturamento-card small {
+    color: #777;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.faturamento-card strong {
+    margin-top: 10px;
+
+    color: #e8e8e8;
+
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.faturamento-card.destaque {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(201, 162, 39, 0.16),
+            rgba(201, 162, 39, 0.045)
+        );
+
+    border-color: rgba(201, 162, 39, 0.28);
+}
+
+.faturamento-card.destaque strong {
+    color: #d8b63b;
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+.grafico-faturamento {
+    margin-top: 18px;
+
+    padding: 25px;
+
+    background: #101010;
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-radius: 12px;
+}
+
+.grafico-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.grafico-titulo h3 {
+    margin: 0;
+
+    color: #eee;
+
+    font-size: 14px;
+}
+
+.grafico-titulo span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #666;
+
+    font-size: 10px;
+}
+
+.grafico-titulo > strong {
+    color: #c9a227;
+
+    font-size: 17px;
+}
+
+.grafico-area {
+    display: flex;
+
+    height: 280px;
+}
+
+.grafico-valores {
+    width: 55px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 5px 8px 25px 0;
+
+    box-sizing: border-box;
+
+    color: #555;
+
+    font-size: 9px;
+
+    text-align: right;
+}
+
+.grafico {
+    position: relative;
+
+    flex: 1;
+
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.grafico-linhas {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding-bottom: 25px;
+}
+
+.grafico-linhas span {
+    width: 100%;
+
+    border-top: 1px dashed rgba(255, 255, 255, 0.055);
+}
+
+.grafico-pontos {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+
+    padding: 10px 15px 0;
+}
+
+.grafico-ponto-coluna {
+    flex: 1;
+
+    max-width: 75px;
+
+    height: calc(100% - 25px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    position: relative;
+}
+
+.grafico-ponto {
+    width: 9px;
+
+    min-height: 8px;
+
+    border-radius: 8px 8px 2px 2px;
+
+    background: #c9a227;
+
+    box-shadow:
+        0 0 15px rgba(201, 162, 39, 0.25);
+
+    transition:
+        height 0.4s ease,
+        filter 0.2s ease;
+}
+
+.grafico-ponto:hover {
+    filter: brightness(1.25);
+}
+
+.grafico-ponto-coluna > span {
+    position: absolute;
+
+    bottom: -22px;
+
+    color: #666;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   SERVIÇOS
+   ========================================================= */
+
+.servicos-lista {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.servico-item {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px 20px;
+
+    background: #121212;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius: 9px;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.servico-item:hover {
+    border-color: rgba(201, 162, 39, 0.18);
+
+    transform: translateX(3px);
+}
+
+.servico-ranking {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: rgba(201, 162, 39, 0.09);
+
+    color: #c9a227;
+
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.servico-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.servico-info > strong {
+    display: block;
+
+    color: #eee;
+
+    font-size: 12px;
+}
+
+.servico-info > span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #666;
+
+    font-size: 9px;
+}
+
+.servico-barra {
+    width: 100%;
+    height: 4px;
+
+    margin-top: 10px;
+
+    overflow: hidden;
+
+    background: #222;
+
+    border-radius: 10px;
+}
+
+.servico-barra span {
+    display: block;
+
+    height: 100%;
+
+    background: #c9a227;
+
+    border-radius: inherit;
+}
+
+.servico-quantidade {
+    min-width: 35px;
+
+    color: #c9a227;
+
+    font-size: 18px;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   CLIENTES
+   ========================================================= */
+
+.clientes-resumo {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.cliente-resumo-card {
+    padding: 22px;
+
+    background: #121212;
+
+    border: 1px solid rgba(255, 255, 255, 0.055);
+
+    border-radius: 10px;
+}
+
+.cliente-resumo-card small {
+    color: #666;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.cliente-resumo-card strong {
+    display: block;
+
+    margin-top: 8px;
+
+    color: #eee;
+
+    font-size: 27px;
+}
+
+.cliente-resumo-card span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #666;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   TABELA DE CLIENTES
+   ========================================================= */
+
+.clientes-tabela {
+    overflow: hidden;
+
+    background: #111;
+
+    border: 1px solid rgba(255, 255, 255, 0.055);
+
+    border-radius: 10px;
+}
+
+.clientes-tabela-header,
+.cliente-linha {
+    display: grid;
+
+    grid-template-columns:
+        1.4fr 1.4fr 0.8fr 0.7fr;
+
+    align-items: center;
+
+    column-gap: 15px;
+
+    padding: 15px 20px;
+}
+
+.clientes-tabela-header {
+    background: #171717;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.clientes-tabela-header span {
+    color: #555;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.cliente-linha {
+    min-height: 58px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.cliente-linha:last-child {
+    border-bottom: none;
+}
+
+.cliente-linha strong {
+    color: #ddd;
+
+    font-size: 11px;
+}
+
+.cliente-linha span {
+    color: #777;
+
+    font-size: 10px;
+}
+
+.cliente-linha > strong:last-child {
+    color: #c9a227;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   HORÁRIOS DE TRABALHO
+   ========================================================= */
+
+.horarios-trabalho {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.horario-trabalho-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px 19px;
+
+    background: #121212;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius: 9px;
+}
+
+.horario-trabalho-item strong {
+    color: #ddd;
+
+    font-size: 11px;
+}
+
+.horario-trabalho-item span {
+    color: #c9a227;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.horario-trabalho-item span.fechado {
+    color: #555;
+}
+
+.btn-editar-horarios {
+    min-height: 40px;
+
+    padding: 0 18px;
+
+    background: transparent;
+
+    border: 1px solid rgba(201, 162, 39, 0.3);
+
+    border-radius: 7px;
+
+    color: #c9a227;
+
+    font-family: inherit;
+
+    font-size: 10px;
     font-weight: 800;
 
     cursor: pointer;
 
     transition:
         background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        color 0.2s ease;
 }
 
+.btn-editar-horarios:hover {
+    background: #c9a227;
 
-.detalhes-barbeiro-page > h2 + button:hover {
-    background: #d9ae55;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 6px 20px rgba(201, 154, 58, 0.16);
+    color: #090909;
 }
 
 
 /* =========================================================
-   RESPONSIVIDADE - 900PX
+   MODAL
+   ========================================================= */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    background: rgba(0, 0, 0, 0.78);
+
+    backdrop-filter: blur(7px);
+}
+
+.modal-agendamento {
+    width: 100%;
+    max-width: 470px;
+
+    padding: 32px;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            #1a1a1a,
+            #0e0e0e
+        );
+
+    border: 1px solid rgba(201, 162, 39, 0.25);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 30px 90px rgba(0, 0, 0, 0.65);
+}
+
+.modal-agendamento::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 15%;
+    right: 15%;
+
+    height: 2px;
+
+    background: #c9a227;
+}
+
+.modal-fechar {
+    position: absolute;
+
+    top: 15px;
+    right: 17px;
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #191919;
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border-radius: 7px;
+
+    color: #777;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.modal-fechar:hover {
+    color: #fff;
+}
+
+.modal-eyebrow {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #c9a227;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.modal-agendamento h2 {
+    margin: 0 0 25px;
+
+    color: #fff;
+
+    font-size: 25px;
+}
+
+.modal-status {
+    margin-bottom: 20px;
+}
+
+.modal-status span {
+    display: inline-flex;
+
+    padding: 7px 12px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.modal-status .agendado {
+    background: rgba(67, 135, 232, 0.12);
+    color: #9bbef3;
+}
+
+.modal-status .em-atendimento {
+    background: rgba(232, 150, 63, 0.12);
+    color: #e9ae72;
+}
+
+.modal-status .concluido {
+    background: rgba(100, 100, 100, 0.15);
+    color: #aaa;
+}
+
+.modal-status .cancelado {
+    background: rgba(233, 77, 77, 0.1);
+    color: #ed9191;
+}
+
+.modal-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.modal-info > div {
+    padding: 16px;
+
+    background: #121212;
+
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    border-radius: 8px;
+}
+
+.modal-info small {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #555;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+.modal-info strong {
+    color: #ddd;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+.modal-botao-fechar {
+    width: 100%;
+
+    height: 42px;
+
+    margin-top: 20px;
+
+    background: #c9a227;
+
+    border: none;
+
+    border-radius: 7px;
+
+    color: #080808;
+
+    font-family: inherit;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+.modal-botao-fechar:hover {
+    background: #e0bd45;
+}
+
+
+/* =========================================================
+   ESTADOS
+   ========================================================= */
+
+.estado-pagina {
+    color: #888;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+.barbeiro-nao-encontrado {
+    min-height: 400px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 20px;
+
+    text-align: center;
+}
+
+.barbeiro-nao-encontrado h2 {
+    margin: 0;
+
+    color: #eee;
+}
+
+.barbeiro-nao-encontrado button {
+    padding: 11px 20px;
+
+    background: #c9a227;
+
+    border: none;
+
+    border-radius: 7px;
+
+    color: #080808;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
+.detalhes-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 60px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detalhes-footer span {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #c9a227;
+}
+
+.detalhes-footer p {
+    margin: 0;
+
+    color: #444;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE — 1200px
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .detalhes-barbeiro-page {
+        padding: 30px 25px 60px;
+    }
+
+    .indicadores-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .faturamento-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE — 900px
    ========================================================= */
 
 @media (max-width: 900px) {
 
     .detalhes-barbeiro-page {
-        width: calc(100% - 250px);
+        width: 100%;
+        margin-left: 0;
 
-        padding: 35px 20px 60px;
+        padding: 25px 20px 60px;
     }
 
-    .detalhes-barbeiro-card {
+    .barbeiro-header {
         flex-direction: column;
     }
 
-    .detalhes-barbeiro-foto-area {
+    .barbeiro-header-foto {
         width: 100%;
+        min-width: 0;
 
-        min-height: 370px;
+        min-height: 280px;
 
         border-right: none;
-
-        border-bottom: 1px solid #262626;
+        border-bottom: 1px solid rgba(201, 162, 39, 0.15);
     }
 
-    .detalhes-barbeiro-foto {
-        width: 210px;
-        height: 270px;
+    .barbeiro-header-info {
+        padding: 30px;
     }
 
-    .detalhes-barbeiro-info {
-        padding: 35px;
+    .informacoes-grid {
+        grid-template-columns: 1fr;
     }
 
-    .detalhes-informacoes {
-        gap: 18px 30px;
+    .clientes-resumo {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
     }
+
 }
 
 
 /* =========================================================
-   RESPONSIVIDADE - 700PX
+   RESPONSIVIDADE — 700px
    ========================================================= */
 
 @media (max-width: 700px) {
 
     .detalhes-barbeiro-page {
-        width: calc(100% - 70px);
-
-        padding: 30px 15px 50px;
+        padding: 20px 15px 50px;
     }
 
-    .detalhes-barbeiro-info {
-        padding: 30px 25px;
+    .barbeiro-header-info h1 {
+        font-size: 32px;
     }
 
-    .detalhes-barbeiro-info h1 {
-        font-size: 30px;
+    .barbeiro-acoes {
+        flex-direction: column;
     }
 
-    .detalhes-informacoes {
+    .barbeiro-acoes button {
+        width: 100%;
+    }
+
+    .section-heading {
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+    .section-heading > span {
+        padding: 0;
+    }
+
+    .agenda-heading {
+        gap: 15px;
+    }
+
+    .agenda-filtros {
+        width: 100%;
+    }
+
+    .agenda-filtros button {
+        flex: 1;
+    }
+
+    .faturamento-filtros {
+        width: 100%;
+    }
+
+    .faturamento-filtros button {
+        flex: 1;
+    }
+
+    .faturamento-grid {
         grid-template-columns: 1fr;
-
-        gap: 17px;
     }
+
+    .clientes-resumo {
+        grid-template-columns: 1fr;
+    }
+
+    .horarios-trabalho {
+        grid-template-columns: 1fr;
+    }
+
+    .clientes-tabela {
+        overflow-x: auto;
+    }
+
+    .clientes-tabela-header,
+    .cliente-linha {
+        min-width: 600px;
+    }
+
+    .mes-grade {
+        min-width: 700px;
+    }
+
+    .agenda-mes {
+        overflow-x: auto;
+    }
+
+    .modal-info {
+        grid-template-columns: 1fr;
+    }
+
 }
 
 
 /* =========================================================
-   RESPONSIVIDADE - 450PX
+   RESPONSIVIDADE — 450px
    ========================================================= */
 
 @media (max-width: 450px) {
 
     .detalhes-barbeiro-page {
-        width: calc(100% - 70px);
-
-        padding: 25px 12px 40px;
+        padding: 15px 10px 40px;
     }
 
-    .detalhes-voltar {
-        margin-bottom: 20px;
+    .barbeiro-header-foto {
+        min-height: 230px;
     }
 
-    .detalhes-barbeiro-foto-area {
-        min-height: 310px;
+    .barbeiro-header-foto img {
+        width: 150px;
+        height: 190px;
     }
 
-    .detalhes-barbeiro-foto {
-        width: 180px;
-        height: 230px;
+    .barbeiro-header-info {
+        padding: 25px 20px;
     }
 
-    .detalhes-barbeiro-info {
-        padding: 25px 18px;
-    }
-
-    .detalhes-barbeiro-info h1 {
+    .barbeiro-header-info h1 {
         font-size: 27px;
     }
 
-    .detalhes-status {
-        margin-bottom: 25px;
+    .indicadores-grid {
+        grid-template-columns: 1fr;
     }
 
-    .detalhes-informacoes {
-        gap: 15px;
+    .indicador-card {
+        min-height: 120px;
     }
 
-    .detalhes-informacoes p {
-        font-size: 12px;
+    .agenda-data {
+        padding: 0 10px;
     }
+
+    .agenda-data strong {
+        font-size: 10px;
+
+        text-align: center;
+    }
+
+    .grafico-faturamento {
+        padding: 18px;
+    }
+
+    .grafico-titulo {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 10px;
+    }
+
+    .modal-overlay {
+        padding: 12px;
+    }
+
+    .modal-agendamento {
+        padding: 25px 20px;
+    }
+
 }

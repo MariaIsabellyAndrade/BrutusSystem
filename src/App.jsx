@@ -12,6 +12,7 @@ import ProtectedRoute from "../Protected/ProtectedRoute";
 import CadastroAdmin from "./views/CadastroAdmin";
 import AgendamentoPage from "./views/Agendamento";
 import DetalhesBarbeiro from "./views/DetalhesBarbeiro";
+import HomeCliente from "./views/HomeCliente";
 
 function App() {
     return (
@@ -51,6 +52,10 @@ function App() {
                                 <Cliente />
                             </ProtectedRoute>
                         }
+                    />
+                    <Route
+                        path="/cliente-home"
+                        element={<HomeCliente />}
                     />
 
                     <Route
