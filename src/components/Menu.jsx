@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PerfilMenu from "./PerfilMenu";
 import "./Menu.css";
 
 export default function Menu() {
-  const tipo = localStorage.getItem("tipo");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const token = localStorage.getItem("token");
   const logado = !!token;
 
@@ -11,30 +12,34 @@ export default function Menu() {
   const navigate = useNavigate();
 
   const irParaSecao = (id) => {
-    // Se já estiver na Home
+    setMobileMenuOpen(false);
     if (location.pathname === "/") {
       const elemento = document.getElementById(id);
-
       if (elemento) {
         elemento.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
       }
-
       return;
     }
-
-    // Se estiver em outra página, volta para Home
     navigate(`/#${id}`);
   };
 
   return (
     <nav className="menu">
+      {/* BOTÃO HAMBÚRGUER MOBILE */}
+      <button
+        type="button"
+        className="header-mobile-toggle"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label="Toggle menu"
+      >
+        {mobileMenuOpen ? "✕" : "☰"}
+      </button>
 
       {/* LINKS PRINCIPAIS */}
-      <div className="menu-links">
-
+      <div className={`menu-links ${mobileMenuOpen ? "mobile-open" : ""}`}>
         <button
           type="button"
           className="menu-link"
@@ -67,37 +72,36 @@ export default function Menu() {
           Como funciona
         </button>
 
+        {!logado && (
+          <Link
+            to="/login"
+            className="menu-link mobile-only-login"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Entrar
+          </Link>
+        )}
       </div>
 
       {/* AÇÕES */}
-{/* AÇÕES */}
-<div className="menu-actions">
+      <div className="menu-actions">
+        {!logado && (
+          <Link to="/login" className="login-link">
+            Entrar
+          </Link>
+        )}
 
-  {!logado && (
-    <Link
-      to="/Login"
-      className="login-link"
-    >
-      Entrar
-    </Link>
-  )}
+        {logado && (
+          <>
+            <Link to="/Agendamento" className="header-agendar">
+              <span>AGENDAR HORÁRIO</span>
+              <span className="arrow">→</span>
+            </Link>
 
-  {logado && (
-    <>
-      <Link
-        to="/Agendamento"
-        className="header-agendar"
-      >
-        <span>AGENDAR HORÁRIO</span>
-        <span className="arrow">→</span>
-      </Link>
-
-      <PerfilMenu />
-    </>
-  )}
-
-</div>
-
+            <PerfilMenu />
+          </>
+        )}
+      </div>
     </nav>
   );
 }

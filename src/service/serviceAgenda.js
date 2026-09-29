@@ -19,7 +19,20 @@ export const deletarAgendamento = async (id) => {
 };
 
 
-export const reagendarAgendamento = async (id, data, hora) => {
-    const response = await api.put(`/agendar-reagendar/${id}`,{ data, hora, });
-    return response.data; 
+export const atualizarAgendamento = async (
+    id,
+    data,
+    hora,
+    servicoIds
+) => {
+    const response = await api.put(
+        `/agendar-reagendar/${id}`,
+        {
+            data,
+            hora,
+            servicoIds
+        }
+    );
+
+    return response.data;
 };

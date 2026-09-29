@@ -1,37 +1,35 @@
 /* =========================================================
-   BRUTUS SYSTEM - MENU LATERAL
+   BRUTUS SYSTEM - MENU LATERAL (DESKTOP & RESPONSIVO)
    ========================================================= */
 
 .menu-lateral {
     position: fixed;
-
     top: 0;
     left: 0;
-
     width: 250px;
     height: 100vh;
-
     box-sizing: border-box;
-
     display: flex;
     flex-direction: column;
-
-    background:
-        linear-gradient(
-            180deg,
-            #0a0a0a 0%,
-            #070707 100%
-        );
-
+    background: linear-gradient(180deg, #0a0a0a 0%, #070707 100%);
     border-right: 1px solid rgba(201, 154, 58, 0.18);
-
     color: #ffffff;
-
     z-index: 1100;
-
     font-family: 'Manrope', sans-serif;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.menu-lateral-close-btn {
+    display: none;
+}
+
+.menu-lateral-mobile-bar {
+    display: none;
+}
+
+.menu-lateral-overlay {
+    display: none;
+}
 
 /* =========================================================
    LOGO
@@ -40,57 +38,39 @@
 .menu-logo {
     display: flex;
     align-items: center;
-
     gap: 12px;
-
     min-height: 92px;
-
     padding: 0 24px;
-
     box-sizing: border-box;
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .logo-icone {
     width: 38px;
     height: 38px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     flex-shrink: 0;
-
     color: #c99a3a;
-
     border: 1px solid rgba(201, 154, 58, 0.45);
-
     border-radius: 9px;
-
     font-size: 20px;
-
     background: rgba(201, 154, 58, 0.05);
 }
 
 .logo-texto {
     display: flex;
     flex-direction: column;
-
     gap: 3px;
-
     min-width: 0;
 }
 
 .logo-texto strong {
     color: #f5f2eb;
-
     font-size: 15px;
-
     font-weight: 800;
-
     letter-spacing: 0.8px;
-
     white-space: nowrap;
 }
 
@@ -100,44 +80,30 @@
 
 .logo-texto small {
     color: #62666b;
-
     font-size: 7px;
-
     font-weight: 700;
-
     letter-spacing: 1.2px;
-
     white-space: nowrap;
 }
 
-
 /* =========================================================
-   PERFIL
+   PERFIL ATIVO
    ========================================================= */
 
 .perfil-ativo {
-    margin: 25px 18px 18px;
-
-    padding: 14px 15px;
-
+    margin: 20px 18px 14px;
+    padding: 12px 14px;
     background: #0f0f0f;
-
     border: 1px solid rgba(255, 255, 255, 0.06);
-
     border-radius: 10px;
 }
 
 .perfil-titulo {
     display: block;
-
-    margin-bottom: 8px;
-
+    margin-bottom: 6px;
     color: #666b71;
-
     font-size: 9px;
-
     font-weight: 800;
-
     letter-spacing: 1.3px;
 }
 
@@ -149,300 +115,205 @@
 
 .perfil-tipo strong {
     color: #c99a3a;
-
     font-size: 12px;
-
     letter-spacing: 0.8px;
 }
 
 .perfil-seta {
     color: #777c82;
-
     font-size: 16px;
-
     line-height: 1;
 }
 
-
 /* =========================================================
-   MENU
+   MENU LINKS
    ========================================================= */
 
 .menu-lateral-links {
     display: flex;
     flex-direction: column;
-
     gap: 4px;
-
     padding: 5px 12px;
-
     flex: 1;
+    overflow-y: auto;
 }
-
-
-/* =========================================================
-   LINK
-   ========================================================= */
 
 .menu-lateral-link {
     position: relative;
-
     display: flex;
     align-items: center;
-
     gap: 13px;
-
-    min-height: 46px;
-
+    min-height: 44px;
     padding: 0 14px;
-
     box-sizing: border-box;
-
     color: #858a91;
-
     text-decoration: none;
-
     border-radius: 8px;
-
-    font-size: 12px;
-
+    font-size: 13px;
     font-weight: 600;
-
-    transition:
-        color 0.2s ease,
-        background 0.2s ease,
-        transform 0.2s ease;
+    transition: color 0.2s ease, background 0.2s ease;
 }
 
 .menu-lateral-link:hover {
     color: #f5f2eb;
-
-    background: rgba(255, 255, 255, 0.035);
+    background: rgba(255, 255, 255, 0.04);
 }
-
-
-/* =========================================================
-   ÍCONE
-   ========================================================= */
 
 .menu-icone {
     width: 22px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     color: #777c82;
-
     font-size: 17px;
-
-    transition:
-        color 0.2s ease,
-        transform 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .menu-lateral-link:hover .menu-icone {
     color: #c99a3a;
-
-    transform: scale(1.05);
 }
-
-
-/* =========================================================
-   LINK ATIVO
-   ========================================================= */
 
 .menu-lateral-link.ativo {
     color: #f5f2eb;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(201, 154, 58, 0.13),
-            rgba(201, 154, 58, 0.035)
-        );
-
-    border: 1px solid rgba(201, 154, 58, 0.12);
-}
-
-.menu-lateral-link.ativo::before {
-    content: "";
-
-    position: absolute;
-
-    left: -12px;
-
-    top: 8px;
-    bottom: 8px;
-
-    width: 3px;
-
-    background: #c99a3a;
-
-    border-radius: 0 4px 4px 0;
-
-    box-shadow:
-        0 0 10px rgba(201, 154, 58, 0.4);
+    background: linear-gradient(90deg, rgba(201, 154, 58, 0.15), rgba(201, 154, 58, 0.035));
+    border: 1px solid rgba(201, 154, 58, 0.18);
 }
 
 .menu-lateral-link.ativo .menu-icone {
     color: #c99a3a;
 }
 
-
-/* =========================================================
-   RODAPÉ
-   ========================================================= */
-
 .menu-lateral-footer {
     display: flex;
     align-items: center;
-
     gap: 8px;
-
     margin: 0 18px;
-
-    padding: 18px 5px;
-
+    padding: 16px 5px;
     color: #555a60;
-
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-
-    font-size: 9px;
-
+    font-size: 10px;
     font-weight: 600;
-
-    letter-spacing: 0.3px;
 }
 
 .footer-status {
     width: 6px;
     height: 6px;
-
     border-radius: 50%;
-
     background: #00c878;
-
-    box-shadow:
-        0 0 8px rgba(0, 200, 120, 0.5);
+    box-shadow: 0 0 8px rgba(0, 200, 120, 0.5);
 }
 
-
 /* =========================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE: TABLET E MOBILE (max-width: 1024px)
    ========================================================= */
 
-@media (max-width: 900px) {
-
-    .menu-lateral {
-        width: 220px;
-    }
-
-    .menu-logo {
-        padding: 0 18px;
-    }
-
-    .perfil-ativo {
-        margin-left: 14px;
-        margin-right: 14px;
-    }
-
-    .menu-lateral-links {
-        padding-left: 9px;
-        padding-right: 9px;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-    .menu-lateral {
-        width: 70px;
-    }
-
-    .menu-logo {
-        justify-content: center;
-
-        padding: 0;
-
-        min-height: 78px;
-    }
-
-    .logo-texto {
-        display: none;
-    }
-
-    .logo-icone {
-        width: 38px;
-        height: 38px;
-    }
-
-    .perfil-ativo {
-        margin: 18px 10px;
-
-        padding: 10px 0;
-
+@media (max-width: 1024px) {
+    /* Barra Fixa no topo em telas menores */
+    .menu-lateral-mobile-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 64px;
+        background: rgba(10, 10, 10, 0.96);
+        border-bottom: 1px solid rgba(201, 154, 58, 0.2);
+        backdrop-filter: blur(10px);
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        box-sizing: border-box;
+        z-index: 1090;
+    }
+
+    .mobile-bar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-icone-sm {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        color: #c99a3a;
+        border: 1px solid rgba(201, 154, 58, 0.4);
+        border-radius: 6px;
+        font-size: 16px;
+        background: rgba(201, 154, 58, 0.05);
     }
 
-    .perfil-titulo {
-        display: none;
+    .mobile-bar-brand strong {
+        color: #f5f2eb;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
     }
 
-    .perfil-tipo {
+    .mobile-bar-brand strong span {
+        color: #c99a3a;
+    }
+
+    .hamburger-button {
+        background: transparent;
+        border: 1px solid rgba(201, 154, 58, 0.3);
+        color: #c99a3a;
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s ease;
     }
 
-    .perfil-tipo strong {
-        font-size: 9px;
-
-        writing-mode: vertical-rl;
+    .hamburger-button:active {
+        background: rgba(201, 154, 58, 0.15);
     }
 
-    .perfil-seta {
-        display: none;
+    /* A Sidebar vira Drawer deslizante */
+    .menu-lateral {
+        width: 270px;
+        transform: translateX(-100%);
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.8);
+        z-index: 1200;
     }
 
-    .menu-lateral-links {
-        padding: 5px 8px;
+    .menu-lateral.mobile-aberto {
+        transform: translateX(0);
     }
 
-    .menu-lateral-link {
+    .menu-lateral-close-btn {
+        display: flex;
+        align-items: center;
         justify-content: center;
-
-        padding: 0;
-
-        min-height: 46px;
-    }
-
-    .menu-lateral-link > span:last-child {
-        display: none;
-    }
-
-    .menu-icone {
-        width: auto;
-
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #f5f2eb;
         font-size: 18px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
     }
 
-    .menu-lateral-link.ativo::before {
-        left: -8px;
-    }
-
-    .menu-lateral-footer {
-        justify-content: center;
-
-        margin: 0;
-
-        padding: 18px 0;
-    }
-
-    .menu-lateral-footer > span:last-child {
-        display: none;
+    /* Overlay escuro quando o menu estiver aberto */
+    .menu-lateral-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 1150;
     }
 }

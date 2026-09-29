@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./index.css";
 
 import { registrarCliente } from "../../service/loginService";
+import { formatarCPF, formatarRG, formatarTelefone, somenteNumeros } from "../../utils/masks";
 
 export default function Cadastro() {
   const [form, setForm] = useState({
@@ -43,29 +44,29 @@ export default function Cadastro() {
 
     // Validação de e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
     if (form.email && !emailRegex.test(form.email)) {
       newErrors.email = "E-mail inválido";
     }
 
-    // Validação de telefone
-    if (
-      form.telefone &&
-      !/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(form.telefone)
-    ) {
+    // Validação de telefone (mínimo 10 dígitos numéricos)
+    const telDigits = somenteNumeros(form.telefone);
+    if (form.telefone && telDigits.length < 10) {
       newErrors.telefone = "Telefone inválido";
     }
 
-    // Idade mínima
+    // Validação de CPF (11 dígitos numéricos)
+    const cpfDigits = somenteNumeros(form.cpf);
+    if (form.cpf && cpfDigits.length !== 11) {
+      newErrors.cpf = "CPF deve ter 11 dígitos";
+    }
+
+    // Idade mínima (16 anos)
     if (form.dataNascimento) {
       const hoje = new Date();
       const nascimento = new Date(form.dataNascimento);
 
-      let idade =
-        hoje.getFullYear() - nascimento.getFullYear();
-
-      const mes =
-        hoje.getMonth() - nascimento.getMonth();
+      let idade = hoje.getFullYear() - nascimento.getFullYear();
+      const mes = hoje.getMonth() - nascimento.getMonth();
 
       if (
         mes < 0 ||
@@ -86,10 +87,21 @@ export default function Cadastro() {
 
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
+    let finalValue = value;
+
+    if (type === "file") {
+      finalValue = files[0];
+    } else if (name === "cpf") {
+      finalValue = formatarCPF(value);
+    } else if (name === "rg") {
+      finalValue = formatarRG(value);
+    } else if (name === "telefone") {
+      finalValue = formatarTelefone(value);
+    }
 
     setForm((prev) => ({
       ...prev,
-      [name]: type === "file" ? files[0] : value,
+      [name]: finalValue,
     }));
 
     setErrors((prev) => ({
@@ -111,7 +123,7 @@ export default function Cadastro() {
       window.location.href = "/login";
     } catch (err) {
       console.error("Erro ao cadastrar:", err);
-      alert("Erro ao cadastrar");
+      alert(err?.response?.data?.erro || err?.response?.data?.message || "Erro ao cadastrar");
     }
   };
 
@@ -232,6 +244,7 @@ export default function Cadastro() {
                 placeholder="000.000.000-00"
                 value={form.cpf}
                 onChange={handleChange}
+                maxLength={14}
               />
 
               {errors.cpf && (
@@ -250,6 +263,7 @@ export default function Cadastro() {
                 placeholder="00.000.000-0"
                 value={form.rg}
                 onChange={handleChange}
+                maxLength={12}
               />
 
               {errors.rg && (
@@ -268,6 +282,7 @@ export default function Cadastro() {
                 placeholder="(11) 99999-9999"
                 value={form.telefone}
                 onChange={handleChange}
+                maxLength={15}
               />
 
               {errors.telefone && (

@@ -1,6 +1,7 @@
 import Header from "./Header";
 import MenuLateral from "./MenuLateral";
 import { useLocation } from "react-router-dom";
+import "./Layout.css";
 
 export default function Layout({ children }) {
     const location = useLocation();

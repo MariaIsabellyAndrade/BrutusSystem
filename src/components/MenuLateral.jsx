@@ -1,90 +1,42 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./MenuLateral.css";
 
 export default function MenuLateral() {
     const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
     const location = useLocation();
+    const [mobileAberto, setMobileAberto] = useState(false);
+
+    // Fecha o menu mobile quando a rota muda
+    useEffect(() => {
+        setMobileAberto(false);
+    }, [location.pathname]);
 
     const menus = {
         ADMIN: [
-            {
-                label: "Dashboard",
-                path: "/dashboard",
-                icon: "▦",
-            },
-            {
-                label: "Agendamentos",
-                path: "/Agendamento",
-                icon: "▣",
-            },
-            {
-                label: "Clientes",
-                path: "/cliente",
-                icon: "♧",
-            },
-            {
-                label: "Barbeiros",
-                path: "/barbeiro",
-                icon: "✂",
-            },
-            {
-                label: "Serviços",
-                path: "/servico",
-                icon: "✧",
-            },
-            {
-                label: "Relatórios",
-                path: "/relatorios",
-                icon: "↗",
-            },
-            {
-                label: "Configurações",
-                path: "/configuracoes",
-                icon: "⚙",
-            },
+            { label: "Dashboard", path: "/dashboard", icon: "▦" },
+            { label: "Agendamentos", path: "/Agendamento", icon: "▣" },
+            { label: "Clientes", path: "/cliente", icon: "♧" },
+            { label: "Barbeiros", path: "/barbeiro", icon: "✂" },
+            { label: "Serviços", path: "/servico", icon: "✧" },
+            { label: "Relatórios", path: "/relatorios", icon: "↗" },
+            { label: "Configurações", path: "/configuracoes", icon: "⚙" },
         ],
-
         BARBEIRO: [
-            {
-                label: "Início",
-                path: "/inicio",
-                icon: "▦",
-            },
-            {
-                label: "Minha agenda",
-                path: "/minha-agenda",
-                icon: "▣",
-            },
-            {
-                label: "Meu perfil",
-                path: "/meu-perfil",
-                icon: "⚙",
-            },
+            { label: "Início", path: "/inicio", icon: "▦" },
+            { label: "Minha agenda", path: "/minha-agenda", icon: "▣" },
+            { label: "Meu perfil", path: "/meu-perfil", icon: "⚙" },
         ],
-
         CLIENTE: [
-            {
-                label: "Agendamentos",
-                path: "/Agendamento",
-                icon: "▣",
-            },
-            {
-                label: "Meus agendamentos",
-                path: "/meus-agendamentos",
-                icon: "▤",
-            },
-            {
-                label: "Configurações",
-                path: "/configuracoes",
-                icon: "⚙",
-            },
+            { label: "Agendamentos", path: "/Agendamento", icon: "▣" },
+            { label: "Meus agendamentos", path: "/meus-agendamentos", icon: "▤" },
+            { label: "Configurações", path: "/configuracoes", icon: "⚙" },
         ],
     };
 
     const menuAtual = menus[tipo] || [];
 
     let nomePerfil = "";
-
     if (tipo === "ADMIN") {
         nomePerfil = "GESTOR";
     } else if (tipo === "BARBEIRO") {
@@ -94,68 +46,89 @@ export default function MenuLateral() {
     }
 
     return (
-        <aside className="menu-lateral">
-
-            {/* LOGO */}
-            <div className="menu-logo">
-                <div className="logo-icone">
-                    ✂
+        <>
+            {/* CABEÇALHO MOBILE / TABLET COM BOTÃO HAMBÚRGUER */}
+            <div className="menu-lateral-mobile-bar">
+                <div className="mobile-bar-brand">
+                    <div className="logo-icone-sm">✂</div>
+                    <strong>BRUTUS <span>SYSTEM</span></strong>
                 </div>
 
-                <div className="logo-texto">
-                    <strong>
-                        BRUTUS <span>SYSTEM</span>
-                    </strong>
-
-                    <small>
-                        BARBER MANAGEMENT
-                    </small>
-                </div>
+                <button
+                    type="button"
+                    className="hamburger-button"
+                    aria-label="Abrir Menu"
+                    onClick={() => setMobileAberto(!mobileAberto)}
+                >
+                    {mobileAberto ? "✕" : "☰"}
+                </button>
             </div>
 
-            {/* PERFIL ATIVO */}
-            <div className="perfil-ativo">
-                <span className="perfil-titulo">
-                    PERFIL ATIVO
-                </span>
+            {/* OVERLAY DE BACKDROP NO MOBILE */}
+            {mobileAberto && (
+                <div
+                    className="menu-lateral-overlay"
+                    onClick={() => setMobileAberto(false)}
+                />
+            )}
 
-                <div className="perfil-tipo">
-                    <strong>
-                        {nomePerfil}
-                    </strong>
+            {/* ASIDE SIDEBAR */}
+            <aside className={`menu-lateral ${mobileAberto ? "mobile-aberto" : ""}`}>
+                {/* BOTÃO DE FECHAR NO MOBILE */}
+                <button
+                    type="button"
+                    className="menu-lateral-close-btn"
+                    onClick={() => setMobileAberto(false)}
+                    aria-label="Fechar Menu"
+                >
+                    ✕
+                </button>
 
-                    <span className="perfil-seta">
-                        ⌄
-                    </span>
+                {/* LOGO */}
+                <div className="menu-logo">
+                    <div className="logo-icone">✂</div>
+                    <div className="logo-texto">
+                        <strong>
+                            BRUTUS <span>SYSTEM</span>
+                        </strong>
+                        <small>BARBER MANAGEMENT</small>
+                    </div>
                 </div>
-            </div>
 
-            {/* MENU */}
-            <nav className="menu-lateral-links">
-                {menuAtual.map((item) => {
-                    const ativo =
-                        location.pathname === item.path;
+                {/* PERFIL ATIVO */}
+                <div className="perfil-ativo">
+                    <span className="perfil-titulo">PERFIL ATIVO</span>
+                    <div className="perfil-tipo">
+                        <strong>{nomePerfil}</strong>
+                        <span className="perfil-seta">⌄</span>
+                    </div>
+                </div>
 
-                    return (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            className={`menu-lateral-link ${
-                                ativo ? "ativo" : ""
-                            }`}
-                        >
-                            <span className="menu-icone">
-                                {item.icon}
-                            </span>
+                {/* MENU */}
+                <nav className="menu-lateral-links">
+                    {menuAtual.map((item) => {
+                        const ativo = location.pathname === item.path;
 
-                            <span>
-                                {item.label}
-                            </span>
-                        </Link>
-                    );
-                })}
-            </nav>
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`menu-lateral-link ${ativo ? "ativo" : ""}`}
+                                onClick={() => setMobileAberto(false)}
+                            >
+                                <span className="menu-icone">{item.icon}</span>
+                                <span>{item.label}</span>
+                            </Link>
+                        );
+                    })}
+                </nav>
 
-        </aside>
+                {/* RODAPÉ STATUS */}
+                <div className="menu-lateral-footer">
+                    <span className="footer-status"></span>
+                    <span>Sistema Online</span>
+                </div>
+            </aside>
+        </>
     );
 }

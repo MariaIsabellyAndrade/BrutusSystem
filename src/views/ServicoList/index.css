@@ -2,1202 +2,447 @@
    BRUTUS SYSTEM - SERVIÇOS
    ========================================================= */
 
-
-/* =========================================================
-   PÁGINA
-   ========================================================= */
-
-/* =========================================================
-   PÁGINA
-   ========================================================= */
-
 .servicos-page {
-    width: calc(100% - 325px);
+    width: 100%;
     min-height: 100vh;
-
-    margin-left: 325px;
-
+    margin-left: 0;
     position: relative;
-
-    padding: 45px 25px 70px;
-
     box-sizing: border-box;
-
+    padding: 30px 24px 60px;
     background:
         radial-gradient(
             circle at 15% 20%,
-            rgba(212, 175, 55, 0.08),
+            rgba(201, 154, 58, 0.08),
             transparent 35%
         ),
         radial-gradient(
             circle at 85% 80%,
-            rgba(212, 175, 55, 0.05),
+            rgba(201, 154, 58, 0.05),
             transparent 35%
         ),
         #050505;
-
     color: #ffffff;
 }
-
-
-/* =========================================================
-   CONTAINER
-   ========================================================= */
 
 .servicos-container {
     width: 100%;
     max-width: 1200px;
-
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
-
-/* =========================================================
-   CABEÇALHO
-   ========================================================= */
-
+/* CABEÇALHO */
 .servicos-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
-    gap: 30px;
-
-    margin-bottom: 35px;
+    gap: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
 }
 
 .servicos-title-area h1 {
-    margin: 0 0 8px;
-
+    margin: 0 0 6px;
     color: #f5f2eb;
-
-    font-size: clamp(30px, 4vw, 42px);
+    font-size: clamp(26px, 4vw, 38px);
     font-weight: 800;
-
-    letter-spacing: -1px;
+    letter-spacing: -0.8px;
 }
 
 .servicos-title-area p {
     margin: 0;
-
     color: #8d929a;
-
     font-size: 14px;
 }
 
-
-/* =========================================================
-   CARDS DE RESUMO
-   ========================================================= */
-
+/* CARDS DE RESUMO */
 .servicos-resumo {
     width: 100%;
-
     display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 18px;
-
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
     margin-bottom: 28px;
 }
 
 .servico-resumo-card {
     position: relative;
-
-    min-height: 125px;
-
-    padding: 24px 26px;
-
+    min-height: 110px;
+    padding: 20px 22px;
     box-sizing: border-box;
-
     display: flex;
-
     align-items: center;
     justify-content: space-between;
-
     background: #0b0b0b;
-
     border: 1px solid rgba(201, 154, 58, 0.18);
-
     border-radius: 12px;
-
-    overflow: hidden;
-
     cursor: pointer;
-
-    transition:
-        border-color 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+    transition: border-color 0.25s ease, transform 0.25s ease;
 }
-
-
-/* LINHA DOURADA */
-
-.servico-resumo-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 2px;
-
-    background: #c99a3a;
-
-    opacity: 0.7;
-
-    transition: opacity 0.25s ease;
-}
-
 
 .servico-resumo-card:hover {
     transform: translateY(-2px);
-
     border-color: rgba(201, 154, 58, 0.45);
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.3);
 }
-
-
-.servico-resumo-card:hover::before {
-    opacity: 1;
-}
-
-
-/* CARD SELECIONADO */
 
 .servico-resumo-card.selecionado {
     border-color: #c99a3a;
-
-    box-shadow:
-        0 0 0 1px rgba(201, 154, 58, 0.18),
-        0 8px 28px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 1px rgba(201, 154, 58, 0.18);
 }
-
-.servico-resumo-card.selecionado::before {
-    opacity: 1;
-}
-
-
-/* INFORMAÇÕES */
 
 .resumo-card-info {
     display: flex;
-
     flex-direction: column;
-
-    gap: 8px;
+    gap: 6px;
 }
 
 .resumo-card-label {
     color: #8d929a;
-
     font-size: 11px;
-
     font-weight: 700;
-
-    letter-spacing: 1.3px;
-
+    letter-spacing: 1.2px;
     text-transform: uppercase;
 }
 
 .resumo-card-info h2 {
     margin: 0;
-
     color: #f5f2eb;
-
-    font-size: 36px;
-
+    font-size: 32px;
     font-weight: 800;
-
-    line-height: 1;
 }
-
-
-/* DETALHE */
 
 .resumo-card-detalhe {
     width: 4px;
-
-    height: 52px;
-
+    height: 44px;
     background: #c99a3a;
-
     border-radius: 10px;
-
     opacity: 0.65;
-
-    transition:
-        opacity 0.25s ease,
-        box-shadow 0.25s ease;
 }
 
-.servico-resumo-card:hover .resumo-card-detalhe {
-    opacity: 0.9;
-}
-
-.servico-resumo-card.selecionado
-.resumo-card-detalhe {
-
-    opacity: 1;
-
-    box-shadow:
-        0 0 12px rgba(201, 154, 58, 0.5);
-}
-
-
-/* =========================================================
-   CONTROLES
-   ========================================================= */
-
+/* CONTROLES */
 .servicos-controls {
+    width: 100%;
     display: flex;
-
     align-items: center;
-
     gap: 14px;
-
-    margin-bottom: 25px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .servicos-search {
     flex: 1;
-
-    height: 48px;
-
+    min-width: 220px;
+    height: 46px;
     padding: 0 16px;
-
     box-sizing: border-box;
-
     background: #111111;
-
     border: 1px solid #292929;
-
-    border-radius: 9px;
-
+    border-radius: 8px;
     color: #ffffff;
-
     font-size: 14px;
-
     outline: none;
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.servicos-search::placeholder {
-    color: #666b72;
+    transition: border-color 0.25s ease;
 }
 
 .servicos-search:focus {
     border-color: #c99a3a;
-
-    box-shadow:
-        0 0 0 3px rgba(201, 154, 58, 0.08);
 }
 
-
-/* =========================================================
-   BOTÃO NOVO SERVIÇO
-   ========================================================= */
-
 .servicos-btn-add {
-    height: 48px;
-
-    padding: 0 22px;
-
+    height: 46px;
+    padding: 0 20px;
     background: #c99a3a;
-
     color: #050505;
-
     border: none;
-
-    border-radius: 9px;
-
+    border-radius: 8px;
     font-size: 12px;
-
     font-weight: 800;
-
     letter-spacing: 0.3px;
-
     cursor: pointer;
-
-    transition:
-        background 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+    white-space: nowrap;
+    transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .servicos-btn-add:hover {
     background: #d9ae55;
-
     transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 25px rgba(201, 154, 58, 0.16);
 }
 
-
-/* =========================================================
-   LISTA
-   ========================================================= */
-
+/* LISTA */
 .servicos-lista {
+    width: 100%;
     display: flex;
-
     flex-direction: column;
-
     gap: 14px;
 }
 
-
-/* =========================================================
-   CARD DO SERVIÇO
-   ========================================================= */
-
 .servico-card {
+    width: 100%;
     display: flex;
-
     align-items: center;
-
     gap: 20px;
-
     padding: 18px 20px;
-
+    box-sizing: border-box;
     background: rgba(17, 17, 17, 0.94);
-
     border: 1px solid #262626;
-
-    border-radius: 14px;
-
-    transition:
-        border-color 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+    border-radius: 12px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
 .servico-card:hover {
     border-color: rgba(201, 154, 58, 0.5);
-
     transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-
-/* =========================================================
-   FOTO
-   ========================================================= */
-
 .servico-foto {
-    width: 72px;
-
-    height: 72px;
-
+    width: 64px;
+    height: 64px;
     flex-shrink: 0;
-
     border-radius: 50%;
-
     object-fit: cover;
-
     border: 2px solid #c99a3a;
-
     background: #0b0b0b;
 }
 
-
-/* =========================================================
-   INFORMAÇÕES
-   ========================================================= */
-
 .servico-info {
     flex: 1;
-
     min-width: 0;
-
     display: flex;
-
     flex-direction: column;
-
-    gap: 5px;
+    gap: 4px;
 }
 
 .servico-info h3 {
-    margin: 0 0 2px;
-
+    margin: 0;
     color: #f5f2eb;
-
-    font-size: 18px;
-
+    font-size: 17px;
     font-weight: 700;
-}
-
-.servico-info span {
-    color: #858a91;
-
-    font-size: 12px;
 }
 
 .servico-info .servico-descricao {
     color: #b0b4ba;
-
-    max-width: 650px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
+    font-size: 13px;
 }
-
-
-/* =========================================================
-   PREÇO
-   ========================================================= */
 
 .servico-info .servico-preco {
     color: #c99a3a;
-
     font-size: 14px;
-
     font-weight: 800;
 }
 
-
-/* =========================================================
-   STATUS
-   ========================================================= */
+.servico-info span {
+    color: #858a91;
+    font-size: 12px;
+}
 
 .servico-status {
     display: inline-flex;
-
     align-items: center;
-
-    width: fit-content;
-
     margin-top: 4px;
-
     font-size: 11px;
-
     font-weight: 700;
 }
 
-.servico-status.ativo {
-    color: #00d889;
-}
-
-.servico-status.inativo {
-    color: #ff5555;
-}
-
-
-/* =========================================================
-   AÇÕES
-   ========================================================= */
+.servico-status.ativo { color: #00d889; }
+.servico-status.inativo { color: #ff5555; }
 
 .servico-actions {
     display: flex;
-
     align-items: center;
-
     gap: 8px;
+    flex-shrink: 0;
 }
 
 .servico-actions button {
-    height: 38px;
-
-    padding: 0 15px;
-
-    border-radius: 8px;
-
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 6px;
     border: 1px solid #303030;
-
     font-size: 11px;
-
     font-weight: 700;
-
     cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
 }
-
-
-/* EDITAR */
 
 .servico-btn-editar {
     background: #202020;
-
     color: #ffffff;
 }
 
 .servico-btn-editar:hover {
-    background: #2b2b2b;
-
     border-color: #c99a3a;
 }
 
-
-/* EXCLUIR */
-
 .servico-btn-excluir {
     background: transparent;
-
     color: #ff5555;
 }
 
 .servico-btn-excluir:hover {
     background: rgba(255, 68, 68, 0.08);
-
-    border-color: #ff4444;
 }
-
-
-/* =========================================================
-   NENHUM RESULTADO
-   ========================================================= */
 
 .servicos-empty {
-    padding: 45px 20px;
-
+    width: 100%;
+    padding: 40px 20px;
     text-align: center;
-
     color: #777c83;
-
     background: rgba(17, 17, 17, 0.7);
-
     border: 1px dashed #292929;
-
-    border-radius: 14px;
-
-    font-size: 13px;
+    border-radius: 12px;
+    font-size: 14px;
 }
 
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
+/* MODAL */
 .servicos-modal {
     position: fixed;
-
     inset: 0;
-
     z-index: 9999;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    padding: 20px;
-
+    padding: 16px;
     box-sizing: border-box;
-
-    background: rgba(0, 0, 0, 0.88);
-
-    backdrop-filter: blur(7px);
-
-    animation: servicosModalFade 0.2s ease;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(6px);
 }
-
-
-/* =========================================================
-   CONTEÚDO MODAL
-   ========================================================= */
 
 .servicos-modal-content {
-    width: 100%;
-
-    max-width: 720px;
-
+    width: min(95%, 650px);
     max-height: 90vh;
-
     overflow-y: auto;
-
-    padding: 34px 38px;
-
+    padding: 28px 24px;
     box-sizing: border-box;
-
     background: #0b0b0b;
-
     border: 1px solid rgba(201, 154, 58, 0.28);
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.65),
-        0 0 35px rgba(201, 154, 58, 0.04);
-
-    animation: servicosModalIn 0.25s ease;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
 }
-
-
-/* =========================================================
-   TÍTULO
-   ========================================================= */
 
 .servicos-modal-content h2 {
-    position: relative;
-
-    margin: 0 0 30px;
-
-    padding-bottom: 16px;
-
+    margin: 0 0 20px;
     color: #f5f2eb;
-
-    font-size: 24px;
-
+    font-size: 20px;
     font-weight: 800;
-
-    letter-spacing: -0.3px;
 }
-
-.servicos-modal-content h2::after {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-
-    bottom: 0;
-
-    width: 42px;
-
-    height: 2px;
-
-    background: #c99a3a;
-
-    border-radius: 5px;
-}
-
-
-/* =========================================================
-   INPUTS
-   ========================================================= */
 
 .servicos-modal-content input:not([type="checkbox"]) {
     width: 100%;
-
-    height: 45px;
-
+    height: 42px;
     padding: 0 14px;
-
     box-sizing: border-box;
-
-    margin-bottom: 4px;
-
+    margin-bottom: 8px;
     color: #f5f2eb;
-
     background: #111111;
-
-    border: 1px solid rgba(255, 255, 255, 0.09);
-
-    border-radius: 8px;
-
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
     outline: none;
-
-    font-family: 'Manrope', sans-serif;
-
     font-size: 13px;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
 }
-
-.servicos-modal-content input:not([type="checkbox"])::placeholder {
-    color: #65676b;
-}
-
-.servicos-modal-content input:not([type="checkbox"]):hover {
-    border-color: rgba(255, 255, 255, 0.16);
-}
-
-.servicos-modal-content input:not([type="checkbox"]):focus {
-    background: #121212;
-
-    border-color: rgba(201, 154, 58, 0.65);
-
-    box-shadow:
-        0 0 0 3px rgba(201, 154, 58, 0.08);
-}
-
-
-/* =========================================================
-   TEXTAREA
-   ========================================================= */
 
 .servicos-textarea {
     width: 100%;
-
-    min-height: 100px;
-
-    padding: 13px 14px;
-
+    min-height: 90px;
+    padding: 12px 14px;
     box-sizing: border-box;
-
-    margin-bottom: 4px;
-
+    margin-bottom: 8px;
     resize: vertical;
-
     color: #f5f2eb;
-
     background: #111111;
-
-    border: 1px solid rgba(255, 255, 255, 0.09);
-
-    border-radius: 8px;
-
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
     outline: none;
-
-    font-family: 'Manrope', sans-serif;
-
+    font-family: inherit;
     font-size: 13px;
-
-    line-height: 1.5;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
 }
 
-.servicos-textarea::placeholder {
-    color: #65676b;
-}
-
-.servicos-textarea:focus {
-    border-color: rgba(201, 154, 58, 0.65);
-
-    box-shadow:
-        0 0 0 3px rgba(201, 154, 58, 0.08);
-}
-
-
-/* =========================================================
-   LABELS
-   ========================================================= */
-
-.servicos-modal-label {
-    display: block;
-
-    margin: 18px 0 7px;
-
-    color: #9b9da2;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    letter-spacing: 0.8px;
-
-    text-transform: uppercase;
-}
-
-
-/* =========================================================
-   DATA / NÚMEROS
-   ========================================================= */
-
-.servicos-modal-content input[type="number"] {
-    appearance: textfield;
-}
-
-.servicos-modal-content input[type="number"]::-webkit-inner-spin-button,
-.servicos-modal-content input[type="number"]::-webkit-outer-spin-button {
-    opacity: 0.5;
-}
-
-
-/* =========================================================
-   UPLOAD
-   ========================================================= */
-
-.servicos-modal-content input[type="file"] {
-    width: 100%;
-
-    padding: 10px 0;
-
-    color: #8d929a;
-
-    font-size: 12px;
-
-    cursor: pointer;
-}
-
-.servicos-modal-content input[type="file"]::file-selector-button {
-    margin-right: 12px;
-
-    padding: 8px 13px;
-
-    color: #f5f2eb;
-
-    background: #171717;
-
-    border: 1px solid rgba(201, 154, 58, 0.3);
-
-    border-radius: 7px;
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.servicos-modal-content input[type="file"]::file-selector-button:hover {
-    background: #1e1e1e;
-
+.servicos-modal-content input:focus, .servicos-textarea:focus {
     border-color: #c99a3a;
 }
 
-
-/* =========================================================
-   CHECKBOX
-   ========================================================= */
+.servicos-modal-label {
+    display: block;
+    margin: 14px 0 6px;
+    color: #9b9da2;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
 
 .servicos-checkbox {
     display: flex;
-
     align-items: center;
-
-    gap: 9px;
-
-    margin-top: 18px;
-
-    color: #b3b7bd;
-
-    font-size: 12px;
-
+    gap: 8px;
+    margin: 14px 0;
+    color: #f5f2eb;
+    font-size: 13px;
     cursor: pointer;
 }
-
-.servicos-checkbox input[type="checkbox"] {
-    width: 16px;
-
-    height: 16px;
-
-    accent-color: #c99a3a;
-
-    cursor: pointer;
-}
-
-
-/* =========================================================
-   BOTÕES MODAL
-   ========================================================= */
 
 .servicos-modal-buttons {
     display: flex;
-
-    justify-content: flex-end;
-
     gap: 10px;
-
-    margin-top: 30px;
-
-    padding-top: 22px;
-
-    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin-top: 24px;
+    justify-content: flex-end;
 }
-
-.servicos-modal-buttons button {
-    min-width: 110px;
-
-    height: 42px;
-
-    padding: 0 20px;
-
-    border-radius: 8px;
-
-    font-size: 12px;
-
-    font-weight: 800;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-/* SALVAR */
 
 .servicos-btn-primary {
+    height: 42px;
+    padding: 0 20px;
     background: #c99a3a;
-
     color: #050505;
-
     border: none;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
 }
-
-.servicos-btn-primary:hover {
-    background: #d9ae55;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 5px 18px rgba(201, 154, 58, 0.18);
-}
-
-
-/* CANCELAR */
 
 .servicos-btn-secondary {
-    background: #151515;
-
-    color: #a1a1a1;
-
-    border: 1px solid rgba(255, 255, 255, 0.09);
+    height: 42px;
+    padding: 0 20px;
+    background: transparent;
+    color: #8d929a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
 }
-
-.servicos-btn-secondary:hover {
-    background: #1c1c1c;
-
-    color: #f5f2eb;
-
-    border-color: rgba(255, 255, 255, 0.16);
-}
-
-
-/* EXCLUIR */
 
 .servicos-btn-danger {
-    background: #351919;
-
-    color: #f5f2eb;
-
-    border: 1px solid rgba(190, 80, 80, 0.3);
+    height: 42px;
+    padding: 0 20px;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
 }
 
-.servicos-btn-danger:hover {
-    background: #451e1e;
-
-    border-color: rgba(210, 90, 90, 0.5);
-}
-
-
-/* =========================================================
-   MODAL DE CONFIRMAÇÃO
-   ========================================================= */
-
-.servicos-confirm-modal {
-    max-width: 430px;
-}
-
-.servicos-modal-content p {
-    margin: 0;
-
-    color: #8d929a;
-
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-
-/* =========================================================
-   ANIMAÇÕES
-   ========================================================= */
-
-@keyframes servicosModalFade {
-
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
-
-@keyframes servicosModalIn {
-
-    from {
-        opacity: 0;
-
-        transform:
-            translateY(10px)
-            scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVIDADE - 900PX
-   ========================================================= */
-
-@media (max-width: 900px) {
-
+/* RESPONSIVIDADE */
+@media (max-width: 768px) {
     .servicos-page {
-        padding: 35px 20px 60px;
-    }
-
-    .servicos-resumo {
-        gap: 12px;
+        padding: 20px 16px 40px;
     }
 
     .servico-card {
-        gap: 15px;
-    }
-
-    .servico-actions button {
-        padding: 0 12px;
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVIDADE - 700PX
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-    .servicos-header {
-        align-items: flex-start;
-
         flex-direction: column;
-
-        margin-bottom: 25px;
-    }
-
-
-    .servicos-resumo {
-        grid-template-columns: 1fr;
-    }
-
-
-    .servicos-controls {
-        flex-direction: column;
-
-        align-items: stretch;
-    }
-
-
-    .servicos-btn-add {
-        width: 100%;
-    }
-
-
-    .servico-card {
         align-items: flex-start;
-
-        flex-wrap: wrap;
     }
-
-
-    .servico-info {
-        min-width: calc(100% - 100px);
-    }
-
-
-    .servico-info .servico-descricao {
-        max-width: 100%;
-
-        white-space: normal;
-    }
-
 
     .servico-actions {
         width: 100%;
+        justify-content: flex-end;
+        margin-top: 10px;
     }
 
-
-    .servico-actions button {
-        flex: 1;
+    .servicos-controls {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-
-    .servicos-modal {
-        padding: 15px;
-    }
-
-
-    .servicos-modal-content {
-        max-height: 94vh;
-
-        padding: 25px 22px;
-
-        border-radius: 13px;
-    }
-}
-
-
-/* =========================================================
-   RESPONSIVIDADE - 450PX
-   ========================================================= */
-
-@media (max-width: 450px) {
-
-    .servicos-page {
-        padding: 30px 15px 50px;
-    }
-
-
-    .servico-card {
-        padding: 16px;
-    }
-
-
-    .servico-foto {
-        width: 60px;
-
-        height: 60px;
-    }
-
-
-    .servico-info h3 {
-        font-size: 16px;
-    }
-
-
-    .servicos-modal {
-        padding: 12px;
-    }
-
-
-    .servicos-modal-content {
-        padding: 22px 18px;
-    }
-
-
-    .servicos-modal-content h2 {
-        font-size: 21px;
-    }
-
-
-    .servicos-modal-buttons {
-        flex-direction: column-reverse;
-    }
-
-
-    .servicos-modal-buttons button {
+    .servicos-btn-add {
         width: 100%;
     }
 }

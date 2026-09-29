@@ -2,82 +2,83 @@
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center; /* Centraliza verticalmente */
-  background: url("https://images.unsplash.com/photo-1517836357463-d25dfeac3438") no-repeat center center;
-  background-size: cover;
-  padding: 80px 20px; /* Aumentamos o padding superior e inferior (80px) */
+  align-items: center;
+  background: #050607;
+  padding: 40px 20px;
   box-sizing: border-box;
 }
 
 .cadastro-box {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 30px;
-  border-radius: 15px;
+  background: #0f0f0f;
+  padding: 36px 30px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 400px;
-  color: white;
-  
-  /* --- AJUSTE DE ALTURA E ROLAGEM --- */
-  max-height: 80vh; /* Diminuímos um pouco para não encostar nas bordas da tela */
-  overflow-y: auto;
-  
-  /* Adiciona uma sombra para destacar do fundo */
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* Garante que o título não fique colado no topo do box */
-.cadastro-box h1 {
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 25px;
-  font-size: 2rem;
-}
-
-/* Customização do Scroll (Opcional - para ficar mais bonito) */
-.cadastro-box::-webkit-scrollbar {
-  width: 8px;
-}
-.cadastro-box::-webkit-scrollbar-thumb {
-  background: gold;
-  border-radius: 10px;
+  max-width: 420px;
+  color: #f5f2eb;
+  border: 1px solid rgba(201, 154, 58, 0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
 }
 
 .cadastro-box h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  font-size: 26px;
+  color: #c99a3a;
+  font-weight: 700;
+}
+
+.cadastro-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .cadastro-box input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  border: none;
-  box-sizing: border-box; /* Garante que o padding não "empurre" o input para fora */
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #171a1e;
+  color: #fff;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 13px;
 }
 
-.cadastro-box span {
-  color: red;
-  font-size: 12px;
-  display: block; /* Garante que o erro fique em sua própria linha */
-  margin-bottom: 5px;
+.cadastro-box input:focus {
+  border-color: #c99a3a;
+}
+
+.cadastro-box .error {
+  color: #ef4444;
+  font-size: 11px;
+  display: block;
+  margin-top: -8px;
 }
 
 .cadastro-box button {
   width: 100%;
-  padding: 10px;
-  background: gold;
+  height: 44px;
+  background: #c99a3a;
+  color: #050505;
   border: none;
-  border-radius: 8px;
-  margin-top: 10px;
+  border-radius: 6px;
+  margin-top: 8px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  transition: background 0.25s ease;
 }
 
-/* --- RESPONSIVIDADE PARA CELULARES --- */
+.cadastro-box button:hover {
+  background: #d9ae55;
+}
+
 @media (max-width: 480px) {
   .cadastro-box {
-    padding: 20px;
-    margin: 10px;
+    padding: 24px 18px;
   }
 }

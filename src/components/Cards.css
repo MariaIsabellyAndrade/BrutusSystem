@@ -1,60 +1,63 @@
+/* =========================================================
+   BRUTUS SYSTEM - CARDS DE RESUMO (BARBEIROS/CLIENTES/SERVIÇOS)
+   ========================================================= */
+
 .cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
-  padding: 20px 5%;
-   
+  width: 100%;
+  padding: 10px 0 20px 0;
+  box-sizing: border-box;
 }
 
 .titulo {
-  text-align: center; /* 👈 centraliza */
-  color: white;
-
-  margin-top: 40px; /* 👈 desce por causa do header */
+  text-align: center;
+  color: #f5f2eb;
+  margin-top: 20px;
   margin-bottom: 20px;
-
-  font-size: 40px;
+  font-size: clamp(24px, 4vw, 40px);
   font-weight: bold;
 }
 
-/* cada card ocupa espaço igual */
 .card {
-  flex: 1;
   padding: 20px;
-  border-radius: 15px;
-
-
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-
+  border-radius: 12px;
+  background: #0f0f0f;
+  border: 1px solid rgba(201, 154, 58, 0.25);
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  transition: 0.3s;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  box-sizing: border-box;
+  min-width: 0;
+  cursor: pointer;
 }
 
-/* efeito hover 🔥 */
 .card:hover {
-  transform: translateY(-5px);
-  border-color: #d4af37;
+  transform: translateY(-4px);
+  border-color: #c99a3a;
+  box-shadow: 0 6px 20px rgba(201, 154, 58, 0.12);
 }
 
-/* textos */
 .card p {
   margin: 0;
-  font-size: 16px;
-  color: #ccc;
+  font-size: 13px;
+  color: #8d929a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 .card h2 {
-  margin-top: 10px;
-  font-size: 28px;
-  color: white;
+  margin-top: 8px;
+  font-size: clamp(22px, 3vw, 32px);
+  color: #ffffff;
+  font-weight: 800;
 }
 
-/* cores */
 .total h2 {
-  color: #3b82f6;
+  color: #c99a3a;
 }
 
 .ativos h2 {
@@ -63,4 +66,11 @@
 
 .inativos h2 {
   color: #ef4444;
+}
+
+@media (max-width: 480px) {
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }

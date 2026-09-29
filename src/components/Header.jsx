@@ -10,7 +10,6 @@ export default function Header() {
       <Link
         to="/"
         className="logo-link"
-        onClick={() => console.log("CLIQUE NA LOGO")}
       >
         <img
           src={logo}

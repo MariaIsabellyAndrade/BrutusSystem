@@ -1,20 +1,59 @@
-.layout-com-menu {
-    min-height: 100vh;
-    background: #0d0d0d;
-}
+/* =========================================================
+   BRUTUS SYSTEM - LAYOUT
+   ========================================================= */
 
-.layout-conteudo {
-    margin-left: 260px;
+.layout-logado {
+    display: flex;
     min-height: 100vh;
-    width: calc(100% - 260px);
+    width: 100%;
+    background: #050505;
+    position: relative;
     box-sizing: border-box;
 }
 
-.layout-sem-menu {
+.conteudo-logado {
+    margin-left: 250px;
+    width: calc(100% - 250px);
     min-height: 100vh;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-.layout-conteudo-full {
+.layout-publico {
     min-height: 100vh;
     width: 100%;
+    background: #050505;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.conteudo-publico {
+    padding-top: 92px;
+    min-height: calc(100vh - 92px);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   RESPONSIVIDADE DAS ÁREAS PRINCIPAIS
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .conteudo-logado {
+        margin-left: 0;
+        width: 100%;
+        padding-top: 64px; /* Espaço para o cabeçalho mobile da sidebar */
+    }
+
+    .conteudo-publico {
+        padding-top: 78px;
+        min-height: calc(100vh - 78px);
+    }
+}
+
+@media (max-width: 600px) {
+    .conteudo-publico {
+        padding-top: 70px;
+        min-height: calc(100vh - 70px);
+    }
 }

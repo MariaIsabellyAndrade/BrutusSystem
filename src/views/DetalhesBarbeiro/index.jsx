@@ -4,6 +4,7 @@ import {
     listarBarbeiros,
     getUrlFotoBarbeiro,
 } from "../../service/serviceBarbeiro";
+import { formatarDataSemFuso, formatarMoedaExibicao } from "../../utils/formatters";
 import "./index.css";
 
 export default function DetalhesBarbeiro() {
@@ -56,18 +57,11 @@ export default function DetalhesBarbeiro() {
     */
 
     const formatarMoeda = (valor) => {
-        return Number(valor).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        });
+        return formatarMoedaExibicao(valor);
     };
 
     const formatarData = (data) => {
-        return data.toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-        });
+        return formatarDataSemFuso(data);
     };
 
     const adicionarDias = (data, quantidade) => {
@@ -709,26 +703,14 @@ export default function DetalhesBarbeiro() {
                     <div className="info-box">
                         <small>DATA DE NASCIMENTO</small>
                         <strong>
-                            {barbeiro.dataNascimento
-                                ? new Date(
-                                    barbeiro.dataNascimento
-                                ).toLocaleDateString(
-                                    "pt-BR"
-                                )
-                                : "-"}
+                            {formatarDataSemFuso(barbeiro.dataNascimento)}
                         </strong>
                     </div>
 
                     <div className="info-box">
                         <small>DATA DE ADMISSÃO</small>
                         <strong>
-                            {barbeiro.dataAdmissao
-                                ? new Date(
-                                    barbeiro.dataAdmissao
-                                ).toLocaleDateString(
-                                    "pt-BR"
-                                )
-                                : "-"}
+                            {formatarDataSemFuso(barbeiro.dataAdmissao)}
                         </strong>
                     </div>
 
