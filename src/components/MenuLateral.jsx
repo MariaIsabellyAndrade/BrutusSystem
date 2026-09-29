@@ -15,6 +15,7 @@ export default function MenuLateral() {
     const menus = {
         ADMIN: [
             { label: "Dashboard", path: "/dashboard", icon: "▦" },
+            { label: "Agendar", path: "/Agendar", icon: "▣" },
             { label: "Agendamentos", path: "/Agendamento", icon: "▣" },
             { label: "Clientes", path: "/cliente", icon: "♧" },
             { label: "Barbeiros", path: "/barbeiro", icon: "✂" },

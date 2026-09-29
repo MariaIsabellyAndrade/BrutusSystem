@@ -36,3 +36,18 @@ export const atualizarAgendamento = async (
 
     return response.data;
 };
+
+export async function listarAgendamentosPorBarbeiro(barbeiroId) {
+    try {
+        const resposta = await api.get(
+            `/barbeiro/${barbeiroId}`
+        );
+        return resposta.data;
+    } catch (error) {
+        console.error(
+            "Erro ao listar agendamentos por barbeiro:",
+            error
+        );
+        throw error;
+    }
+}

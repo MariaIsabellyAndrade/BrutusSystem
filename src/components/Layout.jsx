@@ -1,3 +1,4 @@
+
 import Header from "./Header";
 import MenuLateral from "./MenuLateral";
 import { useLocation } from "react-router-dom";
@@ -6,33 +7,17 @@ import "./Layout.css";
 export default function Layout({ children }) {
     const location = useLocation();
 
-    const tipo = localStorage.getItem("tipo");
+    const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
     const token = localStorage.getItem("token");
 
     const logado = !!token;
-
-    const rotasAdministrativas = [
-        "/dashboard",
-        "/Agendamento",
-        "/cliente",
-        "/barbeiro",
-        "/servico",
-        "/relatorios",
-        "/configuracoes"
-    ];
-
-    const estaNaAreaAdministrativa =
-        rotasAdministrativas.includes(location.pathname) ||
-        location.pathname.startsWith("/barbeiros/");
 
     const usuarioAdministrativo =
         tipo === "ADMIN" ||
         tipo === "BARBEIRO";
 
     const mostrarMenuLateral =
-        logado &&
-        usuarioAdministrativo &&
-        estaNaAreaAdministrativa;
+        logado && usuarioAdministrativo;
 
     return (
         <div
@@ -60,3 +45,4 @@ export default function Layout({ children }) {
         </div>
     );
 }
+

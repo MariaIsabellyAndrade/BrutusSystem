@@ -10,9 +10,10 @@ import Login from "./views/Login";
 import Cadastro from "./views/Cadastro";
 import ProtectedRoute from "../Protected/ProtectedRoute";
 import CadastroAdmin from "./views/CadastroAdmin";
-import AgendamentoPage from "./views/Agendamento";
+import AgendamentoPage from "./views/Agendar";
 import DetalhesBarbeiro from "./views/DetalhesBarbeiro";
 import HomeCliente from "./views/HomeCliente";
+import CalendarioAgendamentos from "./views/Agendamentos";
 
 function App() {
     return (
@@ -30,13 +31,20 @@ function App() {
                         element={<Login />}
                     />
 
+
+                    
+                    <Route
+                        path="/Agendamento"
+                        element={<CalendarioAgendamentos/>}
+                    />
+
                     <Route
                         path="/cadastro"
                         element={<Cadastro />}
                     />
 
                     <Route
-                        path="/Agendamento"
+                        path="/Agendar"
                         element={<AgendamentoPage />}
                     />
 
