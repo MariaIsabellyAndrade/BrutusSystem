@@ -1,0 +1,447 @@
+/* =========================================================
+   BRUTUS SYSTEM — RELATÓRIO FINANCEIRO
+   Identidade visual: fundo #050505, dourado #c99a3a
+   ========================================================= */
+
+/* ─── CONTAINER PRINCIPAL ─────────────────────────────────── */
+.relatorio-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 32px;
+    background: #050505;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* ─── CABEÇALHO ───────────────────────────────────────────── */
+.relatorio-cabecalho {
+    margin-bottom: 28px;
+}
+
+.relatorio-subtitulo {
+    display: block;
+    margin-bottom: 6px;
+    color: #c99a3a;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.relatorio-titulo {
+    margin: 0 0 6px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.relatorio-periodo-texto {
+    margin: 0;
+    color: #888;
+    font-size: 13px;
+}
+
+/* ─── FILTROS ─────────────────────────────────────────────── */
+.relatorio-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 20px;
+    border: 1px solid #222;
+    border-radius: 10px;
+    background: #0b0b0b;
+}
+
+.relatorio-filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 160px;
+}
+
+.relatorio-filtro-grupo label {
+    color: #aaa;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.relatorio-filtro-grupo select,
+.relatorio-filtro-grupo input[type="date"] {
+    min-height: 42px;
+    padding: 0 12px;
+    border: 1px solid #333;
+    border-radius: 7px;
+    outline: none;
+    background: #111;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.relatorio-filtro-grupo select:focus,
+.relatorio-filtro-grupo input[type="date"]:focus {
+    border-color: #c99a3a;
+}
+
+/* Força o calendário nativo a manter identidade visual */
+.relatorio-filtro-grupo input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6) sepia(1) saturate(3) hue-rotate(2deg);
+    cursor: pointer;
+}
+
+.relatorio-filtro-acoes {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+/* ─── BOTÕES ──────────────────────────────────────────────── */
+.relatorio-btn {
+    height: 42px;
+    padding: 0 20px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+.relatorio-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.relatorio-btn--primario {
+    border: 1px solid #c99a3a;
+    background: #c99a3a;
+    color: #000;
+}
+
+.relatorio-btn--primario:hover:not(:disabled) {
+    background: #d4a84a;
+    border-color: #d4a84a;
+}
+
+.relatorio-btn--secundario {
+    border: 1px solid #333;
+    background: #111;
+    color: #aaa;
+}
+
+.relatorio-btn--secundario:hover:not(:disabled) {
+    border-color: #555;
+    color: #fff;
+}
+
+/* ─── ESTADOS (loading / vazio / erro) ───────────────────── */
+.relatorio-erro {
+    margin-bottom: 20px;
+    padding: 14px 18px;
+    border: 1px solid rgba(200, 60, 60, 0.45);
+    border-radius: 8px;
+    background: rgba(200, 60, 60, 0.07);
+    color: #e08888;
+    font-size: 14px;
+}
+
+.relatorio-loading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 40px 0;
+    color: #c99a3a;
+    font-size: 14px;
+}
+
+.relatorio-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(201, 154, 58, 0.2);
+    border-top-color: #c99a3a;
+    border-radius: 50%;
+    animation: relatorio-spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes relatorio-spin {
+    to { transform: rotate(360deg); }
+}
+
+.relatorio-vazio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 260px;
+    border: 1px solid #242424;
+    border-radius: 10px;
+    background: #0b0b0b;
+    text-align: center;
+    padding: 40px;
+}
+
+.relatorio-vazio > span {
+    font-size: 38px;
+}
+
+.relatorio-vazio h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.relatorio-vazio p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+/* ─── CONTEÚDO / SEÇÕES ───────────────────────────────────── */
+.relatorio-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.relatorio-secao-titulo {
+    margin: 0 0 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #c99a3a;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.relatorio-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.relatorio-card {
+    padding: 20px 18px;
+    border: 1px solid #222;
+    border-radius: 10px;
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+}
+
+.relatorio-card:hover {
+    border-color: #333;
+}
+
+.relatorio-card--dourado {
+    border-color: rgba(201, 154, 58, 0.4);
+    background: rgba(201, 154, 58, 0.04);
+}
+
+.relatorio-card-rotulo {
+    color: #777;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.relatorio-card-valor {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    word-break: break-word;
+}
+
+.relatorio-card--dourado .relatorio-card-valor {
+    color: #c99a3a;
+}
+
+.relatorio-card-sub {
+    color: #555;
+    font-size: 11px;
+}
+
+/* ─── GRÁFICO ─────────────────────────────────────────────── */
+.relatorio-grafico-container {
+    padding: 20px;
+    border: 1px solid #222;
+    border-radius: 10px;
+    background: #0d0d0d;
+}
+
+.relatorio-grafico-wrapper {
+    width: 100%;
+}
+
+.relatorio-grafico-vazio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: #555;
+    font-size: 13px;
+}
+
+/* ─── TABELA RANKING ─────────────────────────────────────── */
+.relatorio-tabela-wrapper {
+    overflow-x: auto;
+    border: 1px solid #222;
+    border-radius: 10px;
+    background: #0d0d0d;
+}
+
+.relatorio-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+    font-size: 13px;
+}
+
+.relatorio-tabela thead th {
+    padding: 14px 16px;
+    text-align: left;
+    color: #777;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid #222;
+    background: #0b0b0b;
+    white-space: nowrap;
+}
+
+.relatorio-tabela tbody tr {
+    border-bottom: 1px solid #181818;
+    transition: background 0.15s;
+}
+
+.relatorio-tabela tbody tr:last-child {
+    border-bottom: none;
+}
+
+.relatorio-tabela tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.relatorio-tabela tbody td {
+    padding: 14px 16px;
+    color: #ddd;
+    vertical-align: middle;
+}
+
+.relatorio-td-destaque {
+    color: #c99a3a !important;
+    font-weight: 700 !important;
+}
+
+.relatorio-td-pendente {
+    color: #888 !important;
+}
+
+.relatorio-barbeiro-nome {
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Posição ranking */
+.relatorio-pos {
+    display: inline-block;
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    color: #555;
+}
+
+.relatorio-pos--ouro   { color: #c99a3a; }
+.relatorio-pos--prata  { color: #a0a0a0; }
+.relatorio-pos--bronze { color: #cd7f32; }
+
+/* Badges de quantidade */
+.relatorio-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.relatorio-badge--verde {
+    background: rgba(80, 160, 100, 0.15);
+    color: #75c58b;
+    border: 1px solid rgba(80, 160, 100, 0.3);
+}
+
+.relatorio-badge--amarelo {
+    background: rgba(201, 154, 58, 0.12);
+    color: #c99a3a;
+    border: 1px solid rgba(201, 154, 58, 0.3);
+}
+
+.relatorio-badge--vermelho {
+    background: rgba(200, 60, 60, 0.12);
+    color: #d76a6a;
+    border: 1px solid rgba(200, 60, 60, 0.3);
+}
+
+.relatorio-tabela-vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    color: #555;
+    font-size: 13px;
+}
+
+/* ─── RESPONSIVIDADE ──────────────────────────────────────── */
+@media (max-width: 900px) {
+    .relatorio-container {
+        padding: 24px 18px;
+    }
+
+    .relatorio-filtros {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .relatorio-filtro-acoes {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .relatorio-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .relatorio-container {
+        padding: 18px 12px;
+    }
+
+    .relatorio-titulo {
+        font-size: 24px;
+    }
+
+    .relatorio-cards-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .relatorio-card-valor {
+        font-size: 18px;
+    }
+}

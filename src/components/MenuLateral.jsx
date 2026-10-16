@@ -15,8 +15,9 @@ export default function MenuLateral() {
     const menus = {
         ADMIN: [
             { label: "Dashboard", path: "/dashboard", icon: "▦" },
-            { label: "Agendar", path: "/Agendar", icon: "▣" },
-            { label: "Agendamentos", path: "/Agendamento", icon: "▣" },
+            { label: "Agendar", path: "/agendar", icon: "▣" },
+            { label: "Agendamentos", path: "/agendamento", icon: "▣" },
+            { label: "Horários", path: "/horarios-barbeiro", icon: "⏱" },
             { label: "Clientes", path: "/cliente", icon: "♧" },
             { label: "Barbeiros", path: "/barbeiro", icon: "✂" },
             { label: "Serviços", path: "/servico", icon: "✧" },
@@ -26,12 +27,14 @@ export default function MenuLateral() {
         BARBEIRO: [
             { label: "Início", path: "/inicio", icon: "▦" },
             { label: "Minha agenda", path: "/minha-agenda", icon: "▣" },
+            { label: "Agendar", path: "/agendar", icon: "▣" },
+            { label: "Relatórios", path: "/relatorios", icon: "↗" },
             { label: "Meu perfil", path: "/meu-perfil", icon: "⚙" },
         ],
         CLIENTE: [
-            { label: "Agendamentos", path: "/Agendamento", icon: "▣" },
-            { label: "Meus agendamentos", path: "/meus-agendamentos", icon: "▤" },
-            { label: "Configurações", path: "/configuracoes", icon: "⚙" },
+            { label: "Início", path: "/cliente-home", icon: "▦" },
+            { label: "Novo agendamento", path: "/agendar", icon: "▣" },
+            { label: "Agenda", path: "/agendamento", icon: "▤" },
         ],
     };
 

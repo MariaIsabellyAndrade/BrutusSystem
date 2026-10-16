@@ -98,7 +98,7 @@ function HomeCliente() {
         }));
     };
 
-    const handleSalvarPerfil = async () => {
+        const handleSalvarPerfil = async () => {
         try {
             setSalvando(true);
             setErro("");
@@ -107,6 +107,18 @@ function HomeCliente() {
             if (!dados.senha) delete dados.senha;
 
             await atualizarClientes(cliente._id, dados);
+
+            // Atualiza o localStorage com os novos dados do perfil
+            const clienteAtualizado = {
+                ...clienteSalvo,
+                nome: form.nome,
+                sobrenome: form.sobrenome,
+                telefone: form.telefone,
+                email: form.email,
+                endereco: form.endereco,
+            };
+            localStorage.setItem("cliente", JSON.stringify(clienteAtualizado));
+
             setModo("visualizar");
 
             const response = await listarAgendamentosPorCliente();
@@ -256,7 +268,7 @@ function HomeCliente() {
                             <span>▦</span>
                             Início
                         </Link>
-                        <Link to="/agendamento" className="menu-item">
+                        <Link to="/agendar" className="menu-item">
                             <span>◫</span>
                             Agendar
                         </Link>
@@ -283,7 +295,7 @@ function HomeCliente() {
                         <p>Seu próximo atendimento está reservado.</p>
                     </div>
 
-                    <Link to="/agendamento" className="novo-agendamento">
+                    <Link to="/agendar" className="novo-agendamento">
                         <span>+</span>
                         NOVO AGENDAMENTO
                     </Link>

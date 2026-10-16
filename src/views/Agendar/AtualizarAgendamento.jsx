@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./atualizar.css";
 import { listarServicos } from "../../service/serviceServico";
+import { buscarHorariosDisponiveis } from "../../service/serviceAgenda";
 import { formatarMoedaExibicao } from "../../utils/formatters";
 
 export default function AtualizarAgendamento({
@@ -9,6 +10,8 @@ export default function AtualizarAgendamento({
     onSalvar
 }) {
     const [servicos, setServicos] = useState([]);
+    const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
+    const [carregandoHorarios, setCarregandoHorarios] = useState(false);
 
     const [form, setForm] = useState({
         data: "",
@@ -20,7 +23,10 @@ export default function AtualizarAgendamento({
         async function carregarServicos() {
             try {
                 const response = await listarServicos();
-                setServicos(response.data || []);
+                const lista = Array.isArray(response)
+                    ? response
+                    : response?.data || response?.servicos || [];
+                setServicos(lista.filter((s) => s.ativo !== false));
             } catch (error) {
                 console.error("Erro ao buscar serviços:", error);
             }
@@ -43,27 +49,61 @@ export default function AtualizarAgendamento({
         });
     }, [agendamento]);
 
+    // Busca horários disponíveis sempre que data ou serviços mudam
+    useEffect(() => {
+        if (!form.data || form.servicoIds.length === 0 || !agendamento) return;
+
+        const barbeiroId =
+            agendamento?.Barbeiro?._id ||
+            (typeof agendamento?.Barbeiro === "string" ? agendamento.Barbeiro : null);
+
+        if (!barbeiroId) return;
+
+        const buscar = async () => {
+            try {
+                setCarregandoHorarios(true);
+                const lista = await buscarHorariosDisponiveis(
+                    barbeiroId,
+                    form.data,
+                    form.servicoIds
+                );
+                // Inclui o horário atual do agendamento na lista, pois o backend
+                // pode tratá-lo como ocupado pelo próprio agendamento
+                const horarioAtual = agendamento.hora;
+                const listaComAtual =
+                    horarioAtual && !lista.includes(horarioAtual)
+                        ? [horarioAtual, ...lista].sort()
+                        : lista;
+                setHorariosDisponiveis(listaComAtual);
+            } catch (error) {
+                console.error("Erro ao buscar horários:", error);
+                setHorariosDisponiveis([]);
+            } finally {
+                setCarregandoHorarios(false);
+            }
+        };
+
+        buscar();
+    }, [form.data, form.servicoIds]);
+
     function handleChange(e) {
         const { name, value } = e.target;
         setForm((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
+            // Limpa a hora quando a data muda
+            ...(name === "data" ? { hora: "" } : {})
         }));
     }
 
     function handleServicoChange(servicoId) {
         setForm((prev) => {
             const jaSelecionado = prev.servicoIds.includes(servicoId);
-            if (jaSelecionado) {
-                return {
-                    ...prev,
-                    servicoIds: prev.servicoIds.filter((id) => id !== servicoId)
-                };
-            }
-            return {
-                ...prev,
-                servicoIds: [...prev.servicoIds, servicoId]
-            };
+            const novosIds = jaSelecionado
+                ? prev.servicoIds.filter((id) => id !== servicoId)
+                : [...prev.servicoIds, servicoId];
+            // Limpa hora ao mudar serviços pois a duração muda
+            return { ...prev, servicoIds: novosIds, hora: "" };
         });
     }
 
@@ -72,6 +112,11 @@ export default function AtualizarAgendamento({
 
         if (form.servicoIds.length === 0) {
             alert("Selecione pelo menos um serviço.");
+            return;
+        }
+
+        if (!form.hora) {
+            alert("Selecione um horário.");
             return;
         }
 
@@ -157,18 +202,37 @@ export default function AtualizarAgendamento({
                                 name="data"
                                 value={form.data}
                                 onChange={handleChange}
+                                min={new Date().toISOString().split("T")[0]}
                             />
                         </div>
 
-                        {/* HORÁRIO */}
+                        {/* HORÁRIO — usa horários disponíveis da API */}
                         <div className="campo">
                             <label>Horário</label>
-                            <input
-                                type="time"
-                                name="hora"
-                                value={form.hora}
-                                onChange={handleChange}
-                            />
+                            {!form.data || form.servicoIds.length === 0 ? (
+                                <p className="sem-servicos">
+                                    Selecione a data e os serviços para ver os horários disponíveis.
+                                </p>
+                            ) : carregandoHorarios ? (
+                                <p className="sem-servicos">Buscando horários disponíveis...</p>
+                            ) : horariosDisponiveis.length === 0 ? (
+                                <p className="sem-servicos">
+                                    Nenhum horário disponível para esta data.
+                                </p>
+                            ) : (
+                                <select
+                                    name="hora"
+                                    value={form.hora}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Selecione um horário</option>
+                                    {horariosDisponiveis.map((h) => (
+                                        <option key={h} value={h}>
+                                            {h}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                     </div>
 

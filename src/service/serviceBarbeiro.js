@@ -64,3 +64,18 @@ export const getUrlFotoBarbeiro = (foto) => {
 
     return `${api.defaults.baseURL}/uploads/${encodeURIComponent(foto)}`;
 };
+
+export const buscarHorariosBloqueados = async (barbeiroId, data) => {
+    const response = await api.get(`/barbeiros/${barbeiroId}/horarios-bloqueados`, {
+        params: { data }
+    });
+    return response.data;
+};
+
+export const salvarHorariosBloqueados = async (barbeiroId, data, slots) => {
+    const response = await api.put(`/barbeiros/${barbeiroId}/horarios-bloqueados`, {
+        data,
+        slots
+    });
+    return response.data;
+};

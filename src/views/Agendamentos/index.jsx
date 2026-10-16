@@ -179,11 +179,48 @@ export default function CalendarioAgendamentos() {
 
     /*
      * =====================================================
+     * PALETA DE CORES — UMA POR BARBEIRO
+     * =====================================================
+     */
+
+    const CORES_BARBEIROS = [
+        "barbeiro-cor-0",
+        "barbeiro-cor-1",
+        "barbeiro-cor-2",
+        "barbeiro-cor-3",
+        "barbeiro-cor-4",
+        "barbeiro-cor-5",
+        "barbeiro-cor-6",
+        "barbeiro-cor-7",
+    ];
+
+    // Mapeia ID do barbeiro → índice de cor (estável durante a sessão)
+    const corPorBarbeiro = useMemo(() => {
+        const mapa = {};
+        barbeiros.forEach((b, i) => {
+            mapa[b._id] = CORES_BARBEIROS[i % CORES_BARBEIROS.length];
+        });
+        return mapa;
+    }, [barbeiros]);
+
+    function obterCorBarbeiro(agendamento) {
+        const id =
+            agendamento?.Barbeiro?._id ||
+            (typeof agendamento?.Barbeiro === "string"
+                ? agendamento.Barbeiro
+                : null);
+        return id ? (corPorBarbeiro[id] || "") : "";
+    }
+
+
+    /*
+     * =====================================================
      * CARREGA AGENDAMENTOS
      *
-     * ADMIN    -> barbeiro selecionado
-     * BARBEIRO  -> próprio barbeiro
-     * CLIENTE   -> próprios agendamentos
+     * ADMIN sem barbeiro → todos os barbeiros
+     * ADMIN com barbeiro → barbeiro selecionado
+     * BARBEIRO           → próprio barbeiro
+     * CLIENTE            → próprios agendamentos
      * =====================================================
      */
 
@@ -238,10 +275,31 @@ export default function CalendarioAgendamentos() {
                  * =========================================
                  */
 
-                if (
-                    (isAdmin || isBarbeiro) &&
-                    !barbeiroSelecionado
-                ) {
+                /*
+                 * ADMIN sem barbeiro selecionado
+                 * → busca agendamentos de TODOS os barbeiros em paralelo
+                 */
+                if (isAdmin && !barbeiroSelecionado) {
+
+                    if (barbeiros.length === 0) {
+                        setAgendamentos([]);
+                        return;
+                    }
+
+                    const resultados = await Promise.all(
+                        barbeiros.map((b) =>
+                            listarAgendamentosPorBarbeiro(b._id).catch(() => [])
+                        )
+                    );
+
+                    const todos = resultados.flat();
+
+                    setAgendamentos(todos);
+
+                    return;
+                }
+
+                if (isBarbeiro && !barbeiroSelecionado) {
 
                     setAgendamentos([]);
 
@@ -295,7 +353,8 @@ export default function CalendarioAgendamentos() {
         isBarbeiro,
         isCliente,
         entidadeId,
-        barbeiroSelecionado
+        barbeiroSelecionado,
+        barbeiros
     ]);
 
 
@@ -547,22 +606,53 @@ export default function CalendarioAgendamentos() {
         const agendamentosDoDia =
             obterAgendamentosDoDia(data);
 
-        return agendamentosDoDia.find(
-            (agendamento) => {
+        // Converte horário string "HH:MM" em minutos totais
+        function toMinutes(h) {
+            const [hh, mm] = String(h).split(":").map(Number);
+            return hh * 60 + (mm || 0);
+        }
 
-                const hora =
-                    obterHorarioAgendamento(
-                        agendamento
-                    );
+        const slotMin = toMinutes(horario);
 
-                return (
-                    normalizarHorario(hora) ===
-                    normalizarHorario(horario)
-                );
+        return agendamentosDoDia.find((agendamento) => {
+            const horaInicio = obterHorarioAgendamento(agendamento);
+            const inicioMin = toMinutes(horaInicio);
 
-            }
-        );
+            // Calcula duração total dos serviços do agendamento
+            const servicos =
+                agendamento?.Servicos ||
+                agendamento?.servicos ||
+                [];
 
+            const duracaoMin = Array.isArray(servicos)
+                ? servicos.reduce((acc, item) => {
+                      const duracao =
+                          Number(
+                              item?.Servico?.duracao ??
+                              item?.duracao ??
+                              item?.Duracao ??
+                              0
+                          );
+                      return acc + duracao;
+                  }, 0)
+                : 0;
+
+            // Ocupa slots do início até início+duração (exclusive)
+            // Se duração = 0 ou desconhecida, ocupa apenas o slot exato
+            const fimMin = duracaoMin > 0
+                ? inicioMin + duracaoMin
+                : inicioMin + 30;
+
+            return slotMin >= inicioMin && slotMin < fimMin;
+        });
+
+    }
+
+    // Retorna true se o slot é exatamente o horário de início do agendamento
+    function ehSlotInicio(agendamento, horario) {
+        if (!agendamento) return false;
+        const horaInicio = obterHorarioAgendamento(agendamento);
+        return normalizarHorario(horaInicio) === normalizarHorario(horario);
     }
 
 
@@ -781,15 +871,13 @@ export default function CalendarioAgendamentos() {
 
     let titulo = "Agenda";
 
-    if (isAdmin) {
+    if (isAdmin && !barbeiroSelecionado) {
+        titulo = "Todos os barbeiros";
+    } else if (isAdmin) {
         titulo = "Agenda dos barbeiros";
-    }
-
-    if (isBarbeiro) {
+    } else if (isBarbeiro) {
         titulo = "Minha agenda";
-    }
-
-    if (isCliente) {
+    } else if (isCliente) {
         titulo = "Meus agendamentos";
     }
 
@@ -948,27 +1036,7 @@ export default function CalendarioAgendamentos() {
                 )}
 
 
-            {/* ADMIN SEM BARBEIRO */}
-
-            {isAdmin &&
-                !barbeiroSelecionado && (
-
-                    <div className="calendario-vazio">
-
-                        <span>✂</span>
-
-                        <h2>
-                            Selecione um barbeiro
-                        </h2>
-
-                        <p>
-                            Escolha um barbeiro acima
-                            para visualizar sua agenda.
-                        </p>
-
-                    </div>
-
-                )}
+            {/* ADMIN SEM BARBEIRO — mostra todos (sem estado vazio) */}
 
 
             {/* BARBEIRO SEM ID */}
@@ -998,7 +1066,8 @@ export default function CalendarioAgendamentos() {
 
             {(
                 isCliente ||
-                barbeiroSelecionado
+                isBarbeiro && barbeiroSelecionado ||
+                isAdmin
             ) && (
 
                 <div className="calendario-wrapper">
@@ -1009,6 +1078,20 @@ export default function CalendarioAgendamentos() {
                             Carregando agenda...
                         </div>
 
+                    )}
+
+                    {/* LEGENDA DE BARBEIROS — visível quando ADMIN vê todos */}
+                    {isAdmin && !barbeiroSelecionado && barbeiros.length > 0 && (
+                        <div className="legenda-barbeiros">
+                            {barbeiros.map((b, i) => (
+                                <span
+                                    key={b._id}
+                                    className={`legenda-barbeiro-item ${CORES_BARBEIROS[i % CORES_BARBEIROS.length]}`}
+                                >
+                                    {b.nome} {b.sobrenome || ""}
+                                </span>
+                            ))}
+                        </div>
                     )}
 
 
@@ -1094,6 +1177,12 @@ export default function CalendarioAgendamentos() {
                                                     horario
                                                 );
 
+                                            const isInicio =
+                                                ehSlotInicio(agendamento, horario);
+
+                                            const corBarbeiro =
+                                                obterCorBarbeiro(agendamento);
+
                                             return (
 
                                                 <div
@@ -1103,7 +1192,7 @@ export default function CalendarioAgendamentos() {
                                                     className="celula-agenda"
                                                 >
 
-                                                    {agendamento && (
+                                                    {agendamento && isInicio && (
 
                                                         <button
                                                             type="button"
@@ -1117,7 +1206,7 @@ export default function CalendarioAgendamentos() {
                                                                     .replace(
                                                                         /\s+/g,
                                                                         "-"
-                                                                    )}`
+                                                                    )} ${corBarbeiro}`
                                                             }
                                                             onClick={() =>
                                                                 setAgendamentoSelecionado(
@@ -1162,6 +1251,19 @@ export default function CalendarioAgendamentos() {
 
                                                         </button>
 
+                                                    )}
+
+                                                    {agendamento && !isInicio && (
+                                                        <div
+                                                            className={
+                                                                `celula-continuacao status-${String(
+                                                                    obterStatus(agendamento)
+                                                                )
+                                                                    .toLowerCase()
+                                                                    .replace(/\s+/g, "-")} ${corBarbeiro}`
+                                                            }
+                                                            title={`Continuação: ${obterNomeServico(agendamento)}`}
+                                                        />
                                                     )}
 
                                                 </div>

@@ -4,7 +4,7 @@ import "./index.css";
 import { listarBarbeiros } from "../../service/serviceBarbeiro";
 import { listarClientes } from "../../service/serviceCliente";
 import { listarServicos } from "../../service/serviceServico";
-import { criarAgendamento } from "../../service/serviceAgenda";
+import { criarAgendamento, buscarHorariosDisponiveis } from "../../service/serviceAgenda";
 import { formatarDataSemFuso, formatarMoedaExibicao } from "../../utils/formatters";
 
 export default function AgendamentoPage() {
@@ -29,13 +29,35 @@ export default function AgendamentoPage() {
   const [qrCodeBase64, setQrCodeBase64] = useState("");
   const [pixCopiado, setPixCopiado] = useState(false);
 
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
+  const [carregandoHorarios, setCarregandoHorarios] = useState(false);
+
   const token = localStorage.getItem("token");
   const tipo = localStorage.getItem("tipo");
+  const isAdmin = tipo === "ADMIN";
+  const isBarbeiro = tipo === "BARBEIRO";
+  const isCliente = tipo === "CLIENTE";
 
-  const etapaNomes =
-    tipo === "BARBEIRO"
-      ? ["Cliente", "Serviços", "Data", "Horário", "Resumo"]
-      : ["Barbeiro", "Serviços", "Data", "Horário", "Resumo"];
+  /*
+   * Etapas por perfil:
+   * ADMIN    → Barbeiro | Cliente | Serviços | Data | Horário | Resumo
+   * BARBEIRO → Cliente  | Serviços | Data | Horário | Resumo
+   * CLIENTE  → Barbeiro | Serviços | Data | Horário | Resumo
+   */
+  const etapaNomes = isAdmin
+    ? ["Barbeiro", "Cliente", "Serviços", "Data", "Horário", "Resumo"]
+    : isBarbeiro
+    ? ["Cliente", "Serviços", "Data", "Horário", "Resumo"]
+    : ["Barbeiro", "Serviços", "Data", "Horário", "Resumo"];
+
+  const totalEtapas = etapaNomes.length;
+
+  // Mapeia etapa lógica → índice na barra de progresso
+  // (a barra sempre começa em 1 e vai até totalEtapas)
+  const etapaResumo = totalEtapas;
+  const etapaHorario = totalEtapas - 1;
+  const etapaData = totalEtapas - 2;
+  const etapaServicos = totalEtapas - 3;
 
   useEffect(() => {
     const carregarDados = async () => {
@@ -43,40 +65,29 @@ export default function AgendamentoPage() {
         setCarregando(true);
         setErro("");
 
-        const tipoUsuario = localStorage.getItem("tipo");
-
+        // Serviços: sempre carrega
         const servicosResponse = await listarServicos();
         const listaServicos = Array.isArray(servicosResponse)
           ? servicosResponse
-          : servicosResponse?.servicos || servicosResponse?.data || [];
+          : servicosResponse?.data || servicosResponse?.servicos || [];
+        setServicos(listaServicos.filter((s) => s.ativo === true));
 
-        const servicosAtivos = listaServicos.filter(
-          (servico) => servico.ativo === true
-        );
-        setServicos(servicosAtivos);
-
-        if (tipoUsuario === "CLIENTE") {
+        // Barbeiros: CLIENTE e ADMIN precisam selecionar barbeiro
+        if (isCliente || isAdmin) {
           const barbeirosResponse = await listarBarbeiros();
           const listaBarbeiros = Array.isArray(barbeirosResponse)
             ? barbeirosResponse
-            : barbeirosResponse?.barbeiros || barbeirosResponse?.data || [];
-
-          const barbeirosAtivos = listaBarbeiros.filter(
-            (barbeiro) => barbeiro.ativo === true
-          );
-          setBarbeiros(barbeirosAtivos);
+            : barbeirosResponse?.data || barbeirosResponse?.barbeiros || [];
+          setBarbeiros(listaBarbeiros.filter((b) => b.ativo === true));
         }
 
-        if (tipoUsuario === "BARBEIRO") {
+        // Clientes: BARBEIRO e ADMIN precisam selecionar cliente
+        if (isBarbeiro || isAdmin) {
           const clientesResponse = await listarClientes();
           const listaClientes = Array.isArray(clientesResponse)
             ? clientesResponse
-            : clientesResponse?.clientes || clientesResponse?.data || [];
-
-          const clientesAtivos = listaClientes.filter(
-            (cliente) => cliente.ativo === true
-          );
-          setClientes(clientesAtivos);
+            : clientesResponse?.data || clientesResponse?.clientes || [];
+          setClientes(listaClientes.filter((c) => c.ativo === true));
         }
       } catch (error) {
         console.error("Erro ao carregar os dados:", error);
@@ -88,6 +99,39 @@ export default function AgendamentoPage() {
 
     carregarDados();
   }, []);
+
+  // Busca horários disponíveis ao entrar na etapa de horário
+  useEffect(() => {
+    if (etapa !== etapaHorario || !data || servicosSelecionados.length === 0) return;
+
+    const barbeiroId = isBarbeiro
+      ? localStorage.getItem("entidadeId")
+      : barbeiro;
+
+    if (!barbeiroId) return;
+
+    const buscar = async () => {
+      try {
+        setCarregandoHorarios(true);
+        setErro("");
+        const lista = await buscarHorariosDisponiveis(barbeiroId, data, servicosSelecionados);
+        setHorariosDisponiveis(lista);
+        if (hora && !lista.includes(hora)) setHora("");
+      } catch (error) {
+        console.error("Erro ao buscar horários:", error);
+        setErro("Não foi possível carregar os horários disponíveis.");
+        setHorariosDisponiveis([]);
+      } finally {
+        setCarregandoHorarios(false);
+      }
+    };
+
+    buscar();
+  }, [etapa, data, barbeiro, servicosSelecionados]);
+
+  /* ============================================================
+     HELPERS
+  ============================================================ */
 
   function getId(item) {
     return item?._id || item?.id;
@@ -108,9 +152,7 @@ export default function AgendamentoPage() {
   }
 
   function getPrecoServico(item) {
-    return Number(
-      item?.preco ?? item?.valor ?? item?.precoServico ?? item?.Preco ?? 0
-    );
+    return Number(item?.preco ?? item?.valor ?? item?.precoServico ?? item?.Preco ?? 0);
   }
 
   function getDuracaoServico(item) {
@@ -118,89 +160,88 @@ export default function AgendamentoPage() {
   }
 
   function selecionarServico(id) {
-    setServicosSelecionados((atual) => {
-      if (atual.includes(id)) {
-        return atual.filter((item) => item !== id);
-      }
-      return [...atual, id];
-    });
+    setServicosSelecionados((atual) =>
+      atual.includes(id) ? atual.filter((i) => i !== id) : [...atual, id]
+    );
     setErro("");
   }
 
-  const servicosEscolhidos = useMemo(() => {
-    return servicos.filter((servico) =>
-      servicosSelecionados.includes(getId(servico))
-    );
-  }, [servicos, servicosSelecionados]);
-
-  const valorTotal = useMemo(() => {
-    return servicosEscolhidos.reduce(
-      (total, servico) => total + getPrecoServico(servico),
-      0
-    );
-  }, [servicosEscolhidos]);
-
-  const duracaoTotal = useMemo(() => {
-    return servicosEscolhidos.reduce(
-      (total, servico) => total + getDuracaoServico(servico),
-      0
-    );
-  }, [servicosEscolhidos]);
-
-  function gerarHorarios() {
-    const horariosList = [];
-    for (let horaAtual = 8; horaAtual <= 21; horaAtual++) {
-      for (let minuto = 0; minuto < 60; minuto += 30) {
-        if (horaAtual === 21 && minuto > 30) continue;
-        const horarioStr =
-          String(horaAtual).padStart(2, "0") +
-          ":" +
-          String(minuto).padStart(2, "0");
-        horariosList.push(horarioStr);
-      }
-    }
-    return horariosList;
-  }
-
-  const horarios = gerarHorarios();
-
   function dataMinima() {
     const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
-    const dia = String(hoje.getDate()).padStart(2, "0");
-    return `${ano}-${mes}-${dia}`;
+    return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
   }
+
+  const servicosEscolhidos = useMemo(
+    () => servicos.filter((s) => servicosSelecionados.includes(getId(s))),
+    [servicos, servicosSelecionados]
+  );
+
+  const valorTotal = useMemo(
+    () => servicosEscolhidos.reduce((t, s) => t + getPrecoServico(s), 0),
+    [servicosEscolhidos]
+  );
+
+  const duracaoTotal = useMemo(
+    () => servicosEscolhidos.reduce((t, s) => t + getDuracaoServico(s), 0),
+    [servicosEscolhidos]
+  );
+
+  function getNomeClienteSelecionado() {
+    const item = clientes.find((c) => getId(c) === cliente);
+    if (!item) return "Não selecionado";
+    return `${item?.nome || ""} ${item?.sobrenome || ""}`.trim();
+  }
+
+  function getNomeBarbeiroSelecionado() {
+    const item = barbeiros.find((b) => getId(b) === barbeiro);
+    return item ? `${getNomeBarbeiro(item)}` : "Não selecionado";
+  }
+
+  /* ============================================================
+     VALIDAÇÃO E NAVEGAÇÃO
+  ============================================================ */
 
   function validarEtapaAtual() {
     setErro("");
 
+    // Etapa 1 — ADMIN seleciona barbeiro, BARBEIRO seleciona cliente, CLIENTE seleciona barbeiro
     if (etapa === 1) {
-      if (tipo === "CLIENTE" && !barbeiro) {
+      if ((isAdmin || isCliente) && !barbeiro) {
         setErro("Selecione um barbeiro.");
         return false;
       }
-      if (tipo === "BARBEIRO" && !cliente) {
+      if (isBarbeiro && !cliente) {
         setErro("Selecione um cliente.");
         return false;
       }
     }
 
-    if (etapa === 2) {
+    // Etapa 2 — ADMIN seleciona cliente
+    if (etapa === 2 && isAdmin) {
+      if (!cliente) {
+        setErro("Selecione um cliente.");
+        return false;
+      }
+    }
+
+    // Etapa de serviços
+    if (etapa === etapaServicos) {
       if (servicosSelecionados.length === 0) {
         setErro("Selecione pelo menos um serviço.");
         return false;
       }
     }
 
-    if (etapa === 3) {
+    // Etapa de data
+    if (etapa === etapaData) {
       if (!data) {
         setErro("Selecione uma data.");
         return false;
       }
     }
 
-    if (etapa === 4) {
+    // Etapa de horário
+    if (etapa === etapaHorario) {
       if (!hora) {
         setErro("Selecione um horário.");
         return false;
@@ -213,71 +254,53 @@ export default function AgendamentoPage() {
   function proximaEtapa() {
     if (!validarEtapaAtual()) return;
     setErro("");
-    if (etapa < 5) {
-      setEtapa((atual) => atual + 1);
-    }
+    if (etapa < totalEtapas) setEtapa((e) => e + 1);
   }
 
   function etapaAnterior() {
     setErro("");
-    if (etapa > 1) {
-      setEtapa((atual) => atual - 1);
-    }
+    if (etapa > 1) setEtapa((e) => e - 1);
   }
+
+  /* ============================================================
+     CONFIRMAR AGENDAMENTO
+  ============================================================ */
 
   async function confirmarAgendamento() {
     setErro("");
     setSucesso("");
 
-    const tipoUsuario = localStorage.getItem("tipo");
     const idUsuario = localStorage.getItem("entidadeId");
 
     if (!token) {
       setErro("Você precisa estar logado para realizar um agendamento.");
       return;
     }
-
     if (!idUsuario) {
       setErro("Não foi possível identificar o usuário logado.");
-      return;
-    }
-
-    if (tipoUsuario === "CLIENTE" && !barbeiro) {
-      setErro("Selecione um barbeiro.");
-      setEtapa(1);
-      return;
-    }
-
-    if (tipoUsuario === "BARBEIRO" && !cliente) {
-      setErro("Selecione um cliente.");
-      setEtapa(1);
-      return;
-    }
-
-    if (servicosSelecionados.length === 0) {
-      setErro("Selecione pelo menos um serviço.");
-      setEtapa(2);
-      return;
-    }
-
-    if (!data) {
-      setErro("Selecione uma data.");
-      setEtapa(3);
-      return;
-    }
-
-    if (!hora) {
-      setErro("Selecione um horário.");
-      setEtapa(4);
       return;
     }
 
     try {
       setEnviando(true);
 
+      let clienteEnvio;
+      let barbeiroEnvio;
+
+      if (isAdmin) {
+        clienteEnvio = cliente;
+        barbeiroEnvio = barbeiro;
+      } else if (isBarbeiro) {
+        clienteEnvio = cliente;
+        barbeiroEnvio = idUsuario;
+      } else {
+        clienteEnvio = idUsuario;
+        barbeiroEnvio = barbeiro;
+      }
+
       const dados = {
-        Cliente: tipoUsuario === "CLIENTE" ? idUsuario : cliente,
-        Barbeiro: tipoUsuario === "BARBEIRO" ? idUsuario : barbeiro,
+        Cliente: clienteEnvio,
+        Barbeiro: barbeiroEnvio,
         Servicos: servicosSelecionados,
         data,
         hora,
@@ -286,17 +309,12 @@ export default function AgendamentoPage() {
       const resultado = await criarAgendamento(dados);
       const pagamento = resultado?.pagamento;
 
-      if (!pagamento) {
-        throw new Error("Os dados do pagamento PIX não foram retornados.");
-      }
+      if (!pagamento) throw new Error("Os dados do pagamento PIX não foram retornados.");
 
       setQrCode(pagamento.qrCode || "");
       setQrCodeBase64(pagamento.qrCodeBase64 || "");
-
-      setSucesso(
-        "Agendamento criado com sucesso! Realize o pagamento do PIX para confirmar."
-      );
-      setEtapa(6);
+      setSucesso("Agendamento criado com sucesso!");
+      setEtapa(totalEtapas + 1); // etapa do PIX
     } catch (error) {
       console.error("ERRO AO CRIAR AGENDAMENTO:", error);
       setErro(
@@ -310,16 +328,9 @@ export default function AgendamentoPage() {
     }
   }
 
-  function getNomeClienteSelecionado() {
-    const item = clientes.find((clienteItem) => getId(clienteItem) === cliente);
-    if (!item) return "Não selecionado";
-    return `${item?.nome || ""} ${item?.sobrenome || ""}`.trim();
-  }
-
-  function getNomeBarbeiroSelecionado() {
-    const item = barbeiros.find((barbeiroItem) => getId(barbeiroItem) === barbeiro);
-    return item ? getNomeBarbeiro(item) : "Não selecionado";
-  }
+  /* ============================================================
+     LOADING
+  ============================================================ */
 
   if (carregando) {
     return (
@@ -332,6 +343,12 @@ export default function AgendamentoPage() {
     );
   }
 
+  /* ============================================================
+     RENDER
+  ============================================================ */
+
+  const etapaPix = totalEtapas + 1;
+
   return (
     <main className="agendamento-page">
       <div className="agendamento-background"></div>
@@ -343,24 +360,19 @@ export default function AgendamentoPage() {
             ← Voltar para a home
           </Link>
           <div className="agendamento-title">
-            <p>
-              Escolha os detalhes do seu atendimento de forma rápida e simples.
-            </p>
+            <p>Escolha os detalhes do seu atendimento de forma rápida e simples.</p>
           </div>
         </header>
 
         {/* PROGRESSO */}
-        {etapa <= 5 && (
+        {etapa <= totalEtapas && (
           <div className="agendamento-progress">
             <div className="progress-line">
               <div
                 className="progress-fill"
-                style={{
-                  width: `${((etapa - 1) / 4) * 100}%`,
-                }}
-              ></div>
+                style={{ width: `${((etapa - 1) / (totalEtapas - 1)) * 100}%` }}
+              />
             </div>
-
             <div className="progress-steps">
               {etapaNomes.map((nome, index) => {
                 const numero = index + 1;
@@ -389,105 +401,77 @@ export default function AgendamentoPage() {
             </div>
           )}
 
-          {/* ETAPA 1 */}
+          {/* ── ETAPA 1: ADMIN → Barbeiro | BARBEIRO → Cliente | CLIENTE → Barbeiro ── */}
           {etapa === 1 && (
             <section className="modal-content">
               <div className="modal-heading">
                 <span>01</span>
                 <div>
-                  <small>
-                    {tipo === "BARBEIRO" ? "ATENDIMENTO" : "PROFISSIONAL"}
-                  </small>
-                  <h2>
-                    {tipo === "BARBEIRO"
-                      ? "Escolha o cliente"
-                      : "Escolha o barbeiro"}
-                  </h2>
+                  <small>{isAdmin || isCliente ? "PROFISSIONAL" : "ATENDIMENTO"}</small>
+                  <h2>{isAdmin || isCliente ? "Escolha o barbeiro" : "Escolha o cliente"}</h2>
                   <p>
-                    {tipo === "BARBEIRO"
-                      ? "Selecione o cliente para o atendimento."
-                      : "Selecione o profissional que irá realizar seu atendimento."}
+                    {isAdmin || isCliente
+                      ? "Selecione o profissional que irá realizar o atendimento."
+                      : "Selecione o cliente para o atendimento."}
                   </p>
                 </div>
               </div>
 
-              {tipo === "CLIENTE" ? (
+              {/* ADMIN ou CLIENTE — lista de barbeiros */}
+              {(isAdmin || isCliente) && (
                 <div className="barbeiros-grid">
                   {barbeiros.length === 0 ? (
-                    <div className="empty-message">
-                      Nenhum barbeiro disponível.
-                    </div>
+                    <div className="empty-message">Nenhum barbeiro disponível.</div>
                   ) : (
                     barbeiros.map((item) => {
                       const id = getId(item);
                       const selecionado = barbeiro === id;
-
                       return (
                         <button
                           type="button"
                           key={id}
-                          className={`barbeiro-card ${
-                            selecionado ? "selected" : ""
-                          }`}
-                          onClick={() => {
-                            setBarbeiro(id);
-                            setErro("");
-                          }}
+                          className={`barbeiro-card ${selecionado ? "selected" : ""}`}
+                          onClick={() => { setBarbeiro(id); setErro(""); }}
                         >
                           <div className="barbeiro-avatar">
                             {getNomeBarbeiro(item).charAt(0).toUpperCase()}
                           </div>
-
                           <div className="barbeiro-info">
                             <strong>{getNomeBarbeiro(item)}</strong>
                             <span>Profissional</span>
                           </div>
-
-                          <div className="selection-check">
-                            {selecionado ? "✓" : ""}
-                          </div>
+                          <div className="selection-check">{selecionado ? "✓" : ""}</div>
                         </button>
                       );
                     })
                   )}
                 </div>
-              ) : (
+              )}
+
+              {/* BARBEIRO — lista de clientes */}
+              {isBarbeiro && (
                 <div className="barbeiros-grid">
                   {clientes.length === 0 ? (
-                    <div className="empty-message">
-                      Nenhum cliente disponível.
-                    </div>
+                    <div className="empty-message">Nenhum cliente disponível.</div>
                   ) : (
                     clientes.map((item) => {
                       const id = getId(item);
                       const selecionado = cliente === id;
-
                       return (
                         <button
                           type="button"
                           key={id}
-                          className={`barbeiro-card ${
-                            selecionado ? "selected" : ""
-                          }`}
-                          onClick={() => {
-                            setCliente(id);
-                            setErro("");
-                          }}
+                          className={`barbeiro-card ${selecionado ? "selected" : ""}`}
+                          onClick={() => { setCliente(id); setErro(""); }}
                         >
                           <div className="barbeiro-avatar">
-                            {item?.nome?.charAt(0).toUpperCase()}
+                            {(item?.nome || "C").charAt(0).toUpperCase()}
                           </div>
-
                           <div className="barbeiro-info">
-                            <strong>
-                              {item?.nome} {item?.sobrenome}
-                            </strong>
+                            <strong>{item?.nome} {item?.sobrenome}</strong>
                             <span>Cliente</span>
                           </div>
-
-                          <div className="selection-check">
-                            {selecionado ? "✓" : ""}
-                          </div>
+                          <div className="selection-check">{selecionado ? "✓" : ""}</div>
                         </button>
                       );
                     })
@@ -497,46 +481,77 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* ETAPA 2 */}
-          {etapa === 2 && (
+          {/* ── ETAPA 2: ADMIN → Cliente ── */}
+          {etapa === 2 && isAdmin && (
             <section className="modal-content">
               <div className="modal-heading">
                 <span>02</span>
+                <div>
+                  <small>CLIENTE</small>
+                  <h2>Escolha o cliente</h2>
+                  <p>Selecione o cliente para este agendamento.</p>
+                </div>
+              </div>
+              <div className="barbeiros-grid">
+                {clientes.length === 0 ? (
+                  <div className="empty-message">Nenhum cliente disponível.</div>
+                ) : (
+                  clientes.map((item) => {
+                    const id = getId(item);
+                    const selecionado = cliente === id;
+                    return (
+                      <button
+                        type="button"
+                        key={id}
+                        className={`barbeiro-card ${selecionado ? "selected" : ""}`}
+                        onClick={() => { setCliente(id); setErro(""); }}
+                      >
+                        <div className="barbeiro-avatar">
+                          {(item?.nome || "C").charAt(0).toUpperCase()}
+                        </div>
+                        <div className="barbeiro-info">
+                          <strong>{item?.nome} {item?.sobrenome}</strong>
+                          <span>Cliente</span>
+                        </div>
+                        <div className="selection-check">{selecionado ? "✓" : ""}</div>
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* ── ETAPA DE SERVIÇOS ── */}
+          {etapa === etapaServicos && (
+            <section className="modal-content">
+              <div className="modal-heading">
+                <span>{String(etapaServicos).padStart(2, "0")}</span>
                 <div>
                   <small>SERVIÇOS</small>
                   <h2>Escolha os serviços</h2>
                   <p>Você pode selecionar mais de um serviço.</p>
                 </div>
               </div>
-
               <div className="servicos-grid">
                 {servicos.length === 0 ? (
-                  <div className="empty-message">
-                    Nenhum serviço disponível.
-                  </div>
+                  <div className="empty-message">Nenhum serviço disponível.</div>
                 ) : (
                   servicos.map((servico) => {
                     const id = getId(servico);
                     const selecionado = servicosSelecionados.includes(id);
-
                     return (
                       <button
                         type="button"
                         key={id}
-                        className={`servico-card ${
-                          selecionado ? "selected" : ""
-                        }`}
+                        className={`servico-card ${selecionado ? "selected" : ""}`}
                         onClick={() => selecionarServico(id)}
                       >
-                        <div className="servico-check">
-                          {selecionado ? "✓" : ""}
-                        </div>
-
+                        <div className="servico-check">{selecionado ? "✓" : ""}</div>
                         <div className="servico-content">
                           <strong>{getNomeServico(servico)}</strong>
                           <span>{getDuracaoServico(servico)} minutos</span>
                         </div>
-
                         <div className="servico-preco">
                           {formatarMoedaExibicao(getPrecoServico(servico))}
                         </div>
@@ -548,18 +563,17 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* ETAPA 3 */}
-          {etapa === 3 && (
+          {/* ── ETAPA DE DATA ── */}
+          {etapa === etapaData && (
             <section className="modal-content">
               <div className="modal-heading">
-                <span>03</span>
+                <span>{String(etapaData).padStart(2, "0")}</span>
                 <div>
                   <small>DATA</small>
                   <h2>Escolha a data</h2>
-                  <p>Selecione o dia do seu atendimento.</p>
+                  <p>Selecione o dia do atendimento.</p>
                 </div>
               </div>
-
               <div className="data-wrapper">
                 <label htmlFor="data">Data do atendimento</label>
                 <input
@@ -567,14 +581,9 @@ export default function AgendamentoPage() {
                   type="date"
                   min={dataMinima()}
                   value={data}
-                  onChange={(event) => {
-                    setData(event.target.value);
-                    setHora("");
-                    setErro("");
-                  }}
+                  onChange={(e) => { setData(e.target.value); setHora(""); setErro(""); }}
                 />
               </div>
-
               {data && (
                 <div className="selected-date">
                   <span>DATA SELECIONADA</span>
@@ -584,36 +593,40 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* ETAPA 4 */}
-          {etapa === 4 && (
+          {/* ── ETAPA DE HORÁRIO ── */}
+          {etapa === etapaHorario && (
             <section className="modal-content">
               <div className="modal-heading">
-                <span>04</span>
+                <span>{String(etapaHorario).padStart(2, "0")}</span>
                 <div>
                   <small>HORÁRIO</small>
                   <h2>Escolha o horário</h2>
-                  <p>Horários disponíveis a cada 30 minutos.</p>
+                  <p>Apenas horários disponíveis são exibidos.</p>
                 </div>
               </div>
-
               {!data ? (
                 <div className="horario-empty">
                   <span>◷</span>
                   <p>Selecione uma data primeiro.</p>
                 </div>
+              ) : carregandoHorarios ? (
+                <div className="agendamento-loading">
+                  <div className="loading-spinner"></div>
+                  <p>Buscando horários disponíveis...</p>
+                </div>
+              ) : horariosDisponiveis.length === 0 ? (
+                <div className="horario-empty">
+                  <span>◷</span>
+                  <p>Nenhum horário disponível para esta data.</p>
+                </div>
               ) : (
                 <div className="horarios-grid">
-                  {horarios.map((horario) => (
+                  {horariosDisponiveis.map((horario) => (
                     <button
                       type="button"
                       key={horario}
-                      className={`horario-button ${
-                        hora === horario ? "selected" : ""
-                      }`}
-                      onClick={() => {
-                        setHora(horario);
-                        setErro("");
-                      }}
+                      className={`horario-button ${hora === horario ? "selected" : ""}`}
+                      onClick={() => { setHora(horario); setErro(""); }}
                     >
                       {horario}
                     </button>
@@ -623,64 +636,52 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* ETAPA 5 - RESUMO */}
-          {etapa === 5 && (
+          {/* ── ETAPA DE RESUMO ── */}
+          {etapa === etapaResumo && (
             <section className="modal-content resumo-modal">
               <div className="modal-heading">
-                <span>05</span>
+                <span>{String(etapaResumo).padStart(2, "0")}</span>
                 <div>
                   <small>RESUMO</small>
                   <h2>Confira seu agendamento</h2>
                   <p>Verifique os dados antes de confirmar.</p>
                 </div>
               </div>
-
               <div className="resumo-body">
-                {tipo === "BARBEIRO" && (
+                <div className="resumo-row">
+                  <span>Barbeiro</span>
+                  <strong>{getNomeBarbeiroSelecionado()}</strong>
+                </div>
+                {(isAdmin || isBarbeiro) && (
                   <div className="resumo-row">
                     <span>Cliente</span>
                     <strong>{getNomeClienteSelecionado()}</strong>
                   </div>
                 )}
-
-                {tipo === "CLIENTE" && (
-                  <div className="resumo-row">
-                    <span>Barbeiro</span>
-                    <strong>{getNomeBarbeiroSelecionado()}</strong>
-                  </div>
-                )}
-
                 <div className="resumo-row">
                   <span>Serviços</span>
                   <strong>
                     {servicosSelecionados.length}{" "}
-                    {servicosSelecionados.length === 1
-                      ? "serviço"
-                      : "serviços"}
+                    {servicosSelecionados.length === 1 ? "serviço" : "serviços"}
                   </strong>
                 </div>
-
                 <div className="resumo-row">
                   <span>Data</span>
                   <strong>{formatarDataSemFuso(data)}</strong>
                 </div>
-
                 <div className="resumo-row">
                   <span>Horário</span>
                   <strong>{hora}</strong>
                 </div>
-
                 <div className="resumo-row">
                   <span>Duração</span>
                   <strong>{duracaoTotal} minutos</strong>
                 </div>
               </div>
-
               <div className="resumo-total">
                 <span>Total dos serviços</span>
                 <strong>{formatarMoedaExibicao(valorTotal)}</strong>
               </div>
-
               <div className="sinal-info">
                 <div>
                   <span>SINAL</span>
@@ -691,8 +692,8 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* ETAPA 6 - PIX */}
-          {etapa === 6 && (
+          {/* ── ETAPA PIX ── */}
+          {etapa === etapaPix && (
             <section className="modal-content pix-modal">
               <div className="pix-success-icon">✓</div>
               <div className="modal-heading centered">
@@ -700,7 +701,6 @@ export default function AgendamentoPage() {
                 <h2>Quase lá.</h2>
                 <p>Realize o pagamento do sinal para confirmar seu horário.</p>
               </div>
-
               {qrCodeBase64 && (
                 <>
                   <img
@@ -717,7 +717,6 @@ export default function AgendamentoPage() {
                   </p>
                 </>
               )}
-
               {qrCode && (
                 <div className="pix-code">
                   <span>CÓDIGO PIX</span>
@@ -729,21 +728,16 @@ export default function AgendamentoPage() {
                       try {
                         await navigator.clipboard.writeText(qrCode);
                         setPixCopiado(true);
-                        setTimeout(() => {
-                          setPixCopiado(false);
-                        }, 2500);
-                      } catch (error) {
-                        console.error("Erro ao copiar o PIX:", error);
+                        setTimeout(() => setPixCopiado(false), 2500);
+                      } catch (e) {
+                        console.error("Erro ao copiar o PIX:", e);
                       }
                     }}
                   >
-                    {pixCopiado
-                      ? "✓ Código PIX copiado!"
-                      : "Copiar código PIX"}
+                    {pixCopiado ? "✓ Código PIX copiado!" : "Copiar código PIX"}
                   </button>
                 </div>
               )}
-
               {!qrCodeBase64 && !qrCode && (
                 <div className="pix-waiting">
                   <p>Não foi possível carregar os dados do PIX.</p>
@@ -752,8 +746,8 @@ export default function AgendamentoPage() {
             </section>
           )}
 
-          {/* FOOTER DO MODAL */}
-          {etapa <= 5 && (
+          {/* ── FOOTER ── */}
+          {etapa <= totalEtapas && (
             <div className="modal-footer">
               <div className="footer-info">
                 <div className="footer-icon">✦</div>
@@ -762,26 +756,15 @@ export default function AgendamentoPage() {
                   <small>Sinal de R$ 15,00 via PIX</small>
                 </div>
               </div>
-
               <div className="modal-actions">
                 {etapa > 1 && (
-                  <button
-                    type="button"
-                    className="btn-back"
-                    onClick={etapaAnterior}
-                  >
+                  <button type="button" className="btn-back" onClick={etapaAnterior}>
                     ← Voltar
                   </button>
                 )}
-
-                {etapa < 5 ? (
-                  <button
-                    type="button"
-                    className="btn-next"
-                    onClick={proximaEtapa}
-                  >
-                    Continuar
-                    <span>→</span>
+                {etapa < totalEtapas ? (
+                  <button type="button" className="btn-next" onClick={proximaEtapa}>
+                    Continuar <span>→</span>
                   </button>
                 ) : (
                   <button
@@ -796,10 +779,7 @@ export default function AgendamentoPage() {
                         Processando...
                       </>
                     ) : (
-                      <>
-                        Confirmar agendamento
-                        <span>→</span>
-                      </>
+                      <>Confirmar agendamento <span>→</span></>
                     )}
                   </button>
                 )}

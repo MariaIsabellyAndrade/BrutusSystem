@@ -51,3 +51,16 @@ export async function listarAgendamentosPorBarbeiro(barbeiroId) {
         throw error;
     }
 }
+
+export async function buscarHorariosDisponiveis(barbeiroId, data, servicosIds) {
+    const servicos = Array.isArray(servicosIds)
+        ? servicosIds.join(",")
+        : servicosIds;
+
+    const resposta = await api.get(
+        `/horarios-disponiveis/${barbeiroId}/${data}`,
+        { params: { servicos } }
+    );
+
+    return resposta.data?.horarios ?? [];
+}
