@@ -1,6 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import "./index.css";
-import { listarBarbeiros } from "../../service/serviceBarbeiro";
 import {
     buscarHorariosBloqueados,
     salvarHorariosBloqueados,
@@ -24,26 +23,13 @@ function gerarSlots() {
 const TODOS_OS_SLOTS = gerarSlots();
 
 export default function GerenciarHorarios() {
-    const [barbeiros, setBarbeiros] = useState([]);
-    const [barbeiroId, setBarbeiroId] = useState("");
+    const barbeiroId = localStorage.getItem("entidadeId") || "";
     const [data, setData] = useState("");
 
     const [slotsBloqueados, setSlotsBloqueados] = useState([]);
     const [carregando, setCarregando] = useState(false);
     const [salvando, setSalvando] = useState(false);
     const [mensagem, setMensagem] = useState(null); // { tipo: "sucesso"|"erro", texto }
-
-    // Carrega lista de barbeiros
-    useEffect(() => {
-        listarBarbeiros()
-            .then((res) => {
-                const lista = Array.isArray(res)
-                    ? res
-                    : res?.data || res?.barbeiros || [];
-                setBarbeiros(lista.filter((b) => b.ativo !== false));
-            })
-            .catch(console.error);
-    }, []);
 
     // Busca slots bloqueados quando barbeiro + data estão selecionados
     useEffect(() => {
@@ -109,7 +95,6 @@ export default function GerenciarHorarios() {
         }
     }
 
-    const nomeBarbeiro = barbeiros.find((b) => b._id === barbeiroId);
     const totalBloqueados = slotsBloqueados.length;
     const totalLivres = TODOS_OS_SLOTS.length - totalBloqueados;
 
@@ -119,33 +104,14 @@ export default function GerenciarHorarios() {
             {/* CABEÇALHO */}
             <div className="gh-cabecalho">
                 <div>
-                    <span className="gh-eyebrow">ADMIN · AGENDA</span>
-                    <h1>Gerenciar horários</h1>
-                    <p>Bloqueie ou libere slots de um barbeiro em uma data específica.</p>
+                    <span className="gh-eyebrow">MINHA AGENDA</span>
+                    <h1>Meus horários</h1>
+                    <p>Escolha uma data e bloqueie ou libere seus horários.</p>
                 </div>
             </div>
 
             {/* FILTROS */}
             <div className="gh-filtros">
-                <div className="gh-campo">
-                    <label htmlFor="barbeiro">BARBEIRO</label>
-                    <select
-                        id="barbeiro"
-                        value={barbeiroId}
-                        onChange={(e) => {
-                            setBarbeiroId(e.target.value);
-                            setMensagem(null);
-                        }}
-                    >
-                        <option value="">Selecione um barbeiro</option>
-                        {barbeiros.map((b) => (
-                            <option key={b._id} value={b._id}>
-                                {b.nome} {b.sobrenome || ""}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
                 <div className="gh-campo">
                     <label htmlFor="data">DATA</label>
                     <input
@@ -161,11 +127,15 @@ export default function GerenciarHorarios() {
             </div>
 
             {/* ESTADO VAZIO */}
-            {(!barbeiroId || !data) && (
+            {!data && (
                 <div className="gh-vazio">
                     <span>🗓</span>
-                    <p>Selecione um barbeiro e uma data para gerenciar os horários.</p>
+                    <p>Selecione uma data para gerenciar seus horários.</p>
                 </div>
+            )}
+
+            {!barbeiroId && (
+                <div className="gh-mensagem erro">Não foi possível identificar sua conta de barbeiro. Entre novamente.</div>
             )}
 
             {/* GRID DE SLOTS */}

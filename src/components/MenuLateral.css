@@ -203,6 +203,27 @@
     box-shadow: 0 0 8px rgba(0, 200, 120, 0.5);
 }
 
+.menu-lateral-logout {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 18px 18px;
+    padding: 11px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: transparent;
+    color: #999fa7;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.menu-lateral-logout:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
 /* =========================================================
    RESPONSIVIDADE: TABLET E MOBILE (max-width: 1024px)
    ========================================================= */

@@ -1,4 +1,5 @@
 import api from "./api";
+import { buscarHorariosBloqueados } from "./serviceBarbeiro";
 
 export const criarAgendamento = async (dados) => {
     const response = await api.post("/agendar", {
@@ -57,10 +58,22 @@ export async function buscarHorariosDisponiveis(barbeiroId, data, servicosIds) {
         ? servicosIds.join(",")
         : servicosIds;
 
-    const resposta = await api.get(
-        `/horarios-disponiveis/${barbeiroId}/${data}`,
-        { params: { servicos } }
+    const [resposta, bloqueios] = await Promise.all([
+        api.get(`/horarios-disponiveis/${barbeiroId}/${data}`, {
+            params: { servicos },
+        }),
+        buscarHorariosBloqueados(barbeiroId, data),
+    ]);
+
+    const horarios = resposta.data?.horarios ?? [];
+    const slotsBloqueados = Array.isArray(bloqueios?.slots)
+        ? bloqueios.slots
+        : [];
+    const bloqueados = new Set(
+        slotsBloqueados.map((horario) => String(horario).slice(0, 5))
     );
 
-    return resposta.data?.horarios ?? [];
+    return horarios.filter(
+        (horario) => !bloqueados.has(String(horario).slice(0, 5))
+    );
 }

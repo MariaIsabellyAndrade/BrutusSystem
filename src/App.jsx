@@ -137,7 +137,7 @@ function App() {
                     <Route
                         path="/horarios-barbeiro"
                         element={
-                            <ProtectedRoute allowed={["ADMIN"]}>
+                            <ProtectedRoute allowed={["BARBEIRO"]}>
                                 <GerenciarHorarios />
                             </ProtectedRoute>
                         }

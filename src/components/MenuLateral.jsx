@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import "./MenuLateral.css";
 
 export default function MenuLateral() {
     const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
     const location = useLocation();
+    const navigate = useNavigate();
     const [mobileAberto, setMobileAberto] = useState(false);
 
     // Fecha o menu mobile quando a rota muda
@@ -17,7 +19,6 @@ export default function MenuLateral() {
             { label: "Dashboard", path: "/dashboard", icon: "▦" },
             { label: "Agendar", path: "/agendar", icon: "▣" },
             { label: "Agendamentos", path: "/agendamento", icon: "▣" },
-            { label: "Horários", path: "/horarios-barbeiro", icon: "⏱" },
             { label: "Clientes", path: "/cliente", icon: "♧" },
             { label: "Barbeiros", path: "/barbeiro", icon: "✂" },
             { label: "Serviços", path: "/servico", icon: "✧" },
@@ -27,6 +28,7 @@ export default function MenuLateral() {
         BARBEIRO: [
             { label: "Início", path: "/inicio", icon: "▦" },
             { label: "Minha agenda", path: "/minha-agenda", icon: "▣" },
+            { label: "Meus horários", path: "/horarios-barbeiro", icon: "⏱" },
             { label: "Agendar", path: "/agendar", icon: "▣" },
             { label: "Relatórios", path: "/relatorios", icon: "↗" },
             { label: "Meu perfil", path: "/meu-perfil", icon: "⚙" },
@@ -39,6 +41,11 @@ export default function MenuLateral() {
     };
 
     const menuAtual = menus[tipo] || [];
+
+    function sair() {
+        ["token", "tipo", "entidadeId", "cliente"].forEach((chave) => localStorage.removeItem(chave));
+        navigate("/login", { replace: true });
+    }
 
     let nomePerfil = "";
     if (tipo === "ADMIN") {
@@ -132,6 +139,10 @@ export default function MenuLateral() {
                     <span className="footer-status"></span>
                     <span>Sistema Online</span>
                 </div>
+                <button type="button" className="menu-lateral-logout" onClick={sair}>
+                    <LogOut size={16} />
+                    <span>Sair da conta</span>
+                </button>
             </aside>
         </>
     );

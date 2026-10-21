@@ -6,10 +6,12 @@ import {
 
 import "./PerfilMenu.css";
 import { getUsuarioLogado } from "../service/loginService";
+import { useNavigate } from "react-router-dom";
 
 export default function PerfilMenu() {
   const [aberto, setAberto] = useState(false);
   const [usuario, setUsuario] = useState(null);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
@@ -36,8 +38,8 @@ export default function PerfilMenu() {
   }
 
   const logout = () => {
-    localStorage.clear();
-    window.location.href = "/login";
+    ["token", "tipo", "entidadeId", "cliente"].forEach((chave) => localStorage.removeItem(chave));
+    navigate("/login", { replace: true });
   };
 
   const tipo = usuario?.tipo || "Usuário";
