@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
+import { listarNotificacoesHorarios } from "../service/serviceBarbeiro";
 import "./MenuLateral.css";
 
 export default function MenuLateral() {
@@ -8,17 +9,57 @@ export default function MenuLateral() {
     const location = useLocation();
     const navigate = useNavigate();
     const [mobileAberto, setMobileAberto] = useState(false);
+    const [notificacoesNaoLidas, setNotificacoesNaoLidas] = useState(0);
+    const [mostrarNotificacao, setMostrarNotificacao] = useState(false);
+    const contagemAnterior = useRef(null);
 
     // Fecha o menu mobile quando a rota muda
     useEffect(() => {
         setMobileAberto(false);
     }, [location.pathname]);
 
+    useEffect(() => {
+        if (tipo !== "ADMIN") return undefined;
+
+        let ativo = true;
+        const atualizarNotificacoes = async () => {
+            try {
+                const notificacoes = await listarNotificacoesHorarios(true);
+                if (!ativo) return;
+                if (contagemAnterior.current !== null && notificacoes.length > contagemAnterior.current) {
+                    setMostrarNotificacao(true);
+                    window.setTimeout(() => setMostrarNotificacao(false), 7000);
+                }
+                contagemAnterior.current = notificacoes.length;
+                setNotificacoesNaoLidas(notificacoes.length);
+            } catch (error) {
+                console.error("Erro ao buscar notificações de horários:", error);
+            }
+        };
+
+        const atualizarAposLeitura = () => atualizarNotificacoes();
+        window.addEventListener("horarios-notificacoes-atualizadas", atualizarAposLeitura);
+        atualizarNotificacoes();
+        const intervalo = window.setInterval(atualizarNotificacoes, 30000);
+        return () => {
+            ativo = false;
+            window.clearInterval(intervalo);
+            window.removeEventListener("horarios-notificacoes-atualizadas", atualizarAposLeitura);
+        };
+    }, [tipo]);
+
+    useEffect(() => {
+        if (tipo === "ADMIN" && location.pathname === "/bloqueios-horarios") {
+            setNotificacoesNaoLidas(0);
+        }
+    }, [tipo, location.pathname]);
+
     const menus = {
         ADMIN: [
             { label: "Dashboard", path: "/dashboard", icon: "▦" },
             { label: "Agendar", path: "/agendar", icon: "▣" },
             { label: "Agendamentos", path: "/agendamento", icon: "▣" },
+            { label: "Bloqueios", path: "/bloqueios-horarios", icon: "⏱", badge: notificacoesNaoLidas },
             { label: "Clientes", path: "/cliente", icon: "♧" },
             { label: "Barbeiros", path: "/barbeiro", icon: "✂" },
             { label: "Serviços", path: "/servico", icon: "✧" },
@@ -129,10 +170,24 @@ export default function MenuLateral() {
                             >
                                 <span className="menu-icone">{item.icon}</span>
                                 <span>{item.label}</span>
+                                {item.badge > 0 && <span className="menu-notificacao-badge">{item.badge}</span>}
                             </Link>
                         );
                     })}
                 </nav>
+
+                {tipo === "ADMIN" && mostrarNotificacao && (
+                    <button
+                        type="button"
+                        className="menu-notificacao-toast"
+                        onClick={() => {
+                            setMostrarNotificacao(false);
+                            navigate("/bloqueios-horarios");
+                        }}
+                    >
+                        Nova alteração de horário. Ver detalhes
+                    </button>
+                )}
 
                 {/* RODAPÉ STATUS */}
                 <div className="menu-lateral-footer">

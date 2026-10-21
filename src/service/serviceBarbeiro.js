@@ -69,13 +69,52 @@ export const buscarHorariosBloqueados = async (barbeiroId, data) => {
     const response = await api.get(`/barbeiros/${barbeiroId}/horarios-bloqueados`, {
         params: { data }
     });
+    const dados = response.data || {};
+    const motivos = Object.fromEntries(
+        (dados.motivos || []).map(({ horario, motivo }) => [horario, motivo])
+    );
+    const slots = (dados.slots || []).map((slot) =>
+        typeof slot === "string" ? slot : slot.horario
+    );
+
+    return { ...dados, slots, motivos, recorrencias: dados.recorrencias || [] };
+};
+
+export const salvarHorariosBloqueados = async (barbeiroId, data, bloqueios) => {
+    const response = await api.put(`/barbeiros/${barbeiroId}/horarios-bloqueados`, {
+        data,
+        slots: bloqueios.map(({ horario, motivo }) => horario),
+        motivos: bloqueios,
+    });
     return response.data;
 };
 
-export const salvarHorariosBloqueados = async (barbeiroId, data, slots) => {
-    const response = await api.put(`/barbeiros/${barbeiroId}/horarios-bloqueados`, {
-        data,
-        slots
+export const listarBloqueiosRecorrentes = async (barbeiroId) => {
+    const response = await api.get(`/barbeiros/${barbeiroId}/bloqueios-recorrentes`);
+    return response.data?.regras || [];
+};
+
+export const salvarBloqueiosRecorrentes = async (barbeiroId, regras) => {
+    const response = await api.put(`/barbeiros/${barbeiroId}/bloqueios-recorrentes`, { regras });
+    return response.data?.regras || [];
+};
+
+export const listarBloqueiosParaAdmin = async () => {
+    const response = await api.get("/admin/horarios-bloqueados");
+    return {
+        bloqueios: response.data?.bloqueios || [],
+        recorrencias: response.data?.recorrencias || [],
+    };
+};
+
+export const listarNotificacoesHorarios = async (naoLidas = false) => {
+    const response = await api.get("/admin/notificacoes/horarios", {
+        params: naoLidas ? { naoLidas: true } : {},
     });
+    return response.data?.notificacoes || [];
+};
+
+export const marcarNotificacaoHorarioLida = async (id) => {
+    const response = await api.patch(`/admin/notificacoes/horarios/${id}/lida`);
     return response.data;
 };

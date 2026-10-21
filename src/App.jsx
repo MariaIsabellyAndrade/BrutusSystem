@@ -16,6 +16,7 @@ import HomeCliente from "./views/HomeCliente";
 import CalendarioAgendamentos from "./views/Agendamentos";
 import RelatorioFinanceiro from "./views/Relatorio";
 import GerenciarHorarios from "./views/GerenciarHorarios";
+import HorariosBloqueados from "./views/HorariosBloqueados";
 
 function App() {
     return (
@@ -139,6 +140,15 @@ function App() {
                         element={
                             <ProtectedRoute allowed={["BARBEIRO"]}>
                                 <GerenciarHorarios />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/bloqueios-horarios"
+                        element={
+                            <ProtectedRoute allowed={["ADMIN"]}>
+                                <HorariosBloqueados />
                             </ProtectedRoute>
                         }
                     />

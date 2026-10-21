@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "./index.css";
 import {
     buscarHorariosBloqueados,
     salvarHorariosBloqueados,
+    listarBloqueiosRecorrentes,
+    salvarBloqueiosRecorrentes,
 } from "../../service/serviceBarbeiro";
 import { formatarDataSemFuso } from "../../utils/formatters";
 
@@ -21,15 +24,52 @@ function gerarSlots() {
 }
 
 const TODOS_OS_SLOTS = gerarSlots();
+const DIAS_SEMANA = [
+    { valor: 1, label: "Seg" },
+    { valor: 2, label: "Ter" },
+    { valor: 3, label: "Qua" },
+    { valor: 4, label: "Qui" },
+    { valor: 5, label: "Sex" },
+    { valor: 6, label: "Sáb" },
+    { valor: 0, label: "Dom" },
+];
+
+function descreverDias(dias = []) {
+    return DIAS_SEMANA.filter((dia) => dias.includes(dia.valor)).map((dia) => dia.label).join(", ");
+}
 
 export default function GerenciarHorarios() {
     const barbeiroId = localStorage.getItem("entidadeId") || "";
     const [data, setData] = useState("");
 
     const [slotsBloqueados, setSlotsBloqueados] = useState([]);
+    const [slotsRecorrentes, setSlotsRecorrentes] = useState([]);
+    const [motivos, setMotivos] = useState({});
+    const [slotEmEdicao, setSlotEmEdicao] = useState(null);
+    const [motivoNovo, setMotivoNovo] = useState("");
+    const [regrasRecorrentes, setRegrasRecorrentes] = useState([]);
+    const [salvandoRecorrencia, setSalvandoRecorrencia] = useState(false);
+    const [formRecorrencia, setFormRecorrencia] = useState({
+        diasSemana: [],
+        horaInicio: "08:00",
+        horaFim: "12:00",
+        dataInicio: "",
+        dataFim: "",
+        motivo: "",
+    });
     const [carregando, setCarregando] = useState(false);
     const [salvando, setSalvando] = useState(false);
     const [mensagem, setMensagem] = useState(null); // { tipo: "sucesso"|"erro", texto }
+
+    useEffect(() => {
+        if (!barbeiroId) return;
+        listarBloqueiosRecorrentes(barbeiroId)
+            .then(setRegrasRecorrentes)
+            .catch((error) => {
+                console.error("Erro ao buscar regras recorrentes:", error);
+                setMensagem({ tipo: "erro", texto: "Não foi possível carregar seus bloqueios recorrentes." });
+            });
+    }, [barbeiroId]);
 
     // Busca slots bloqueados quando barbeiro + data estão selecionados
     useEffect(() => {
@@ -42,10 +82,22 @@ export default function GerenciarHorarios() {
             try {
                 setCarregando(true);
                 const res = await buscarHorariosBloqueados(barbeiroId, data);
-                setSlotsBloqueados(res?.slots || []);
+                const recorrentes = new Set((res?.recorrencias || []).flatMap((regra) =>
+                    TODOS_OS_SLOTS.filter((slot) => {
+                        const inicioSlot = Number(slot.slice(0, 2)) * 60 + Number(slot.slice(3, 5));
+                        const inicioRegra = Number(regra.horaInicio.slice(0, 2)) * 60 + Number(regra.horaInicio.slice(3, 5));
+                        const fimRegra = Number(regra.horaFim.slice(0, 2)) * 60 + Number(regra.horaFim.slice(3, 5));
+                        return inicioSlot < fimRegra && inicioSlot + 30 > inicioRegra;
+                    })
+                ));
+                setSlotsRecorrentes([...recorrentes]);
+                setSlotsBloqueados((res?.slots || []).filter((slot) => !recorrentes.has(slot)));
+                setMotivos(res?.motivos || {});
             } catch (e) {
                 console.error("Erro ao buscar horários bloqueados:", e);
                 setSlotsBloqueados([]);
+                setSlotsRecorrentes([]);
+                setMotivos({});
             } finally {
                 setCarregando(false);
             }
@@ -55,19 +107,46 @@ export default function GerenciarHorarios() {
     }, [barbeiroId, data]);
 
     function toggleSlot(slot) {
-        setSlotsBloqueados((prev) =>
-            prev.includes(slot)
-                ? prev.filter((s) => s !== slot)
-                : [...prev, slot]
-        );
+        if (slotsRecorrentes.includes(slot)) return;
+        if (slotsBloqueados.includes(slot)) {
+            setSlotsBloqueados((prev) => prev.filter((s) => s !== slot));
+            setMotivos((prev) => {
+                const atualizados = { ...prev };
+                delete atualizados[slot];
+                return atualizados;
+            });
+            return;
+        }
+
+        setSlotEmEdicao(slot);
+        setMotivoNovo("");
     }
 
     function bloquearTodos() {
-        setSlotsBloqueados([...TODOS_OS_SLOTS]);
+        setSlotEmEdicao("TODOS");
+        setMotivoNovo("");
     }
 
     function desbloquearTodos() {
         setSlotsBloqueados([]);
+        setMotivos((atuais) => Object.fromEntries(
+            Object.entries(atuais).filter(([slot]) => slotsRecorrentes.includes(slot))
+        ));
+    }
+
+    function confirmarBloqueio() {
+        const motivo = motivoNovo.trim();
+        if (!motivo) return;
+
+        const slots = (slotEmEdicao === "TODOS" ? TODOS_OS_SLOTS : [slotEmEdicao])
+            .filter((slot) => !slotsRecorrentes.includes(slot));
+        setSlotsBloqueados((prev) => [...new Set([...prev, ...slots])]);
+        setMotivos((prev) => Object.fromEntries([
+            ...Object.entries(prev).filter(([slot]) => !slots.includes(slot)),
+            ...slots.map((slot) => [slot, motivo]),
+        ]));
+        setSlotEmEdicao(null);
+        setMotivoNovo("");
     }
 
     async function handleSalvar() {
@@ -76,7 +155,11 @@ export default function GerenciarHorarios() {
         try {
             setSalvando(true);
             setMensagem(null);
-            await salvarHorariosBloqueados(barbeiroId, data, slotsBloqueados);
+            await salvarHorariosBloqueados(
+                barbeiroId,
+                data,
+                slotsBloqueados.map((horario) => ({ horario, motivo: motivos[horario] || "" }))
+            );
             setMensagem({
                 tipo: "sucesso",
                 texto: `Horários salvos para ${formatarDataSemFuso(data)}.`,
@@ -95,7 +178,56 @@ export default function GerenciarHorarios() {
         }
     }
 
-    const totalBloqueados = slotsBloqueados.length;
+    function alternarDiaRecorrente(dia) {
+        setFormRecorrencia((atual) => ({
+            ...atual,
+            diasSemana: atual.diasSemana.includes(dia)
+                ? atual.diasSemana.filter((item) => item !== dia)
+                : [...atual.diasSemana, dia],
+        }));
+    }
+
+    async function salvarRegrasRecorrentes(regras) {
+        try {
+            setSalvandoRecorrencia(true);
+            setMensagem(null);
+            const salvas = await salvarBloqueiosRecorrentes(barbeiroId, regras);
+            setRegrasRecorrentes(salvas);
+            setMensagem({ tipo: "sucesso", texto: "Bloqueios recorrentes atualizados." });
+            return true;
+        } catch (error) {
+            setMensagem({ tipo: "erro", texto: error?.response?.data?.erro || "Não foi possível salvar a recorrência." });
+            return false;
+        } finally {
+            setSalvandoRecorrencia(false);
+        }
+    }
+
+    async function adicionarRecorrencia(event) {
+        event.preventDefault();
+        if (formRecorrencia.diasSemana.length === 0) {
+            setMensagem({ tipo: "erro", texto: "Selecione pelo menos um dia da semana." });
+            return;
+        }
+        const regra = {
+            ...formRecorrencia,
+            motivo: formRecorrencia.motivo.trim(),
+            dataFim: formRecorrencia.dataFim || "",
+        };
+        if (regra.horaFim <= regra.horaInicio) {
+            setMensagem({ tipo: "erro", texto: "O horário final precisa ser depois do horário inicial." });
+            return;
+        }
+        if (await salvarRegrasRecorrentes([...regrasRecorrentes, regra])) {
+            setFormRecorrencia((atual) => ({ ...atual, diasSemana: [], motivo: "", dataFim: "" }));
+        }
+    }
+
+    function removerRecorrencia(id) {
+        salvarRegrasRecorrentes(regrasRecorrentes.filter((regra) => regra._id !== id));
+    }
+
+    const totalBloqueados = new Set([...slotsBloqueados, ...slotsRecorrentes]).size;
     const totalLivres = TODOS_OS_SLOTS.length - totalBloqueados;
 
     return (
@@ -110,10 +242,74 @@ export default function GerenciarHorarios() {
                 </div>
             </div>
 
+            <section className="gh-recorrencias">
+                <div className="gh-recorrencias-titulo">
+                    <div>
+                        <span className="gh-eyebrow">REGRAS DEFINIDAS POR VOCÊ</span>
+                        <h2>Bloqueios contínuos</h2>
+                        <p>Escolha os dias, o período e a faixa de horário que se repetem.</p>
+                    </div>
+                </div>
+
+                <form className="gh-recorrencia-form" onSubmit={adicionarRecorrencia}>
+                    <div className="gh-recorrencia-campo gh-recorrencia-dias">
+                        <span className="gh-recorrencia-label">DIAS DA SEMANA</span>
+                        <div className="gh-dias-opcoes">
+                            {DIAS_SEMANA.map((dia) => (
+                                <button
+                                    key={dia.valor}
+                                    type="button"
+                                    className={formRecorrencia.diasSemana.includes(dia.valor) ? "selecionado" : ""}
+                                    onClick={() => alternarDiaRecorrente(dia.valor)}
+                                >{dia.label}</button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="gh-recorrencia-linha">
+                        <label className="gh-recorrencia-campo">
+                            <span className="gh-recorrencia-label">INÍCIO</span>
+                            <input type="time" value={formRecorrencia.horaInicio} onChange={(e) => setFormRecorrencia({ ...formRecorrencia, horaInicio: e.target.value })} required />
+                        </label>
+                        <label className="gh-recorrencia-campo">
+                            <span className="gh-recorrencia-label">FIM</span>
+                            <input type="time" value={formRecorrencia.horaFim} onChange={(e) => setFormRecorrencia({ ...formRecorrencia, horaFim: e.target.value })} required />
+                        </label>
+                        <label className="gh-recorrencia-campo">
+                            <span className="gh-recorrencia-label">VÁLIDO A PARTIR DE</span>
+                            <input type="date" value={formRecorrencia.dataInicio} onChange={(e) => setFormRecorrencia({ ...formRecorrencia, dataInicio: e.target.value })} required />
+                        </label>
+                        <label className="gh-recorrencia-campo">
+                            <span className="gh-recorrencia-label">ATÉ (OPCIONAL)</span>
+                            <input type="date" min={formRecorrencia.dataInicio || undefined} value={formRecorrencia.dataFim} onChange={(e) => setFormRecorrencia({ ...formRecorrencia, dataFim: e.target.value })} />
+                        </label>
+                    </div>
+                    <label className="gh-recorrencia-campo">
+                        <span className="gh-recorrencia-label">MOTIVO</span>
+                        <input type="text" maxLength={300} value={formRecorrencia.motivo} onChange={(e) => setFormRecorrencia({ ...formRecorrencia, motivo: e.target.value })} placeholder="Ex.: folga semanal" required />
+                    </label>
+                    <button className="gh-btn-salvar" type="submit" disabled={salvandoRecorrencia}>
+                        {salvandoRecorrencia ? "Salvando..." : "Adicionar recorrência"}
+                    </button>
+                </form>
+
+                <div className="gh-regras-lista">
+                    {regrasRecorrentes.length === 0 ? <p>Nenhuma regra recorrente cadastrada.</p> : regrasRecorrentes.map((regra) => (
+                        <article className="gh-regra-card" key={regra._id}>
+                            <div>
+                                <strong>{descreverDias(regra.diasSemana)} · {regra.horaInicio}–{regra.horaFim}</strong>
+                                <span>{formatarDataSemFuso(regra.dataInicio)} até {regra.dataFim ? formatarDataSemFuso(regra.dataFim) : "sem data final"}</span>
+                                <small>{regra.motivo}</small>
+                            </div>
+                            <button type="button" className="gh-btn-remover-regra" disabled={salvandoRecorrencia} onClick={() => removerRecorrencia(regra._id)}>Remover</button>
+                        </article>
+                    ))}
+                </div>
+            </section>
+
             {/* FILTROS */}
             <div className="gh-filtros">
                 <div className="gh-campo">
-                    <label htmlFor="data">DATA</label>
+                    <label htmlFor="data">BLOQUEIO PONTUAL · DATA</label>
                     <input
                         id="data"
                         type="date"
@@ -156,7 +352,7 @@ export default function GerenciarHorarios() {
                                 onClick={desbloquearTodos}
                                 disabled={salvando}
                             >
-                                Liberar todos
+                                Liberar pontuais
                             </button>
                             <button
                                 type="button"
@@ -176,6 +372,33 @@ export default function GerenciarHorarios() {
                         </div>
                     )}
 
+                    {slotEmEdicao && (
+                        createPortal(<div className="gh-modal-overlay" onClick={() => setSlotEmEdicao(null)}>
+                            <form
+                                className="gh-modal-motivo"
+                                onSubmit={(event) => { event.preventDefault(); confirmarBloqueio(); }}
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <h2>{slotEmEdicao === "TODOS" ? "Bloquear todos os horários" : `Bloquear ${slotEmEdicao}`}</h2>
+                                <p>Informe o motivo do bloqueio. O administrador poderá consultá-lo.</p>
+                                <label htmlFor="motivo-bloqueio">Motivo</label>
+                                <textarea
+                                    id="motivo-bloqueio"
+                                    value={motivoNovo}
+                                    onChange={(event) => setMotivoNovo(event.target.value)}
+                                    maxLength={300}
+                                    rows={3}
+                                    autoFocus
+                                    required
+                                />
+                                <div className="gh-modal-acoes">
+                                    <button type="button" className="gh-btn-secundario" onClick={() => setSlotEmEdicao(null)}>Cancelar</button>
+                                    <button type="submit" className="gh-btn-salvar">Confirmar bloqueio</button>
+                                </div>
+                            </form>
+                        </div>, document.body)
+                    )}
+
                     {carregando ? (
                         <div className="gh-loading">Carregando horários...</div>
                     ) : (
@@ -190,19 +413,25 @@ export default function GerenciarHorarios() {
                             {/* SLOTS */}
                             <div className="gh-slots">
                                 {TODOS_OS_SLOTS.map((slot) => {
-                                    const bloqueado = slotsBloqueados.includes(slot);
+                                    const recorrente = slotsRecorrentes.includes(slot);
+                                    const bloqueado = recorrente || slotsBloqueados.includes(slot);
                                     return (
                                         <button
                                             key={slot}
                                             type="button"
-                                            className={`gh-slot ${bloqueado ? "bloqueado" : "livre"}`}
+                                            className={`gh-slot ${bloqueado ? "bloqueado" : "livre"} ${recorrente ? "recorrente" : ""}`}
                                             onClick={() => toggleSlot(slot)}
-                                            disabled={salvando}
+                                            disabled={salvando || recorrente}
                                         >
                                             <span className="gh-slot-hora">{slot}</span>
                                             <span className="gh-slot-status">
-                                                {bloqueado ? "Bloqueado" : "Livre"}
+                                                {recorrente ? "Recorrente" : bloqueado ? "Bloqueado" : "Livre"}
                                             </span>
+                                            {bloqueado && motivos[slot] && (
+                                                <span className="gh-slot-motivo" title={motivos[slot]}>
+                                                    {motivos[slot]}
+                                                </span>
+                                            )}
                                         </button>
                                     );
                                 })}
