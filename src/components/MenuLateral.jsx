@@ -5,7 +5,7 @@ import { listarNotificacoesHorarios } from "../service/serviceBarbeiro";
 import "./MenuLateral.css";
 
 export default function MenuLateral() {
-    const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
+    const tipo = sessionStorage.getItem("tipo")?.trim().toUpperCase();
     const location = useLocation();
     const navigate = useNavigate();
     const [mobileAberto, setMobileAberto] = useState(false);
@@ -84,6 +84,7 @@ export default function MenuLateral() {
     const menuAtual = menus[tipo] || [];
 
     function sair() {
+        ["token", "tipo", "entidadeId"].forEach((chave) => sessionStorage.removeItem(chave));
         ["token", "tipo", "entidadeId", "cliente"].forEach((chave) => localStorage.removeItem(chave));
         navigate("/login", { replace: true });
     }

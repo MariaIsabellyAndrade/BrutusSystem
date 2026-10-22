@@ -7,8 +7,8 @@ import "./Layout.css";
 export default function Layout({ children }) {
     const location = useLocation();
 
-    const tipo = localStorage.getItem("tipo")?.trim().toUpperCase();
-    const token = localStorage.getItem("token");
+    const tipo = sessionStorage.getItem("tipo")?.trim().toUpperCase();
+    const token = sessionStorage.getItem("token");
 
     const logado = !!token;
 

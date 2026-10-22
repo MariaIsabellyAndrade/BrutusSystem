@@ -32,8 +32,8 @@ export default function AgendamentoPage() {
   const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
   const [carregandoHorarios, setCarregandoHorarios] = useState(false);
 
-  const token = localStorage.getItem("token");
-  const tipo = localStorage.getItem("tipo");
+  const token = sessionStorage.getItem("token");
+  const tipo = sessionStorage.getItem("tipo");
   const isAdmin = tipo === "ADMIN";
   const isBarbeiro = tipo === "BARBEIRO";
   const isCliente = tipo === "CLIENTE";
@@ -105,7 +105,7 @@ export default function AgendamentoPage() {
     if (etapa !== etapaHorario || !data || servicosSelecionados.length === 0) return;
 
     const barbeiroId = isBarbeiro
-      ? localStorage.getItem("entidadeId")
+      ? sessionStorage.getItem("entidadeId")
       : barbeiro;
 
     if (!barbeiroId) return;
@@ -270,7 +270,7 @@ export default function AgendamentoPage() {
     setErro("");
     setSucesso("");
 
-    const idUsuario = localStorage.getItem("entidadeId");
+    const idUsuario = sessionStorage.getItem("entidadeId");
 
     if (!token) {
       setErro("Você precisa estar logado para realizar um agendamento.");

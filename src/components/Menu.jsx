@@ -5,7 +5,7 @@ import "./Menu.css";
 
 export default function Menu() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
   const logado = !!token;
 
   const location = useLocation();

@@ -55,7 +55,7 @@ export async function getResumoClientes() {
 }
 
 export const listarAgendamentosPorCliente = () => {
-  const clienteId = localStorage.getItem("entidadeId");
+  const clienteId = sessionStorage.getItem("entidadeId");
 
   return api.get(`/cliente/${clienteId}`);
 };

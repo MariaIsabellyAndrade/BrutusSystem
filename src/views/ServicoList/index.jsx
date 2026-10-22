@@ -39,6 +39,11 @@ export default function ListaServicos() {
         carregarServicos();
     }, []);
 
+    useEffect(() => {
+        document.documentElement.classList.add("servicos-view");
+        return () => document.documentElement.classList.remove("servicos-view");
+    }, []);
+
     const servicosFiltrados = servicos.filter((s) => {
         const matchBusca = s.nome?.toLowerCase().includes(busca.toLowerCase());
         if (!matchBusca) return false;
@@ -167,7 +172,7 @@ export default function ListaServicos() {
                     >
                         + Novo Serviço
                     </button>
-                </div>
+               
 
                 {/* LISTA */}
                 <div className="servicos-lista">
@@ -219,6 +224,7 @@ export default function ListaServicos() {
                         ))
                     )}
                 </div>
+             </div>
 
                 {/* MODAL CADASTRO / EDIÇÃO */}
                 {editando !== null && (

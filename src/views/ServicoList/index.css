@@ -2,6 +2,14 @@
    BRUTUS SYSTEM - SERVIÇOS
    ========================================================= */
 
+html.servicos-view {
+    scrollbar-width: none;
+}
+
+html.servicos-view::-webkit-scrollbar {
+    display: none;
+}
+
 .servicos-page {
     width: 100%;
     min-height: 100vh;

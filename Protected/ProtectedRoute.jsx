@@ -3,8 +3,8 @@ import { Navigate } from "react-router-dom";
 
 
 export default function ProtectedRoute({ children, allowed }) {
-  const token = localStorage.getItem("token");
-  const tipo = localStorage.getItem("tipo");
+  const token = sessionStorage.getItem("token");
+  const tipo = sessionStorage.getItem("tipo");
 
 
   if (!token) {

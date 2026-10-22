@@ -61,9 +61,9 @@ function HomeCliente() {
         .toUpperCase();
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        ["token", "tipo", "entidadeId"].forEach((chave) => sessionStorage.removeItem(chave));
+        ["token", "tipo", "entidadeId"].forEach((chave) => localStorage.removeItem(chave));
         localStorage.removeItem("cliente");
-        localStorage.removeItem("entidadeId");
         navigate("/login");
     };
 

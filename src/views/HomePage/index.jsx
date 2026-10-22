@@ -82,7 +82,7 @@ function Home() {
 
               <div className="hero-actions">
                 <Link
-                  to={localStorage.getItem("token") ? "/agendamento" : "/login"}
+                  to={sessionStorage.getItem("token") ? "/agendamento" : "/login"}
                   className="button-primary"
                 >
                   AGENDAR HORÁRIO

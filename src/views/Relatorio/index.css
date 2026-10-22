@@ -16,7 +16,13 @@
 /* ─── CABEÇALHO ───────────────────────────────────────────── */
 .relatorio-cabecalho {
     margin-bottom: 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
 }
+
+.relatorio-exportacoes { display: flex; gap: 9px; flex-wrap: wrap; }
 
 .relatorio-subtitulo {
     display: block;
@@ -445,3 +451,34 @@
         font-size: 18px;
     }
 }
+
+/* ─── COMISSÕES ───────────────────────────────────────────── */
+.relatorio-comissoes { display: flex; flex-direction: column; gap: 18px; }
+.relatorio-comissao-cabecalho { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.relatorio-comissao-cabecalho .relatorio-secao-titulo { margin-bottom: 5px; }
+.relatorio-comissao-cabecalho p { margin: 0; color: #777; font-size: 12px; }
+.relatorio-comissao-totais { display: flex; gap: 10px; }
+.relatorio-comissao-totais span { min-width: 120px; padding: 12px 14px; border: 1px solid #252421; border-radius: 8px; background: #0d0d0d; color: #777; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.relatorio-comissao-totais strong { display: block; margin-top: 6px; color: #d8b35e; font-size: 15px; letter-spacing: normal; }
+.relatorio-comissao-config { padding: 18px; border: 1px solid #292723; border-radius: 10px; background: #0b0b0b; }
+.relatorio-comissao-config-titulo { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.relatorio-comissao-config-titulo>div { display: flex; flex-direction: column; gap: 5px; }
+.relatorio-comissao-config-titulo strong { color: #eee; font-size: 13px; }
+.relatorio-comissao-config-titulo small { color: #737373; font-size: 11px; }
+.relatorio-comissao-servicos { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 10px; }
+.relatorio-comissao-servicos label { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 12px; border: 1px solid #222; border-radius: 7px; color: #bbb; font-size: 12px; }
+.relatorio-comissao-servicos label>div { display: flex; align-items: center; gap: 5px; color: #c99a3a; }
+.relatorio-comissao-servicos input { width: 60px; height: 32px; box-sizing: border-box; padding: 0 7px; border: 1px solid #35332e; border-radius: 5px; outline: none; background: #111; color: #fff; text-align: right; }
+.relatorio-comissao-servicos input:focus { border-color: #c99a3a; }
+.relatorio-comissao-historico h3 { margin: 0 0 12px; color: #d6d1c5; font-size: 13px; }
+.relatorio-tabela-comissao { min-width: 900px; }
+.relatorio-tabela-atendimentos { min-width: 900px; }
+.relatorio-comissao-status { display: inline-flex; padding: 5px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; }
+.relatorio-comissao-status.pago { border: 1px solid #28553a; background: #102017; color: #82c993; }
+.relatorio-comissao-status.pendente { border: 1px solid #594921; background: #211b0e; color: #d8b35e; }
+.relatorio-link-acao { padding: 6px 8px; border: 1px solid #594921; border-radius: 5px; background: #19140a; color: #e0bd67; font-size: 10px; cursor: pointer; white-space: nowrap; }
+.relatorio-link-acao:disabled { opacity: .6; cursor: wait; }
+.relatorio-comissao-vazio { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 28px; border: 1px dashed #292723; border-radius: 8px; color: #b9b5ad; text-align: center; }
+.relatorio-comissao-vazio span,.relatorio-comissao-nota { color: #777; font-size: 11px; }
+@media(max-width:700px) { .relatorio-cabecalho,.relatorio-comissao-cabecalho { align-items: stretch; flex-direction: column; } .relatorio-comissao-totais { display: grid; grid-template-columns: 1fr 1fr; } .relatorio-comissao-config-titulo { align-items: stretch; flex-direction: column; } .relatorio-exportacoes .relatorio-btn { flex: 1; } }
+@media print { body { background: #fff !important; } .menu-lateral,.menu-lateral-mobile-bar,.menu-lateral-overlay,.menu-lateral-close-btn { display: none !important; } .conteudo-logado { margin: 0 !important; width: 100% !important; padding: 0 !important; } .relatorio-container { min-height: 0; padding: 0; background: #fff; color: #111; } .no-print,.relatorio-filtros { display: none !important; } .relatorio-card,.relatorio-grafico-container,.relatorio-comissao-config,.relatorio-comissao-totais span { break-inside: avoid; background: #fff; color: #111; border-color: #ccc; } .relatorio-card-valor,.relatorio-titulo,.relatorio-secao-titulo { color: #111 !important; } }

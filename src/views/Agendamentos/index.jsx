@@ -23,7 +23,7 @@ export default function CalendarioAgendamentos() {
      */
 
     const tipoSalvo = (
-        localStorage.getItem("tipo") || ""
+        sessionStorage.getItem("tipo") || ""
     )
         .trim()
         .toUpperCase();
@@ -44,7 +44,7 @@ export default function CalendarioAgendamentos() {
      * CLIENTE  -> ID do cliente
      */
     const entidadeId =
-        localStorage.getItem("entidadeId");
+        sessionStorage.getItem("entidadeId");
 
     const isAdmin =
         tipoUsuario === "ADMIN";
@@ -1079,21 +1079,6 @@ export default function CalendarioAgendamentos() {
                         </div>
 
                     )}
-
-                    {/* LEGENDA DE BARBEIROS — visível quando ADMIN vê todos */}
-                    {isAdmin && !barbeiroSelecionado && barbeiros.length > 0 && (
-                        <div className="legenda-barbeiros">
-                            {barbeiros.map((b, i) => (
-                                <span
-                                    key={b._id}
-                                    className={`legenda-barbeiro-item ${CORES_BARBEIROS[i % CORES_BARBEIROS.length]}`}
-                                >
-                                    {b.nome} {b.sobrenome || ""}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
 
                     <div className="calendario">
 

@@ -39,7 +39,7 @@ function descreverDias(dias = []) {
 }
 
 export default function GerenciarHorarios() {
-    const barbeiroId = localStorage.getItem("entidadeId") || "";
+    const barbeiroId = sessionStorage.getItem("entidadeId") || "";
     const [data, setData] = useState("");
 
     const [slotsBloqueados, setSlotsBloqueados] = useState([]);

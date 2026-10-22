@@ -17,6 +17,7 @@ import CalendarioAgendamentos from "./views/Agendamentos";
 import RelatorioFinanceiro from "./views/Relatorio";
 import GerenciarHorarios from "./views/GerenciarHorarios";
 import HorariosBloqueados from "./views/HorariosBloqueados";
+import DashboardGerencial from "./views/DashboardGerencial";
 
 function App() {
     return (
@@ -122,6 +123,15 @@ function App() {
                         element={
                             <ProtectedRoute allowed={["BARBEIRO", "ADMIN"]}>
                                 <ServicoList />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute allowed={["ADMIN"]}>
+                                <DashboardGerencial />
                             </ProtectedRoute>
                         }
                     />

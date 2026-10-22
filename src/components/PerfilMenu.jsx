@@ -13,7 +13,7 @@ export default function PerfilMenu() {
   const [usuario, setUsuario] = useState(null);
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     if (!token || token === "null" || token === "undefined") {
@@ -38,6 +38,7 @@ export default function PerfilMenu() {
   }
 
   const logout = () => {
+    ["token", "tipo", "entidadeId"].forEach((chave) => sessionStorage.removeItem(chave));
     ["token", "tipo", "entidadeId", "cliente"].forEach((chave) => localStorage.removeItem(chave));
     navigate("/login", { replace: true });
   };

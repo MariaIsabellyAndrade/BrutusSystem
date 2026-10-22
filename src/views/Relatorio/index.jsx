@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./index.css";
-import { buscarRelatorioFinanceiro } from "../../service/serviceRelatorio";
+import { buscarRelatorioFinanceiro, buscarDadosGerenciais, atualizarPercentualComissao, marcarComissaoPaga, concluirAtendimento } from "../../service/serviceRelatorio";
 import { listarBarbeiros } from "../../service/serviceBarbeiro";
 import { formatarMoedaExibicao, formatarDataSemFuso } from "../../utils/formatters";
 
@@ -121,6 +121,7 @@ function TabelaRanking({ ranking }) {
                         <th>#</th>
                         <th>Barbeiro</th>
                         <th>Confirmados</th>
+                        <th>Concluídos</th>
                         <th>Pendentes</th>
                         <th>Cancelados</th>
                         <th>Receita Recebida</th>
@@ -142,6 +143,9 @@ function TabelaRanking({ ranking }) {
                                 <span className="relatorio-badge relatorio-badge--verde">
                                     {item.confirmados}
                                 </span>
+                            </td>
+                            <td>
+                                <span className="relatorio-badge relatorio-badge--verde">{item.concluidos || 0}</span>
                             </td>
                             <td>
                                 <span className="relatorio-badge relatorio-badge--amarelo">
@@ -172,13 +176,17 @@ function TabelaRanking({ ranking }) {
 ───────────────────────────────────────────────────────────────── */
 
 export default function RelatorioFinanceiro() {
-    const tipo = (localStorage.getItem("tipo") || "").trim().toUpperCase();
+    const tipo = (sessionStorage.getItem("tipo") || "").trim().toUpperCase();
     const isAdmin = tipo === "ADMIN";
 
     // ── Estados ──────────────────────────────────────────────────
     const [dados, setDados]           = useState(null);
+    const [gerencial, setGerencial]   = useState(null);
     const [carregando, setCarregando] = useState(false);
     const [erro, setErro]             = useState("");
+    const [salvandoComissoes, setSalvandoComissoes] = useState(false);
+    const [acaoComissaoId, setAcaoComissaoId] = useState("");
+    const [concluindoId, setConcluindoId] = useState("");
 
     // Filtros
     const [barbeiros, setBarbeiros]           = useState([]);
@@ -213,8 +221,12 @@ export default function RelatorioFinanceiro() {
             if (dataInicio) params.dataInicio = dataInicio;
             if (dataFim)    params.dataFim    = dataFim;
 
-            const resultado = await buscarRelatorioFinanceiro(params);
+            const [resultado, resultadoGerencial] = await Promise.all([
+                buscarRelatorioFinanceiro(params),
+                buscarDadosGerenciais(params),
+            ]);
             setDados(resultado);
+            setGerencial(resultadoGerencial);
         } catch (err) {
             const msg =
                 err?.response?.data?.erro ||
@@ -236,6 +248,73 @@ export default function RelatorioFinanceiro() {
         setBarbeiroFiltro("");
         setDataInicio("");
         setDataFim("");
+    };
+
+    const salvarComissoes = async () => {
+        if (!isAdmin || !gerencial) return;
+        setSalvandoComissoes(true);
+        setErro("");
+        try {
+            await Promise.all(gerencial.servicosComissao.map((servico) =>
+                atualizarPercentualComissao(servico.id, servico.percentual)
+            ));
+            await buscar();
+        } catch (err) {
+            setErro(err?.response?.data?.erro || "Não foi possível salvar os percentuais de comissão.");
+        } finally {
+            setSalvandoComissoes(false);
+        }
+    };
+
+    const confirmarPagamentoComissao = async (id) => {
+        setAcaoComissaoId(id);
+        setErro("");
+        try {
+            await marcarComissaoPaga(id);
+            await buscar();
+        } catch (err) {
+            setErro(err?.response?.data?.erro || "Não foi possível registrar o pagamento da comissão.");
+        } finally {
+            setAcaoComissaoId("");
+        }
+    };
+
+    const marcarAtendimentoConcluido = async (id) => {
+        setConcluindoId(id);
+        setErro("");
+        try {
+            await concluirAtendimento(id);
+            await buscar();
+        } catch (err) {
+            setErro(err?.response?.data?.erro || "Não foi possível concluir este atendimento.");
+        } finally {
+            setConcluindoId("");
+        }
+    };
+
+    const exportarCsv = () => {
+        if (!dados) return;
+        const linhas = [["Indicador", "Valor"]];
+        if (dados.tipo === "geral") {
+            const { financeiro, quantidades } = dados.indicadoresGlobais;
+            linhas.push(["Receita confirmada", financeiro.receitaRecebida], ["Valor pendente", financeiro.valorPendente], ["Agendamentos", quantidades.total], ["Confirmados", quantidades.confirmados], ["Pendentes", quantidades.pendentes], ["Cancelados", quantidades.cancelados]);
+            linhas.push([], ["Barbeiro", "Confirmados", "Concluídos", "Pendentes", "Cancelados", "Receita", "Valor pendente"]);
+            for (const item of dados.ranking || []) linhas.push([item.nome, item.confirmados, item.concluidos || 0, item.pendentes, item.cancelados, item.receitaRecebida, item.valorPendente]);
+        } else {
+            const { financeiro, quantidades } = dados.indicadores;
+            linhas.push(["Receita confirmada", financeiro.receitaRecebida], ["Valor pendente", financeiro.valorPendente], ["Agendamentos", quantidades.total], ["Confirmados", quantidades.confirmados], ["Pendentes", quantidades.pendentes], ["Cancelados", quantidades.cancelados]);
+        }
+        linhas.push([], ["Atendimentos"], ["Data", "Hora", "Cliente", "Barbeiro", "Serviços", "Valor", "Status"]);
+        for (const item of gerencial?.agendamentos || []) linhas.push([item.data, item.hora, item.cliente, item.barbeiro, item.servicos.join(", "), item.valor, item.status]);
+        linhas.push([], ["Histórico de comissões"], ["Barbeiro", "Serviço", "Base", "Percentual", "Comissão", "Status", "Gerada em", "Paga em"]);
+        for (const item of gerencial?.historicoComissoes || []) linhas.push([item.barbeiro, item.servico, item.valorBase, item.percentual, item.valor, item.status, item.geradaEm, item.pagaEm || ""]);
+        const csv = linhas.map((linha) => linha.map((valor) => `"${String(valor ?? "").replaceAll('"', '""')}"`).join(";")).join("\r\n");
+        const url = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" }));
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "relatorio-financeiro.csv";
+        link.click();
+        URL.revokeObjectURL(url);
     };
 
     // ── Helpers de renderização ─────────────────────────────────
@@ -291,6 +370,7 @@ export default function RelatorioFinanceiro() {
                     <div className="relatorio-cards-grid">
                         <CardIndicador rotulo="Total"       valor={quantidades.total} />
                         <CardIndicador rotulo="Confirmados" valor={quantidades.confirmados} sub="Sinal pago" />
+                        <CardIndicador rotulo="Concluídos" valor={quantidades.concluidos || 0} sub="Serviço realizado" />
                         <CardIndicador rotulo="Pendentes"   valor={quantidades.pendentes}   sub="Aguardando pagamento" />
                         <CardIndicador rotulo="Cancelados"  valor={quantidades.cancelados} />
                         <CardIndicador rotulo="Taxa de Cancelamento" valor={`${taxaCancelamento}%`} />
@@ -362,6 +442,7 @@ export default function RelatorioFinanceiro() {
                     <div className="relatorio-cards-grid">
                         <CardIndicador rotulo="Total"       valor={quantidades.total} />
                         <CardIndicador rotulo="Confirmados" valor={quantidades.confirmados} />
+                        <CardIndicador rotulo="Concluídos" valor={quantidades.concluidos || 0} sub="Serviço realizado" />
                         <CardIndicador rotulo="Pendentes"   valor={quantidades.pendentes} />
                         <CardIndicador rotulo="Cancelados"  valor={quantidades.cancelados} />
                         <CardIndicador rotulo="Taxa de Cancelamento" valor={`${taxaCancelamento}%`} />
@@ -416,6 +497,10 @@ export default function RelatorioFinanceiro() {
                         </p>
                     )}
                 </div>
+                {dados && <div className="relatorio-exportacoes no-print">
+                    <button type="button" className="relatorio-btn relatorio-btn--secundario" onClick={exportarCsv}>Exportar CSV</button>
+                    <button type="button" className="relatorio-btn relatorio-btn--primario" onClick={() => window.print()}>Salvar PDF</button>
+                </div>}
             </div>
 
             {/* FILTROS */}
@@ -509,6 +594,34 @@ export default function RelatorioFinanceiro() {
                 <div className="relatorio-conteudo">
                     {dados.tipo === "individual" && renderIndicadoresIndividual()}
                     {dados.tipo === "geral"      && renderRelatorioGeral()}
+
+                    {gerencial && <section className="relatorio-comissao-historico" aria-labelledby="titulo-atendimentos">
+                        <h2 className="relatorio-secao-titulo" id="titulo-atendimentos">Atendimentos do período</h2>
+                        {gerencial.agendamentos?.length ? <div className="relatorio-tabela-wrapper"><table className="relatorio-tabela relatorio-tabela-atendimentos"><thead><tr><th>Data</th><th>Hora</th><th>Cliente</th>{isAdmin && <th>Barbeiro</th>}<th>Serviço(s)</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead><tbody>{gerencial.agendamentos.map((item) => <tr key={item.id}><td>{formatarDataSemFuso(item.data)}</td><td>{item.hora}</td><td>{item.cliente}</td>{isAdmin && <td>{item.barbeiro}</td>}<td>{item.servicos.join(", ") || "—"}</td><td>{formatarMoedaExibicao(item.valor)}</td><td><span className={`relatorio-comissao-status ${item.status === "CONCLUIDO" ? "pago" : "pendente"}`}>{item.status === "CONCLUIDO" ? "Concluído" : item.status === "CONFIRMADO" ? "Confirmado" : item.status === "CANCELADO" ? "Cancelado" : "Pendente"}</span></td><td>{item.status === "CONFIRMADO" && <button type="button" className="relatorio-link-acao" disabled={concluindoId === item.id} onClick={() => marcarAtendimentoConcluido(item.id)}>{concluindoId === item.id ? "Salvando…" : "Marcar realizado"}</button>}</td></tr>)}</tbody></table></div> : <div className="relatorio-comissao-vazio"><strong>Nenhum agendamento no período</strong><span>Os atendimentos confirmados podem ser concluídos pelo barbeiro após o serviço.</span></div>}
+                    </section>}
+
+                    {gerencial && <section className="relatorio-comissoes" aria-labelledby="titulo-comissoes">
+                        <div className="relatorio-comissao-cabecalho">
+                            <div><h2 className="relatorio-secao-titulo" id="titulo-comissoes">Comissões</h2><p>Percentuais configurados por serviço e histórico de repasses.</p></div>
+                            <div className="relatorio-comissao-totais">
+                                <span>A receber <strong>{formatarMoedaExibicao(gerencial.comissoes?.pendentes || 0)}</strong></span>
+                                <span>Já pago <strong>{formatarMoedaExibicao(gerencial.comissoes?.pagas || 0)}</strong></span>
+                            </div>
+                        </div>
+
+                        {isAdmin && <div className="relatorio-comissao-config">
+                            <div className="relatorio-comissao-config-titulo"><div><strong>Regras por serviço</strong><small>O percentual é aplicado aos serviços de novos agendamentos confirmados.</small></div>
+                                <button type="button" className="relatorio-btn relatorio-btn--primario" onClick={salvarComissoes} disabled={salvandoComissoes}>{salvandoComissoes ? "Salvando…" : "Salvar percentuais"}</button>
+                            </div>
+                            {gerencial.servicosComissao?.length ? <div className="relatorio-comissao-servicos">{gerencial.servicosComissao.map((servico) => <label key={servico.id}><span>{servico.nome}</span><div><input type="number" min="0" max="100" step="0.5" value={servico.percentual} onChange={(event) => setGerencial((atual) => ({ ...atual, servicosComissao: atual.servicosComissao.map((item) => item.id === servico.id ? { ...item, percentual: Math.min(100, Math.max(0, Number(event.target.value || 0))) } : item) }))} /><b>%</b></div></label>)}</div> : <p className="relatorio-tabela-vazia">Nenhum serviço ativo.</p>}
+                        </div>}
+
+                        <div className="relatorio-comissao-historico">
+                            <h3>Histórico de valores gerados e pagos</h3>
+                        {gerencial.historicoComissoes?.length ? <div className="relatorio-tabela-wrapper"><table className="relatorio-tabela relatorio-tabela-comissao"><thead><tr>{isAdmin && <th>Barbeiro</th>}<th>Serviço</th><th>Base</th><th>%</th><th>Comissão</th><th>Gerada em</th><th>Pago em</th><th>Status</th>{isAdmin && <th>Ação</th>}</tr></thead><tbody>{gerencial.historicoComissoes.map((item) => <tr key={item.id}>{isAdmin && <td>{item.barbeiro}</td>}<td>{item.servico}</td><td>{formatarMoedaExibicao(item.valorBase)}</td><td>{item.percentual}%</td><td className="relatorio-td-destaque">{formatarMoedaExibicao(item.valor)}</td><td>{item.geradaEm ? formatarDataSemFuso(item.geradaEm) : "—"}</td><td>{item.pagaEm ? formatarDataSemFuso(item.pagaEm) : "—"}</td><td><span className={`relatorio-comissao-status ${item.status === "PAGO" ? "pago" : "pendente"}`}>{item.status === "PAGO" ? "Pago" : "Pendente"}</span></td>{isAdmin && <td>{item.status !== "PAGO" && <button type="button" className="relatorio-link-acao" disabled={acaoComissaoId === item.id} onClick={() => confirmarPagamentoComissao(item.id)}>{acaoComissaoId === item.id ? "Salvando…" : "Marcar como pago"}</button>}</td>}</tr>)}</tbody></table></div> : <div className="relatorio-comissao-vazio"><strong>Nenhuma comissão gerada neste período</strong><span>As comissões são geradas quando o atendimento é marcado como realizado.</span></div>}
+                        </div>
+                        {!isAdmin && <small className="relatorio-comissao-nota">Você pode consultar somente suas próprias comissões. O administrador registra os repasses pagos.</small>}
+                    </section>}
                 </div>
             )}
         </div>

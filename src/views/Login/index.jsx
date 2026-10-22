@@ -38,12 +38,12 @@ export default function Login() {
     try {
       const res = await login(form);
 
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("tipo", res.data.tipo);
-      localStorage.setItem("entidadeId", res.data.entidadeId);
+      sessionStorage.setItem("token", res.data.token);
+      sessionStorage.setItem("tipo", res.data.tipo);
+      sessionStorage.setItem("entidadeId", res.data.entidadeId);
 
       if (res.data.tipo === "ADMIN") {
-        navigate("/barbeiro");
+        navigate("/dashboard");
       } else if (res.data.tipo === "BARBEIRO") {
         navigate("/barbeiro");
       } else {

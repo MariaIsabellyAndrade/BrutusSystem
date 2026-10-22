@@ -27,3 +27,25 @@ export async function buscarRelatorioFinanceiro({ barbeiroId, dataInicio, dataFi
     const response = await api.get("/relatorio/financeiro", { params });
     return response.data;
 }
+
+export async function buscarDadosGerenciais({ barbeiroId, dataInicio, dataFim } = {}) {
+    const response = await api.get("/relatorio/gerencial", {
+        params: { barbeiroId, dataInicio, dataFim },
+    });
+    return response.data;
+}
+
+export async function atualizarPercentualComissao(servicoId, percentual) {
+    const response = await api.patch(`/relatorio/comissoes/servicos/${servicoId}`, { percentual });
+    return response.data;
+}
+
+export async function marcarComissaoPaga(comissaoId) {
+    const response = await api.patch(`/relatorio/comissoes/${comissaoId}/paga`);
+    return response.data;
+}
+
+export async function concluirAtendimento(agendamentoId) {
+    const response = await api.patch(`/agendamentos/${agendamentoId}/concluir`);
+    return response.data;
+}
