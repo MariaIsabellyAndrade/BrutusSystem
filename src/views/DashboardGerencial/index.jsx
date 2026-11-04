@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { CalendarDays, CircleDollarSign, Clock3, Scissors, Users, Download, Printer } from "lucide-react";
 import { buscarDadosGerenciais } from "../../service/serviceRelatorio";
 import { listarBarbeiros } from "../../service/serviceBarbeiro";
+import { buscarResumoEstoque } from "../../service/serviceEstoque";
 import { formatarMoedaExibicao } from "../../utils/formatters";
 import "./index.css";
 
@@ -65,6 +67,7 @@ export default function DashboardGerencial() {
     const [dados, setDados] = useState(null);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [resumoEstoque, setResumoEstoque] = useState(null);
 
     useEffect(() => {
         if (!admin) return;
@@ -72,6 +75,11 @@ export default function DashboardGerencial() {
             const list = Array.isArray(res) ? res : res?.data || [];
             setBarbeiros(list.filter((item) => item.ativo));
         }).catch(() => setBarbeiros([]));
+    }, [admin]);
+
+    useEffect(() => {
+        if (!admin) return;
+        buscarResumoEstoque().then(setResumoEstoque).catch(() => setResumoEstoque(null));
     }, [admin]);
 
     const buscar = useCallback(async () => {
@@ -121,6 +129,8 @@ export default function DashboardGerencial() {
                     <article className="gerencial-kpi"><span><CalendarDays size={18} /> Agendamentos</span><strong>{indicadores.agendamentos}</strong><small>{indicadores.concluidos} realizados · {indicadores.confirmados} confirmados · {indicadores.pendentes} pendentes</small></article>
                     <article className="gerencial-kpi"><span><Clock3 size={18} /> Cancelamentos</span><strong>{taxa}%</strong><small>{indicadores.cancelados} no período selecionado</small></article>
                 </section>
+
+                {admin && resumoEstoque && <section className="gerencial-stock-summary"><div className="gerencial-panel-heading"><div><span className="gerencial-eyebrow">CONTROLE INTERNO</span><h2>Estoque</h2></div><Link to="/estoque">Abrir estoque</Link></div><div className="gerencial-stock-kpis"><div><span>Produtos ativos</span><strong>{resumoEstoque.produtosAtivos}</strong></div><div className={resumoEstoque.estoqueBaixo ? "alerta" : ""}><span>Estoque baixo</span><strong>{resumoEstoque.estoqueBaixo}</strong></div><div className={resumoEstoque.semEstoque ? "alerta" : ""}><span>Sem estoque</span><strong>{resumoEstoque.semEstoque}</strong></div></div>{resumoEstoque.movimentacoesRecentes?.length > 0 && <div className="gerencial-stock-recent"><h3>Movimentações recentes</h3>{resumoEstoque.movimentacoesRecentes.slice(0, 4).map((item) => <div key={item._id}><span className={`gerencial-stock-type gerencial-stock-type--${item.tipo.toLowerCase()}`}>{item.tipo}</span><b>{item.produto?.nome || "Produto inativado"}</b><span>{item.quantidade} un.</span><small>{new Date(item.createdAt).toLocaleDateString("pt-BR")}</small></div>)}</div>}</section>}
 
                 <section className="gerencial-grid gerencial-grid--wide">
                     <article className="gerencial-panel"><div className="gerencial-panel-heading"><div><span className="gerencial-eyebrow">TENDÊNCIA</span><h2>Faturamento por mês</h2></div><small>Últimos 6 meses</small></div><GraficoMensal dados={dados.comparativoMensal} /></article>

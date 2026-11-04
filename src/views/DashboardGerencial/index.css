@@ -54,6 +54,22 @@
 .gerencial-ranking-row strong{color:#d8b35e;font-size:11px;white-space:nowrap}
 .gerencial-muted{margin:24px 0;color:#777;font-size:12px;text-align:center}
 .gerencial-scope-note{margin:4px 0 0;color:#737373;font-size:11px;text-align:center}
+.gerencial-stock-summary{margin:0 0 16px;padding:18px;border:1px solid #302a1e;border-radius:11px;background:linear-gradient(145deg,#12100b,#0b0b0b)}
+.gerencial-stock-summary .gerencial-panel-heading{margin-bottom:13px}
+.gerencial-stock-summary .gerencial-panel-heading a{color:#d9b458;font-size:11px;font-weight:700;text-decoration:none}
+.gerencial-stock-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gerencial-stock-kpis>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid #26231c;border-radius:7px;background:#10100e}
+.gerencial-stock-kpis span{color:#aaa;font-size:11px}
+.gerencial-stock-kpis strong{color:#eee;font-size:17px}
+.gerencial-stock-kpis .alerta strong{color:#e4aa63}
+.gerencial-stock-recent{margin-top:16px}
+.gerencial-stock-recent h3{margin:0 0 6px;color:#888;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.gerencial-stock-recent>div{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #211f1a}
+.gerencial-stock-recent b{flex:1;overflow:hidden;color:#ddd;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.gerencial-stock-recent>div>span:not(.gerencial-stock-type){color:#aaa;font-size:10px}
+.gerencial-stock-recent small{color:#777;font-size:10px}
+.gerencial-stock-type{padding:4px 6px;border-radius:4px;font-size:8px;font-weight:800}
+.gerencial-stock-type--entrada{background:#102017;color:#79bd8d}.gerencial-stock-type--saida{background:#291515;color:#e18b8b}.gerencial-stock-type--ajuste{background:#241d10;color:#d5b15d}
 @media(max-width:1000px){.gerencial-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.gerencial-header{align-items:flex-start;flex-direction:column}.gerencial-grid,.gerencial-grid--wide{grid-template-columns:1fr}.gerencial-panel{padding:15px}}
 @media(max-width:480px){.gerencial-kpis{gap:9px}.gerencial-kpi{min-height:128px;padding:13px}.gerencial-kpi span{font-size:9px}.gerencial-kpi small{font-size:9px}.gerencial-filters label{min-width:calc(50% - 8px);flex:1}.gerencial-filters button{flex:1}.gerencial-ranking-row{grid-template-columns:24px minmax(50px,1fr) auto}.gerencial-ranking-row strong{grid-column:2 / 4}.gerencial-actions{width:100%}.gerencial-action{flex:1;justify-content:center}}

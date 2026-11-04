@@ -5,6 +5,16 @@ export const listarBarbeiros = () => {
   return api.get("/barbeiros");
 };
 
+export const buscarInicioBarbeiro = async () => {
+  const response = await api.get("/barbeiros/me/inicio");
+  return response.data;
+};
+
+export const atualizarMeuPerfilBarbeiro = async (dados) => {
+  const response = await api.put("/barbeiros/me/perfil", dados);
+  return response.data;
+};
+
 
 export const criarBarbeiros = (dados) => {
   const formData = new FormData();

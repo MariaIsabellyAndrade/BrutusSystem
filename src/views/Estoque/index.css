@@ -1,0 +1,78 @@
+.estoque-page{min-height:100vh;box-sizing:border-box;padding:32px clamp(18px,3vw,40px);background:#070707;color:#f5f3ef;font-family:Manrope,system-ui,sans-serif}
+.estoque-header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:25px}
+.estoque-header h1{margin:5px 0 7px;font-size:clamp(28px,3vw,36px);letter-spacing:-.04em}
+.estoque-header p{margin:0;color:#858585;font-size:13px}
+.estoque-eyebrow{color:#c99a3a;font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.estoque-header-actions{display:flex;gap:9px;flex-wrap:wrap}
+.estoque-button{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;border:1px solid #c99a3a;border-radius:7px;background:#c99a3a;color:#0a0906;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.estoque-button:hover{background:#dbb252;border-color:#dbb252}
+.estoque-button:disabled{opacity:.6;cursor:wait}
+.estoque-button--secondary{border-color:#333;background:#111;color:#ddd}
+.estoque-button--secondary:hover{border-color:#c99a3a;background:#17130b;color:#f0ce7c}
+.estoque-tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:1px solid #242321}
+.estoque-tabs button{display:flex;align-items:center;gap:8px;padding:12px 15px;border:0;border-bottom:2px solid transparent;background:transparent;color:#858585;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.estoque-tabs button.ativo{border-color:#c99a3a;color:#f0ce7c}
+.estoque-filtros{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:17px;padding:13px;border:1px solid #242321;border-radius:10px;background:#0c0c0c}
+.estoque-filtros select,.estoque-filtros input,.estoque-modal input,.estoque-modal select,.estoque-modal textarea{min-height:40px;box-sizing:border-box;padding:0 11px;border:1px solid #2d2c29;border-radius:7px;outline:none;background:#111;color:#eee;font:inherit;font-size:12px}
+.estoque-filtros select:focus,.estoque-filtros input:focus,.estoque-modal input:focus,.estoque-modal select:focus,.estoque-modal textarea:focus{border-color:#c99a3a}
+.estoque-busca{min-width:200px;flex:1;display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid #2d2c29;border-radius:7px;color:#777}
+.estoque-busca:focus-within{border-color:#c99a3a}
+.estoque-busca input{width:100%;padding:0;border:0;background:transparent;outline:0;color:#eee;font:inherit;font-size:12px}
+.estoque-busca input:focus{border:0}
+.estoque-filtros--movimento label{display:flex;align-items:center;gap:7px;color:#858585;font-size:11px}
+.estoque-filtros--movimento input{min-height:36px}
+.estoque-produtos{display:flex;flex-direction:column;gap:10px}
+.estoque-produto{min-width:0;display:flex;align-items:center;gap:15px;padding:15px 17px;border:1px solid #242321;border-radius:10px;background:#0c0c0c}
+.estoque-produto-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border:1px solid #392e18;border-radius:9px;background:#17130b;color:#d6af51}
+.estoque-produto-info{flex:1;min-width:0}
+.estoque-produto-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.estoque-produto-title h2{margin:0;color:#eee;font-size:14px}
+.estoque-produto-info>p{margin:4px 0 9px;color:#737373;font-size:11px}
+.estoque-produto-meta{display:flex;gap:14px;flex-wrap:wrap;color:#858585;font-size:10px}
+.estoque-produto-meta b{color:#e3c470;font-size:12px}
+.estoque-status,.estoque-tipo{display:inline-flex;padding:4px 7px;border-radius:5px;font-size:9px;font-weight:800;white-space:nowrap}
+.estoque-status--normal,.estoque-tipo--entrada{background:#102017;color:#79bd8d}
+.estoque-status--baixo,.estoque-tipo--ajuste{background:#241d10;color:#d5b15d}
+.estoque-status--sem-estoque,.estoque-tipo--saida{background:#291515;color:#e18b8b}
+.estoque-status--inativo{background:#242424;color:#999}
+.estoque-status--inativo{background:#242424;color:#999}
+.estoque-produto-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}
+.estoque-link{padding:7px 8px;border:1px solid transparent;border-radius:6px;background:transparent;color:#d8b65e;font:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.estoque-link:hover{border-color:#3b321e;background:#17130b}
+.estoque-link--danger{color:#dd8888}
+.estoque-inativo-note{padding:7px 8px;color:#777;font-size:10px}
+.estoque-inativo-note{padding:7px 8px;color:#777;font-size:10px}
+.estoque-vazio{padding:54px 18px;border:1px dashed #302e29;border-radius:10px;color:#777;text-align:center;font-size:13px}
+.estoque-alerta{position:relative;margin:0 0 14px;padding:11px 14px;border:1px solid;border-radius:7px;font-size:12px}
+.estoque-alerta--erro{border-color:#643434;background:#211111;color:#e6a0a0}
+.estoque-alerta--sucesso{border-color:#294b32;background:#101b13;color:#9dd5a7}
+.estoque-alerta--sucesso button{position:absolute;right:10px;top:4px;border:0;background:transparent;color:inherit;font-size:20px;cursor:pointer}
+.estoque-tabela-wrap{overflow-x:auto;border:1px solid #242321;border-radius:9px;background:#0c0c0c}
+.estoque-tabela{width:100%;border-collapse:collapse;text-align:left;font-size:11px}
+.estoque-tabela th{padding:12px 10px;border-bottom:1px solid #282724;color:#8c8a84;font-size:9px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.estoque-tabela td{padding:12px 10px;border-bottom:1px solid #1d1d1b;color:#c9c7c2;vertical-align:top}
+.estoque-tabela tr:last-child td{border-bottom:0}
+.estoque-tabela-vazio{padding:36px!important;color:#777!important;text-align:center}
+.estoque-paginacao{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;color:#777;font-size:10px}
+.estoque-paginacao>div{display:flex;gap:7px}
+.estoque-paginacao button{padding:8px 10px;border:1px solid #302e29;border-radius:6px;background:#111;color:#ddd;font:inherit;font-weight:700;cursor:pointer}
+.estoque-paginacao button:disabled{opacity:.45;cursor:default}
+.estoque-overlay{position:fixed;inset:0;z-index:1300;display:grid;place-items:center;padding:18px;background:#000c;backdrop-filter:blur(4px)}
+.estoque-modal{width:min(100%,560px);max-height:min(90vh,820px);overflow-y:auto;box-sizing:border-box;padding:22px;border:1px solid #453819;border-radius:12px;background:#0c0c0c;box-shadow:0 20px 60px #000b}
+.estoque-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:18px}
+.estoque-modal-head h2{margin:4px 0 0;color:#f4f1e9;font-size:20px}
+.estoque-fechar{width:32px;height:32px;border:1px solid #333;border-radius:6px;background:#111;color:#aaa;font-size:21px;cursor:pointer}
+.estoque-modal>label{display:flex;flex-direction:column;gap:6px;margin-bottom:13px;color:#a4a19a;font-size:10px;font-weight:700}
+.estoque-modal input,.estoque-modal select,.estoque-modal textarea{width:100%;font-size:12px}
+.estoque-modal textarea{min-height:75px;padding:10px;resize:vertical}
+.estoque-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.estoque-form-grid label{display:flex;flex-direction:column;gap:6px;margin-bottom:13px;color:#a4a19a;font-size:10px;font-weight:700}
+.estoque-nota{padding:10px 12px;border:1px solid #292720;border-radius:7px;background:#111;color:#888;font-size:11px;line-height:1.5}
+.estoque-nota strong{color:#dfbd68}
+.estoque-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.estoque-detalhes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.estoque-detalhes p{display:flex;flex-direction:column;gap:5px;margin:0;padding:11px;border:1px solid #242321;border-radius:7px;background:#101010}
+.estoque-detalhes span{color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.estoque-detalhes b{color:#e4e0d6;font-size:12px}
+@media(max-width:800px){.estoque-header{align-items:flex-start;flex-direction:column}.estoque-header-actions{width:100%}.estoque-header-actions>.estoque-button{flex:1}.estoque-produto{align-items:flex-start;flex-wrap:wrap}.estoque-produto-actions{width:100%;padding-left:55px;justify-content:flex-start}}
+@media(max-width:560px){.estoque-page{padding:22px 14px}.estoque-filtros>*{min-width:calc(50% - 6px);flex:1}.estoque-filtros .estoque-busca{min-width:100%}.estoque-filtros--movimento label{flex-direction:column;align-items:stretch}.estoque-filtros--movimento input{width:100%}.estoque-form-grid,.estoque-detalhes{grid-template-columns:1fr}.estoque-produto{gap:10px;padding:12px}.estoque-produto-meta{gap:8px}.estoque-produto-actions{padding-left:0}.estoque-modal{padding:17px}.estoque-modal-actions .estoque-button{flex:1}}

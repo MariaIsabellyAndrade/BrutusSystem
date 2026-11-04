@@ -63,6 +63,7 @@ export default function MenuLateral() {
             { label: "Clientes", path: "/cliente", icon: "♧" },
             { label: "Barbeiros", path: "/barbeiro", icon: "✂" },
             { label: "Serviços", path: "/servico", icon: "✧" },
+            { label: "Estoque", path: "/estoque", icon: "▤" },
             { label: "Relatórios", path: "/relatorios", icon: "↗" },
             { label: "Configurações", path: "/configuracoes", icon: "⚙" },
         ],
@@ -72,6 +73,7 @@ export default function MenuLateral() {
             { label: "Meus horários", path: "/horarios-barbeiro", icon: "⏱" },
             { label: "Agendar", path: "/agendar", icon: "▣" },
             { label: "Relatórios", path: "/relatorios", icon: "↗" },
+            { label: "Estoque", path: "/estoque", icon: "▤" },
             { label: "Meu perfil", path: "/meu-perfil", icon: "⚙" },
         ],
         CLIENTE: [

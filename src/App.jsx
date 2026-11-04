@@ -18,6 +18,8 @@ import RelatorioFinanceiro from "./views/Relatorio";
 import GerenciarHorarios from "./views/GerenciarHorarios";
 import HorariosBloqueados from "./views/HorariosBloqueados";
 import DashboardGerencial from "./views/DashboardGerencial";
+import Estoque from "./views/Estoque";
+import HomeBarbeiro from "./views/HomeBarbeiro";
 
 function App() {
     return (
@@ -40,12 +42,20 @@ function App() {
                     {/* Agenda / calendário — rota canônica lowercase */}
                     <Route
                         path="/agendamento"
-                        element={<CalendarioAgendamentos/>}
+                        element={
+                            <ProtectedRoute allowed={["ADMIN", "CLIENTE"]}>
+                                <CalendarioAgendamentos />
+                            </ProtectedRoute>
+                        }
                     />
                     {/* Alias com A maiúsculo para compatibilidade com links antigos */}
                     <Route
                         path="/Agendamento"
-                        element={<CalendarioAgendamentos/>}
+                        element={
+                            <ProtectedRoute allowed={["ADMIN", "CLIENTE"]}>
+                                <CalendarioAgendamentos />
+                            </ProtectedRoute>
+                        }
                     />
 
                     <Route
@@ -68,8 +78,8 @@ function App() {
                     <Route
                         path="/inicio"
                         element={
-                            <ProtectedRoute allowed={["BARBEIRO", "ADMIN"]}>
-                                <CalendarioAgendamentos />
+                            <ProtectedRoute allowed={["BARBEIRO"]}>
+                                <HomeBarbeiro />
                             </ProtectedRoute>
                         }
                     />
@@ -112,7 +122,7 @@ function App() {
                     <Route
                         path="/barbeiro"
                         element={
-                            <ProtectedRoute allowed={["BARBEIRO", "ADMIN"]}>
+                            <ProtectedRoute allowed={["ADMIN"]}>
                                 <Barbeiros />
                             </ProtectedRoute>
                         }
@@ -132,6 +142,15 @@ function App() {
                         element={
                             <ProtectedRoute allowed={["ADMIN"]}>
                                 <DashboardGerencial />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/estoque"
+                        element={
+                            <ProtectedRoute allowed={["ADMIN", "BARBEIRO"]}>
+                                <Estoque />
                             </ProtectedRoute>
                         }
                     />

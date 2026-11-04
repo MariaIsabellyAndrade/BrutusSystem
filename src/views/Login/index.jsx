@@ -45,7 +45,7 @@ export default function Login() {
       if (res.data.tipo === "ADMIN") {
         navigate("/dashboard");
       } else if (res.data.tipo === "BARBEIRO") {
-        navigate("/barbeiro");
+        navigate("/inicio");
       } else {
         navigate("/cliente-home");
       }
