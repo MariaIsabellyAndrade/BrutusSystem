@@ -5,6 +5,11 @@ export const listarClientes = () => {
   return api.get("/clientes");
 };
 
+export const buscarConsentimentoWhatsApp = () => api.get("/clientes/me/consentimento-whatsapp");
+
+export const atualizarConsentimentoWhatsApp = (consentimento) =>
+  api.patch("/clientes/me/consentimento-whatsapp", { consentimento });
+
 
 export const criarClientes = (dados) => {
   const formData = new FormData();

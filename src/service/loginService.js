@@ -29,6 +29,7 @@ export const registrarCliente = (dados) => {
   formData.append("endereco", dados.endereco);
   formData.append("ativo", dados.ativo);
   formData.append("telefone", dados.telefone);
+  formData.append("whatsappConsentimento", String(dados.whatsappConsentimento === true));
 
   if (dados.foto) {
     formData.append("foto", dados.foto);

@@ -17,6 +17,7 @@ export default function Cadastro() {
     rg: "",
     endereco: "",
     telefone: "",
+    whatsappConsentimento: false,
     ativo: true,
     foto: null,
   });
@@ -290,6 +291,19 @@ export default function Cadastro() {
                   {errors.telefone}
                 </span>
               )}
+            </div>
+
+            {/* EMAIL */}
+            <div className="cadastro-consentimento full">
+              <label>
+                <input
+                  type="checkbox"
+                  name="whatsappConsentimento"
+                  checked={form.whatsappConsentimento}
+                  onChange={(event) => setForm((prev) => ({ ...prev, whatsappConsentimento: event.target.checked }))}
+                />
+                <span>Quero receber lembretes dos meus agendamentos pelo WhatsApp.</span>
+              </label>
             </div>
 
             {/* EMAIL */}

@@ -65,6 +65,7 @@ export default function MenuLateral() {
             { label: "Serviços", path: "/servico", icon: "✧" },
             { label: "Estoque", path: "/estoque", icon: "▤" },
             { label: "Relatórios", path: "/relatorios", icon: "↗" },
+            { label: "Despesas", path: "/despesas", icon: "＄" },
             { label: "Configurações", path: "/configuracoes", icon: "⚙" },
         ],
         BARBEIRO: [
@@ -74,6 +75,7 @@ export default function MenuLateral() {
             { label: "Agendar", path: "/agendar", icon: "▣" },
             { label: "Relatórios", path: "/relatorios", icon: "↗" },
             { label: "Estoque", path: "/estoque", icon: "▤" },
+            { label: "Registrar despesa", path: "/despesas", icon: "＄" },
             { label: "Meu perfil", path: "/meu-perfil", icon: "⚙" },
         ],
         CLIENTE: [

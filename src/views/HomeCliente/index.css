@@ -265,6 +265,26 @@
   gap: 20px;
 }
 
+.whatsapp-consentimento-card {
+  max-width: 1200px;
+  margin: 20px auto 0;
+  padding: 19px 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px;
+  background: #111315;
+  color: #f3f1ec;
+}
+.whatsapp-consentimento-kicker { color: #c99d42; font-size: 9px; letter-spacing: 1.5px; font-weight: 800; }
+.whatsapp-consentimento-card h2 { margin: 5px 0; font-size: 15px; }
+.whatsapp-consentimento-card p { margin: 0; color: #999da2; font-size: 11px; }
+.whatsapp-consentimento-erro { display: block; margin-top: 7px; color: #f18080; font-size: 11px; }
+.whatsapp-consentimento-toggle { display: flex; align-items: center; gap: 8px; color: #d5d1c8; font-size: 11px; white-space: nowrap; cursor: pointer; }
+.whatsapp-consentimento-toggle input { width: 17px; height: 17px; accent-color: #c99d42; }
+
 .historico-card, .perfil-card {
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 12px;
@@ -356,6 +376,7 @@
 }
 
 @media (max-width: 768px) {
+  .whatsapp-consentimento-card { align-items: flex-start; flex-direction: column; }
   .cliente-sidebar {
     width: 100%;
     min-height: auto;

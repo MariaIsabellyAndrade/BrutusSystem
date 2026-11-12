@@ -20,6 +20,7 @@ import HorariosBloqueados from "./views/HorariosBloqueados";
 import DashboardGerencial from "./views/DashboardGerencial";
 import Estoque from "./views/Estoque";
 import HomeBarbeiro from "./views/HomeBarbeiro";
+import Despesas from "./views/Despesas";
 
 function App() {
     return (
@@ -151,6 +152,15 @@ function App() {
                         element={
                             <ProtectedRoute allowed={["ADMIN", "BARBEIRO"]}>
                                 <Estoque />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/despesas"
+                        element={
+                            <ProtectedRoute allowed={["ADMIN", "BARBEIRO"]}>
+                                <Despesas />
                             </ProtectedRoute>
                         }
                     />

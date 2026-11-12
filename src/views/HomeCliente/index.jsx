@@ -4,7 +4,9 @@ import "./index.css";
 import AtualizarAgendamento from "../Agendar/AtualizarAgendamento";
 import {
     listarAgendamentosPorCliente,
-    atualizarClientes
+    atualizarClientes,
+    buscarConsentimentoWhatsApp,
+    atualizarConsentimentoWhatsApp
 } from "../../service/serviceCliente";
 import {
     deletarAgendamento,
@@ -20,6 +22,9 @@ function HomeCliente() {
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
     const [modo, setModo] = useState("visualizar");
+    const [consentimentoWhatsApp, setConsentimentoWhatsApp] = useState(false);
+    const [salvandoConsentimento, setSalvandoConsentimento] = useState(false);
+    const [erroConsentimento, setErroConsentimento] = useState("");
 
     const [form, setForm] = useState({
         nome: "",
@@ -197,6 +202,30 @@ function HomeCliente() {
 
         carregarAgendamentos();
     }, []);
+
+    useEffect(() => {
+        buscarConsentimentoWhatsApp()
+            .then(({ data }) => setConsentimentoWhatsApp(data.consentimento === true))
+            .catch((error) => {
+                console.error("Erro ao carregar autorização do WhatsApp:", error);
+                setErroConsentimento("Não foi possível carregar sua autorização para lembretes.");
+            });
+    }, []);
+
+    const handleAlterarConsentimentoWhatsApp = async (event) => {
+        const valor = event.target.checked;
+        setSalvandoConsentimento(true);
+        setErroConsentimento("");
+        try {
+            const { data } = await atualizarConsentimentoWhatsApp(valor);
+            setConsentimentoWhatsApp(data.consentimento === true);
+        } catch (error) {
+            event.target.checked = consentimentoWhatsApp;
+            setErroConsentimento(error.response?.data?.erro || "Não foi possível salvar sua preferência.");
+        } finally {
+            setSalvandoConsentimento(false);
+        }
+    };
 
     const agora = new Date();
     const proximosAgendamentos = agendamentos
@@ -399,6 +428,19 @@ function HomeCliente() {
                         </div>
                     </section>
                 </div>
+
+                <section className="whatsapp-consentimento-card">
+                    <div>
+                        <span className="whatsapp-consentimento-kicker">LEMBRETES DE AGENDAMENTO</span>
+                        <h2>Receber lembretes pelo WhatsApp</h2>
+                        <p>Enviaremos uma mensagem um dia antes dos seus horários confirmados.</p>
+                        {erroConsentimento && <small className="whatsapp-consentimento-erro">{erroConsentimento}</small>}
+                    </div>
+                    <label className="whatsapp-consentimento-toggle">
+                        <input type="checkbox" checked={consentimentoWhatsApp} disabled={salvandoConsentimento} onChange={handleAlterarConsentimentoWhatsApp} />
+                        <span>{salvandoConsentimento ? "Salvando..." : consentimentoWhatsApp ? "Autorizado" : "Desativado"}</span>
+                    </label>
+                </section>
             </main>
 
             {/* MODAL DE ATUALIZAÇÃO */}
